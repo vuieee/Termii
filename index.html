@@ -47,7 +47,7 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
-        /* --- LOADING SCREEN (Exact Match) --- */
+        /* --- LOADING SCREEN --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--term-bg);
@@ -55,7 +55,6 @@
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             transition: opacity 0.5s ease-out;
-            /* Vignette Effect */
             background: radial-gradient(circle, transparent 60%, black 100%), var(--term-bg);
         }
 
@@ -63,7 +62,7 @@
             width: 300px;
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Align text to start of bar */
+            align-items: flex-start; 
         }
 
         #loading-text { 
@@ -173,14 +172,35 @@
         #bios-trigger.active { color: var(--term-green); font-weight: bold; text-shadow: 0 0 10px var(--term-green); }
         #screen-trigger.active { color: var(--term-white); font-weight: bold; text-shadow: 0 0 10px var(--term-white); }
 
-        /* --- RESTORED FOOTER LAYOUT --- */
+        /* === BRANDING ASCII STYLE === */
+        /* Fixed "Moving" issue by disabling pointer events and adding translateZ */
+        .branding-text { 
+            font-family: var(--font-body); 
+            font-weight: bold; 
+            font-size: 0.7rem;  /* Made Bigger */
+            line-height: 1.0;
+            text-align: center; 
+            color: var(--term-teal); 
+            opacity: 0.8; 
+            margin: 1vh 0; 
+            flex-shrink: 0;
+            white-space: pre; 
+            align-self: center;
+            overflow-x: hidden;
+            width: 100%;
+            pointer-events: none; /* PREVENTS HOVER JITTER */
+            transform: translateZ(0); /* LOCKS RENDER LAYER */
+        }
+
+        /* --- RESTORED & ADJUSTED FOOTER LAYOUT --- */
         .bios-footer { 
-            display: flex; 
-            justify-content: space-between; /* Spread elements across */
+            /* Changed to Grid to control "Leftness" of the middle item */
+            display: grid; 
+            grid-template-columns: 1fr auto 1.5fr; /* Right side is wider, forcing center to left */
             align-items: flex-end; 
             font-family: var(--font-body); 
             flex-shrink: 0; 
-            margin-top: 0.5vh; 
+            margin-top: auto; 
             gap: 1vw;
             padding-bottom: 2px;
         }
@@ -191,26 +211,15 @@
             gap: 2px;
         }
 
-        /* Centered Inputs in footer flow */
+        /* Inputs now sit in the "auto" center column of the grid */
         .inputs-grid { 
             display: grid; 
             grid-template-columns: auto auto; 
             gap: 0.2vh 1vw; 
             font-weight: bold; 
             margin-bottom: 2px;
-        }
-
-        /* ASCII Art in Footer Slot */
-        .branding-text { 
-            font-family: var(--font-body); 
-            font-weight: bold; 
-            font-size: 0.3rem; /* Tiny size to fit footer height */
-            line-height: 0.9;
-            text-align: center; 
-            color: var(--term-teal); 
-            opacity: 0.8; 
-            white-space: pre; 
-            margin-bottom: 2px;
+            /* Extra nudge to left if grid isn't enough */
+            transform: translateX(-2vw); 
         }
 
         .footer-right {
@@ -429,7 +438,13 @@
                     </div>
                 </div>
 
-                <div class="branding-text">JOSHUA DESIGN</div>
+                <div class="branding-text">
+     _  ___  ____  _   _ _   _   _      ____  _____ ____ ___ ____ _   _ ____  
+    | |/ _ \/ ___|| | | | | | | / \    |  _ \| ____/ ___|_ _/ ___| \ | / ___| 
+ _  | | | | \___ \| |_| | | | |/ _ \   | | | |  _| \___ \| | |  _|  \| \___ \ 
+| |_| | |_| |___) |  _  | |_| / ___ \  | |_| | |___ ___) | | |_| | |\  |___) |
+ \___/ \___/|____/|_| |_|\___/_/   \_\ |____/|_____|____/___\____|_| \_|____/ 
+                </div>
 
                 <div class="bios-footer body-text text-xs">
                     <div class="footer-left">
@@ -448,14 +463,6 @@
                         <span class="header-text" style="font-size: 0.6rem; margin:0;">HTML CSS JS</span>
                         <span class="opacity-50">INPUT 2:</span>
                         <span class="header-text" style="font-size: 0.6rem; margin:0;">GIMP FIGMA</span>
-                    </div>
-
-                    <div class="branding-text">
-     _  ___  ____  _   _ _   _   _      ____  _____ ____ ___ ____ _   _ ____  
-    | |/ _ \/ ___|| | | | | | | / \    |  _ \| ____/ ___|_ _/ ___| \ | / ___| 
- _  | | | | \___ \| |_| | | | |/ _ \   | | | |  _| \___ \| | |  _|  \| \___ \ 
-| |_| | |_| |___) |  _  | |_| / ___ \  | |_| | |___ ___) | | |_| | |\  |___) |
- \___/ \___/|____/|_| |_|\___/_/   \_\ |____/|_____|____/___\____|_| \_|____/ 
                     </div>
 
                     <div class="footer-right opacity-50">
