@@ -47,7 +47,7 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
-        /* --- LOADING SCREEN --- */
+        /* --- LOADING SCREEN (Teal + Vignette) --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--term-bg);
@@ -71,20 +71,20 @@
             margin-bottom: 5px; 
             font-size: 0.9rem; 
             letter-spacing: 1px;
-            color: var(--term-white);
+            color: var(--term-teal); 
         }
 
         #loading-bar-container { 
             width: 100%; 
             height: 25px;
-            border: 3px solid var(--term-white); 
+            border: 3px solid var(--term-teal); 
             padding: 3px; 
-            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+            box-shadow: 0 0 10px rgba(80, 255, 247, 0.2);
         }
 
         #loading-bar { 
             height: 100%; 
-            background-color: var(--term-white); 
+            background-color: var(--term-teal); 
             width: 0%; 
             transition: width 0.1s linear; 
         }
@@ -236,7 +236,7 @@
         .social-btn { width: 100%; background: transparent; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.6rem; padding: 1vh; text-align: center; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .social-btn:hover { background: var(--term-teal); color: black; box-shadow: 0 0 10px var(--term-teal); }
 
-        /* Modal Overlays (Shared) */
+        /* Modal Overlays */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 1000; display: none; 
@@ -365,7 +365,7 @@
 
         .icon-svg { width: 1.2rem; height: 1.2rem; fill: var(--term-teal); }
 
-        /* === NEW: ARTICLES LIST OVERLAY === */
+        /* === ARTICLES LIST OVERLAY === */
         .articles-list-modal {
             width: 90vw; height: 85vh;
             background: var(--term-bg);
@@ -386,7 +386,6 @@
             padding-right: 10px;
             flex: 1;
         }
-        
         .articles-list-container::-webkit-scrollbar { width: 14px; display: block; }
         .articles-list-container::-webkit-scrollbar-track { background: transparent; }
         .articles-list-container::-webkit-scrollbar-thumb { 
@@ -439,7 +438,7 @@
             line-height: 1.4;
         }
 
-        /* === REPOS MODAL (UPDATED) === */
+        /* === REPOS MODAL === */
         .repos-modal {
             width: 90vw; height: 85vh;
             background: var(--term-bg);
@@ -462,15 +461,27 @@
             align-items: center;
         }
 
+        /* Fixed Alignment for Search Icon and Text */
         .search-box {
             flex: 2;
             display: flex;
-            align-items: center;
+            align-items: center; /* This forces vertical center */
             border: 2px solid var(--term-teal);
-            padding: 0.5vh;
+            padding: 0.5vh 1vh;
             background: black;
+            height: 40px; /* Fixed height helps alignment */
         }
         
+        /* The ">" Icon */
+        .search-icon-symbol {
+            color: var(--term-teal);
+            font-family: var(--font-head);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 10px;
+            margin-top: -2px; /* Slight micro-adjustment for specific font baseline */
+        }
+
         #repo-search {
             background: transparent;
             border: none;
@@ -479,6 +490,7 @@
             font-size: 0.8rem;
             width: 100%;
             outline: none;
+            height: 100%;
         }
         #repo-search::placeholder { color: rgba(80, 255, 247, 0.5); }
 
@@ -492,6 +504,7 @@
             padding: 0.5vh;
             outline: none;
             cursor: pointer;
+            height: 40px;
         }
 
         .repos-list-container {
@@ -514,11 +527,11 @@
         }
         .repo-row-card:hover { background: rgba(80, 255, 247, 0.05); }
 
+        /* Removed Border Separator here as requested */
         .repo-header {
             display: flex; justify-content: space-between; align-items: flex-start;
             margin-bottom: 1vh;
             padding-bottom: 0.5vh;
-            /* REMOVED DASHED BORDER SEPARATOR */
         }
 
         .repo-name {
@@ -740,8 +753,8 @@
         <div class="repos-modal" onclick="event.stopPropagation()">
             <div class="repos-controls">
                 <div class="search-box">
-                    <span class="header-text" style="font-size:1rem; margin-right:10px; color:var(--term-teal);">&gt;</span>
-                    <input type="text" id="repo-search" placeholder="SEARCH REPOSITORY...">
+                    <span class="search-icon-symbol">&gt;</span>
+                    <input type="text" id="repo-search" placeholder="SEARCH REPOSITORIES...">
                 </div>
                 <select id="repo-lang" class="repo-select">
                     <option value="ALL">LANGUAGE (ALL)</option>
