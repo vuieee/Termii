@@ -10,18 +10,22 @@
 
     <style>
         :root {
+            /* COLORS */
             --term-teal: #50fff7;
             --term-green: #00ff41;
             --term-yellow: #f1ff5e;
             --term-red: #ff3333;
             --term-white: #ffffff;
             --term-bg: #050505;
+            
+            /* FONTS & SPACING */
             --font-head: 'Press Start 2P', cursive;
             --font-body: 'Fira Code', monospace;
-            --gap-size: 2vh; 
-            --top-align: 10vh; 
+            --gap-size: 2vh; /* Compact Gap */
+            --top-align: 10vh; /* Shared Top Alignment */
         }
 
+        /* --- GLOBAL RESET --- */
         *::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; box-sizing: border-box; }
 
@@ -52,7 +56,7 @@
         .text-xs { font-size: 0.65rem; }
         .opacity-50 { opacity: 0.5; }
 
-        /* LAYOUT */
+        /* HEADER & NAV */
         header { display: flex; justify-content: space-between; margin-bottom: 1vh; opacity: 0.7; flex-shrink: 0; z-index: 1002; position: relative; }
 
         nav {
@@ -77,9 +81,9 @@
 
         .left-panel { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
         .right-panel { display: flex; flex-direction: column; gap: 1.5vh; height: 100%; overflow: hidden; }
+        
         .unix-box { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-bottom: 1vh; position: relative; }
 
-        /* IMAGE WRAPPERS */
         .img-wrapper {
             flex: 1; border: 2px solid var(--term-teal); overflow: hidden;
             display: flex; justify-content: center; align-items: center; padding: 2px; position: relative;
@@ -88,7 +92,7 @@
         .img-wrapper::after { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--term-teal); mix-blend-mode: color; opacity: 1; pointer-events: none; z-index: 2; }
         .img-wrapper::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.95) 100%); }
 
-        /* OVERLAYS */
+        /* OVERLAYS (Hack/BIOS) */
         .term-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; font-family: var(--font-body); padding: 10px; z-index: 4; display: none; flex-direction: column; overflow: hidden; }
         #hack-overlay { color: var(--term-teal); font-size: 0.7rem; justify-content: flex-start; word-break: break-all; line-height: 1.5; }
         #bios-overlay { color: #ddd; font-size: 0.6rem; gap: 8px; }
@@ -103,7 +107,7 @@
         .cursor-blink { display: inline-block; width: 8px; height: 14px; background: var(--term-teal); animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* FOOTER */
+        /* FOOTER & TRIGGERS */
         .easter-egg-trigger { cursor: default; text-decoration: none; transition: all 0.2s; user-select: none; }
         #boot-trigger.active { cursor: pointer; color: var(--term-red); font-weight: bold; text-shadow: 0 0 10px var(--term-red); }
         #bios-trigger.active { cursor: pointer; color: var(--term-green); font-weight: bold; text-shadow: 0 0 10px var(--term-green); }
@@ -113,14 +117,13 @@
         .bios-footer { display: flex; gap: 1vw; align-items: flex-end; font-family: var(--font-body); flex-shrink: 0; margin-top: 0.5vh; }
         .inputs-grid { display: grid; grid-template-columns: auto auto; gap: 0.2vh 1vw; font-weight: bold; }
 
-        /* REPOS */
+        /* RIGHT PANEL */
         .repos-box { border: 2px solid var(--term-teal); padding: 1.5vh; flex-shrink: 0; }
         .repo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1vh; }
         .repo-card { border: 2px solid var(--term-teal); padding: 1vh; position: relative; }
         .btn-get { position: absolute; top: 1vh; right: 1vh; background: none; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.55rem; cursor: pointer; padding: 2px 4px; }
         .btn-get:hover { background: var(--term-teal); color: black; }
 
-        /* ARTICLES & COMMENTS */
         .bottom-split { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vh; overflow: hidden; }
         .articles-stack { display: flex; flex-direction: column; gap: 1.5vh; overflow-y: auto; padding-right: 5px; }
         .article-card { border: 2px solid var(--term-teal); padding: 1.5vh; display: flex; flex-direction: column; justify-content: center; cursor: pointer; flex-shrink: 0; }
