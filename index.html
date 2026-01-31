@@ -140,11 +140,10 @@
             width: 100vw; height: 100vh;
             z-index: 1000; 
             display: none; 
-            /* ALIGNMENT FIX: Use flex-start and fixed padding-top */
-            /* This ensures ALL modals start at the exact same vertical position */
+            /* ALIGNMENT FIX: All modals start 15vh from top */
             align-items: flex-start; 
             justify-content: center;
-            padding-top: 14vh; /* Matches the bottom of Nav bar */
+            padding-top: 15vh; /* Uniform top gap */
             padding-left: 2vw; padding-right: 2vw;
             backdrop-filter: blur(0px); background: rgba(0,0,0,0);
             transition: backdrop-filter 0.4s ease, background 0.4s ease;
@@ -155,7 +154,7 @@
         /* === ARTICLE OVERLAY SPECIFIC === */
         /* ========================================= */
         .expanded-article {
-            width: 90vw; height: 80vh; /* Fixed height relative to viewport */
+            width: 90vw; height: 80vh; 
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
             box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
@@ -206,17 +205,16 @@
         /* === SOCIALS OVERLAY SPECIFIC === */
         /* ========================================= */
         .expanded-socials {
-            width: 60vw; height: 65vh; /* Smaller Width/Height */
+            width: 60vw; height: 65vh; 
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
             box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
             display: flex; flex-direction: column;
             padding: 1.5vh;
             overflow: hidden;
-            /* Animation Base State */
             transform: scale(0.95); opacity: 0;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            margin: 0 auto; /* Ensure horizontal centering */
+            margin: 0 auto; /* Horizontal Center */
         }
         .modal-overlay.active .expanded-socials { transform: scale(1); opacity: 1; }
 
@@ -232,7 +230,7 @@
 
         .socials-content-grid {
             display: grid;
-            grid-template-columns: 1fr 1.2fr; /* List | Preview */
+            grid-template-columns: 1fr 1.2fr;
             gap: 2vh;
             flex: 1;
             min-height: 0;
@@ -424,7 +422,7 @@
         </section>
     </main>
 
-    <div id="article-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
+    <div id="article-overlay-container" class="modal-overlay" onclick="handleOverlayClick(event)">
         <div class="expanded-article" onclick="event.stopPropagation()">
             <div class="article-main" id="article-main-col">
                 <div class="article-main-thumb">
@@ -444,7 +442,7 @@
         </div>
     </div>
 
-    <div id="socials-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
+    <div id="socials-overlay-container" class="modal-overlay" onclick="handleOverlayClick(event)">
         <div class="expanded-socials" onclick="event.stopPropagation()">
             <div class="socials-header">FIND ME HERE</div>
             <div class="socials-content-grid">
@@ -521,7 +519,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         ];
 
         let systemState = 'idle'; let userInput = ""; let intervals = [];
-        let closeTimeout = null; // Global timeout tracker
+        let closeTimeout = null;
 
         const codeSnippets = ["sudo inject --force -p 8080", "decrypting root access...", "0x4F 0xA1 0xB3 0xC9 [ACCESS GRANTED]", "bypassing mainframe firewall...", "downloading packets: [||||||||||] 100%", "executing shellcode.bin...", "rm -rf /var/log/syslog --quiet", "initializing buffer overflow...", "connecting to host 192.168.0.x...", "user_privileges = admin", "searching for vulnerabilities...", "traceroute complete. node found.", "compile error: core dump intercepted", "overriding security protocols...", "installing rootkit v4.2...", "ssh key generated: SHA256:8f4...", "System.out.println('HACKED');", "void *p = malloc(1024);", "if (access_level > 9000) { break; }", "network scan: 4 ports open"];
         const fakeProcesses = [{ cmd: "kworker/u16", pid: 120 }, { cmd: "systemd", pid: 1 }, { cmd: "discord", pid: 4055 }, { cmd: "chrome", pid: 3201 }, { cmd: "code", pid: 5600 }, { cmd: "spotify", pid: 2100 }, { cmd: "steam", pid: 8890 }, { cmd: "Xorg", pid: 600 }, { cmd: "pulseaudio", pid: 1220 }];
@@ -536,36 +534,63 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             hackOutput.innerHTML = ""; userInput = "";
         }
 
-        // --- OVERLAY MANAGEMENT ---
+        // --- OVERLAY HELPERS ---
         function forceClose(container) {
             container.classList.remove('active');
             container.style.display = 'none';
         }
 
-        // Closes everything instantly except the 'except' container
-        function closeAllOverlays(e, exceptContainer) {
-            // Cancel any pending close animation to prevent it from hiding the new window
-            if (closeTimeout) clearTimeout(closeTimeout);
+        function closeAllOverlays() {
+            // Cancel pending animation to prevent hiding what we just tried to open
+            if(closeTimeout) clearTimeout(closeTimeout);
+            
+            // Start closing animation for all
+            articleContainer.classList.remove('active');
+            socialsContainer.classList.remove('active');
+            mainStage.classList.remove('blur');
+            
+            // Wait for animation to finish before setting display:none
+            closeTimeout = setTimeout(() => {
+                articleContainer.style.display = 'none';
+                socialsContainer.style.display = 'none';
+            }, 300);
+        }
 
-            // Logic: Close if click is on background OR explicit close request
-            if (!e || (e.target && (e.target.classList.contains('modal-overlay') || e.target.id === 'nav-home'))) {
-                articleContainer.classList.remove('active');
-                socialsContainer.classList.remove('active');
-                mainStage.classList.remove('blur');
-                
-                // Allow animation to play
-                closeTimeout = setTimeout(() => { 
-                    articleContainer.style.display = 'none'; 
-                    socialsContainer.style.display = 'none';
-                }, 300);
-            } else if (exceptContainer) {
-                // Switching modes: Instantly hide others to prevent conflict
-                if (exceptContainer !== articleContainer) forceClose(articleContainer);
-                if (exceptContainer !== socialsContainer) forceClose(socialsContainer);
+        function handleOverlayClick(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeAllOverlays();
             }
         }
 
-        // --- ARTICLE LOGIC ---
+        // --- OPENING FUNCTIONS ---
+        function prepareOpen() {
+            if(closeTimeout) clearTimeout(closeTimeout);
+            // Instantly hide others to prevent conflict
+            forceClose(articleContainer);
+            forceClose(socialsContainer);
+        }
+
+        function openArticle(index) {
+            prepareOpen();
+            populateArticle(index);
+            articleContainer.style.display = 'flex';
+            requestAnimationFrame(() => {
+                articleContainer.classList.add('active');
+                mainStage.classList.add('blur');
+            });
+        }
+
+        function openSocials() {
+            prepareOpen();
+            populateSocials();
+            socialsContainer.style.display = 'flex';
+            requestAnimationFrame(() => {
+                socialsContainer.classList.add('active');
+                mainStage.classList.add('blur');
+            });
+        }
+
+        // --- CONTENT POPULATION ---
         function populateArticle(index) {
             const data = articlesData[index];
             const otherIndex = (index === 0) ? 1 : 0;
@@ -585,18 +610,6 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             `;
         }
 
-        function openArticle(index) {
-            closeAllOverlays(null, articleContainer); // Close others
-            populateArticle(index);
-            articleContainer.style.display = 'flex';
-            
-            // Short delay to allow display:flex to apply
-            requestAnimationFrame(() => {
-                articleContainer.classList.add('active');
-                mainStage.classList.add('blur');
-            });
-        }
-
         function switchArticle(index) {
             const content = document.getElementById('article-main-col');
             content.classList.add('switching');
@@ -607,14 +620,9 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             }, 200);
         }
 
-        // --- SOCIALS FUNCTIONS ---
-        function openSocials() {
-            closeAllOverlays(null, socialsContainer); // Close others
-            
+        function populateSocials() {
             const listContainer = document.getElementById('socials-list-container');
             listContainer.innerHTML = '';
-            
-            // Initial Preview
             document.getElementById('soc-prev-img').src = socialData[0].img;
             document.getElementById('soc-prev-desc').textContent = socialData[0].desc;
 
@@ -639,20 +647,14 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                 capsule.appendChild(arrow);
                 listContainer.appendChild(capsule);
             });
-
-            socialsContainer.style.display = 'flex';
-            requestAnimationFrame(() => {
-                socialsContainer.classList.add('active');
-                mainStage.classList.add('blur');
-            });
         }
 
-        // Listeners
+        // --- LISTENERS ---
         bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
         biosTrigger.addEventListener('click', () => { if (systemState === 'idle') startBios(); else resetAll(); });
         screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
         
-        navHome.addEventListener('click', (e) => closeAllOverlays(e));
+        navHome.addEventListener('click', closeAllOverlays);
         navSocials.addEventListener('click', openSocials);
 
         document.addEventListener('keydown', (e) => {
