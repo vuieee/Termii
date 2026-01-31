@@ -18,12 +18,9 @@
             --term-bg: #050505;
             --font-head: 'Press Start 2P', cursive;
             --font-body: 'Fira Code', monospace;
-            
-            /* GAP VARIABLE FOR SYMMETRY */
             --gap-size: 3vh; 
         }
 
-        /* --- GLOBAL RESET --- */
         *::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; box-sizing: border-box; }
 
@@ -48,13 +45,13 @@
             box-shadow: inset 0 0 80px rgba(0,0,0,0.7);
         }
 
-        /* --- TYPOGRAPHY --- */
+        /* TYPOGRAPHY */
         .header-text { font-family: var(--font-head); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8vh; }
         .body-text { font-size: 0.8rem; line-height: 1.3; opacity: 0.8; }
         .text-xs { font-size: 0.65rem; }
         .opacity-50 { opacity: 0.5; }
 
-        /* --- LAYOUT --- */
+        /* LAYOUT */
         header { display: flex; justify-content: space-between; margin-bottom: 1vh; opacity: 0.7; flex-shrink: 0; z-index: 1002; position: relative; }
 
         nav {
@@ -76,8 +73,9 @@
         }
         .main-stage.blur { filter: blur(8px) brightness(0.6); pointer-events: none; }
 
-        /* --- LEFT PANEL --- */
+        /* PANELS */
         .left-panel { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+        .right-panel { display: flex; flex-direction: column; gap: 1.5vh; height: 100%; overflow: hidden; }
         .unix-box { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-bottom: 1vh; position: relative; }
 
         .img-wrapper {
@@ -88,7 +86,7 @@
         .img-wrapper::after { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--term-teal); mix-blend-mode: color; opacity: 1; pointer-events: none; z-index: 2; }
         .img-wrapper::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.95) 100%); }
 
-        /* --- OVERLAYS --- */
+        /* OVERLAYS (Hack/BIOS) */
         .term-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; font-family: var(--font-body); padding: 10px; z-index: 4; display: none; flex-direction: column; overflow: hidden; }
         #hack-overlay { color: var(--term-teal); font-size: 0.7rem; justify-content: flex-start; word-break: break-all; line-height: 1.5; }
         #bios-overlay { color: #ddd; font-size: 0.6rem; gap: 8px; }
@@ -113,8 +111,6 @@
         .bios-footer { display: flex; gap: 1vw; align-items: flex-end; font-family: var(--font-body); flex-shrink: 0; margin-top: 0.5vh; }
         .inputs-grid { display: grid; grid-template-columns: auto auto; gap: 0.2vh 1vw; font-weight: bold; }
 
-        /* --- RIGHT PANEL --- */
-        .right-panel { display: flex; flex-direction: column; gap: 1.5vh; height: 100%; overflow: hidden; }
         .repos-box { border: 2px solid var(--term-teal); padding: 1.5vh; flex-shrink: 0; }
         .repo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1vh; }
         .repo-card { border: 2px solid var(--term-teal); padding: 1vh; position: relative; }
@@ -136,19 +132,21 @@
         .social-btn:hover { background: var(--term-teal); color: black; box-shadow: 0 0 10px var(--term-teal); }
 
         /* ========================================= */
-        /* === EXPANDED ARTICLE OVERLAY CSS === */
+        /* === SHARED OVERLAY CONTAINER (Base) === */
         /* ========================================= */
-        
-        #article-overlay-container {
+        .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 1000; display: none; justify-content: center; align-items: flex-end;
             padding-top: 10vh; padding-bottom: 2vh; padding-left: 2vw; padding-right: 2vw;
             backdrop-filter: blur(0px); background: rgba(0,0,0,0);
             transition: backdrop-filter 0.4s ease, background 0.4s ease;
         }
-        #article-overlay-container.active { backdrop-filter: blur(5px); background: rgba(0,0,0,0.6); }
+        .modal-overlay.active { backdrop-filter: blur(5px); background: rgba(0,0,0,0.6); }
 
-        .expanded-content {
+        /* ========================================= */
+        /* === ARTICLE OVERLAY SPECIFIC === */
+        /* ========================================= */
+        .expanded-article {
             width: 90vw; height: 85vh;
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
@@ -159,81 +157,139 @@
             transform: scale(0.95); opacity: 0;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
-        #article-overlay-container.active .expanded-content { transform: scale(1); opacity: 1; }
+        .modal-overlay.active .expanded-article { transform: scale(1); opacity: 1; }
 
-        /* --- Left Column: Main Article --- */
+        /* Article Left Column */
         .article-main {
             display: flex; flex-direction: column; overflow-y: auto; height: 100%; width: 100%;
-            /* Removed Border Separator */
-            border-right: none; 
-            padding-right: 20px; 
-            /* Transition for smooth content switching */
+            border-right: none; padding-right: 20px; 
             transition: opacity 0.2s ease, transform 0.2s ease;
             opacity: 1; transform: scale(1);
-            
-            scrollbar-width: thin; 
-            scrollbar-color: var(--term-teal) transparent;
+            scrollbar-width: thin; scrollbar-color: var(--term-teal) transparent;
         }
-        /* Class added via JS when switching articles */
         .article-main.switching { opacity: 0; transform: scale(0.98); }
 
-        /* SCROLLBAR - FLOATING & CENTERED */
         .article-main::-webkit-scrollbar { width: 14px; display: block; }
         .article-main::-webkit-scrollbar-track { background: transparent; }
         .article-main::-webkit-scrollbar-thumb { 
             background-color: var(--term-teal); 
-            /* Transparent border creates the "centered/floating" effect */
             border: 5px solid transparent; 
             background-clip: content-box; 
             border-radius: 99px;
         }
 
         .article-main-thumb {
-            width: 100%; height: auto; 
-            border: 1px solid var(--term-teal);
-            margin-bottom: var(--gap-size); /* SYMMETRY GAP 1 */
-            background: #000; flex-shrink: 0; overflow: hidden;
+            width: 100%; height: auto; border: 1px solid var(--term-teal);
+            margin-bottom: var(--gap-size); background: #000; flex-shrink: 0; overflow: hidden;
         }
         .article-main-thumb img { width: 100%; height: auto; display: block; filter: none; }
 
-        /* TITLE BOX - NO BORDER, JUST TEXT */
-        .article-title-box { 
-            border: none; padding: 0; 
-            width: 100%;
-            margin-bottom: var(--gap-size); /* SYMMETRY GAP 2 */
-            flex-shrink: 0; 
-        }
-        
-        #exp-title {
-            font-size: 2rem; line-height: 1.1; text-align: left; margin: 0;
-        }
+        .article-title-box { border: none; padding: 0; width: 100%; margin-bottom: var(--gap-size); flex-shrink: 0; }
+        #exp-title { font-size: 2rem; line-height: 1.1; text-align: left; margin: 0; }
+        .article-body-text { font-family: var(--font-body); font-size: 0.9rem; line-height: 1.6; color: rgba(80, 255, 247, 0.9); white-space: pre-wrap; padding-bottom: 5vh; width: 100%; }
 
-        .article-body-text {
-            font-family: var(--font-body); font-size: 0.9rem; line-height: 1.6;
-            color: rgba(80, 255, 247, 0.9); white-space: pre-wrap; 
-            padding-bottom: 5vh; width: 100%;
-        }
-
-        /* --- Right Column: Sidebar --- */
+        /* Article Right Column */
         .article-sidebar { display: flex; flex-direction: column; gap: 2vh; overflow-y: auto; }
-        
-        .rec-header { 
-            border: 1px solid var(--term-teal); padding: 1vh; text-align: center;
-            margin-bottom: var(--gap-size); /* SYMMETRY GAP 3 */
-        }
-        
+        .rec-header { border: 1px solid var(--term-teal); padding: 1vh; text-align: center; margin-bottom: var(--gap-size); }
         .rec-card { border: 2px solid var(--term-teal); padding: 1vh; cursor: pointer; overflow: hidden; }
-        
-        .rec-thumb { 
-            width: 100%; height: auto; 
-            border: 1px solid var(--term-teal); margin-bottom: 1vh; 
-            overflow: hidden; background: #000; 
-        }
-        .rec-thumb img { 
-            width: 100%; height: auto; display: block; 
-            filter: none; transition: transform 0.4s ease; 
-        }
+        .rec-thumb { width: 100%; height: auto; border: 1px solid var(--term-teal); margin-bottom: 1vh; overflow: hidden; background: #000; }
+        .rec-thumb img { width: 100%; height: auto; display: block; filter: none; transition: transform 0.4s ease; }
         .rec-card:hover .rec-thumb img { transform: scale(1.1); }
+
+        /* ========================================= */
+        /* === SOCIALS OVERLAY SPECIFIC === */
+        /* ========================================= */
+        .expanded-socials {
+            width: 60vw; height: 65vh; /* Smaller Width/Height */
+            background: var(--term-bg);
+            border: 2px solid var(--term-teal);
+            box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
+            display: flex; flex-direction: column;
+            padding: 1.5vh;
+            overflow: hidden;
+            transform: scale(0.95); opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .modal-overlay.active .expanded-socials { transform: scale(1); opacity: 1; }
+
+        .socials-header {
+            border: 2px solid var(--term-teal);
+            padding: 1vh;
+            text-align: center;
+            font-family: var(--font-head);
+            font-size: 1rem;
+            margin-bottom: 2vh;
+            flex-shrink: 0;
+        }
+
+        .socials-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr; /* List | Preview */
+            gap: 2vh;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* Left: List */
+        .socials-list {
+            display: flex; flex-direction: column; gap: 1.5vh;
+            overflow-y: auto; padding-right: 5px;
+        }
+
+        .social-capsule {
+            display: flex; 
+            border: 2px solid var(--term-teal);
+            height: 6vh;
+            align-items: stretch;
+        }
+
+        .social-info {
+            flex: 1;
+            display: flex; align-items: center; padding-left: 1vw; gap: 1vw;
+            cursor: pointer;
+            border-right: 2px solid var(--term-teal);
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .social-info:hover { background: rgba(80, 255, 247, 0.1); }
+
+        .social-arrow {
+            width: 4vw;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .social-arrow:hover {
+            background: var(--term-teal);
+            color: black;
+            box-shadow: 0 0 15px var(--term-teal); /* Glow Effect */
+        }
+
+        /* Right: Preview */
+        .socials-preview {
+            display: flex; flex-direction: column; gap: 1.5vh;
+        }
+
+        .social-preview-thumb {
+            flex: 1;
+            border: 2px solid var(--term-teal);
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            background: #000;
+        }
+        .social-preview-thumb img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .social-preview-desc {
+            height: 8vh;
+            border: 2px solid var(--term-teal);
+            padding: 1vh;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            opacity: 0.8;
+            flex-shrink: 0;
+        }
 
     </style>
 </head>
@@ -252,7 +308,7 @@
         <div class="nav-item" id="nav-home">HOME</div>
         <div class="nav-item">ARTICLES</div>
         <div class="nav-item">REPOS</div>
-        <div class="nav-item">SOCIALS</div>
+        <div class="nav-item" id="nav-socials">SOCIALS</div>
         <div class="nav-item">UNIX</div>
     </nav>
 
@@ -263,10 +319,12 @@
                 <div class="header-text" style="text-align: center;">LAIN V1-01 . . .</div>
                 <div class="img-wrapper">
                     <img id="lain-img" src="lainheader.png" alt="Lain Interface">
+                    
                     <div id="hack-overlay" class="term-overlay">
                         <div id="hack-output"></div>
                         <div id="hack-input-line" style="display:none;">> <span id="user-input"></span><span class="cursor-blink"></span></div>
                     </div>
+
                     <div id="bios-overlay" class="term-overlay">
                         <div class="header-text" style="color:var(--term-green);">SYSTEM MONITOR v2.0</div>
                         <div class="bios-section">
@@ -335,7 +393,6 @@
                         </div>
                         <div class="body-text text-xs opacity-50">Why I moved from Windows to Arch, and why Window Managers are superior.</div>
                     </div>
-                    
                     <div class="article-card" onclick="openArticle(1)">
                         <div class="header-text" style="font-size: 0.65rem;">ENABLE VRR XORG</div>
                         <div class="article-thumb">
@@ -359,8 +416,8 @@
         </section>
     </main>
 
-    <div id="article-overlay-container" onclick="closeArticle(event)">
-        <div class="expanded-content" id="expanded-content" onclick="event.stopPropagation()">
+    <div id="article-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
+        <div class="expanded-article" onclick="event.stopPropagation()">
             <div class="article-main" id="article-main-col">
                 <div class="article-main-thumb">
                     <img id="exp-img" src="" alt="Expanded Image">
@@ -380,21 +437,42 @@
         </div>
     </div>
 
+    <div id="socials-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
+        <div class="expanded-socials" onclick="event.stopPropagation()">
+            <div class="socials-header">FIND ME HERE</div>
+            <div class="socials-content-grid">
+                <div class="socials-list" id="socials-list-container">
+                    </div>
+                <div class="socials-preview">
+                    <div class="social-preview-thumb">
+                        <img id="soc-prev-img" src="lainheader.png" alt="Social Preview">
+                    </div>
+                    <div class="social-preview-desc" id="soc-prev-desc">
+                        Select a link to view details.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const bootTrigger = document.getElementById('boot-trigger');
         const biosTrigger = document.getElementById('bios-trigger');
         const screenTrigger = document.getElementById('screen-trigger');
         const navHome = document.getElementById('nav-home');
+        const navSocials = document.getElementById('nav-socials');
         const lainImg = document.getElementById('lain-img');
         
         const hackOverlay = document.getElementById('hack-overlay');
         const biosOverlay = document.getElementById('bios-overlay');
         const articleContainer = document.getElementById('article-overlay-container');
+        const socialsContainer = document.getElementById('socials-overlay-container');
         const mainStage = document.getElementById('main-stage');
         const hackOutput = document.getElementById('hack-output');
         const hackInputLine = document.getElementById('hack-input-line');
         const userInputDisplay = document.getElementById('user-input');
         
+        // --- DATA ---
         const longLorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
@@ -420,6 +498,13 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                 desc: "Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.",
                 longText: `XORG VRR CONFIGURATION GUIDE\n\n${longLorem}\n\nSection 2: Troubleshooting\n\n${longLorem}`
             }
+        ];
+
+        const socialData = [
+            { name: "Discord", icon: "💬", link: "https://discord.com", img: "rice1.png", desc: "Join my community server for tech support." },
+            { name: "LinkedIn", icon: "💼", link: "https://linkedin.com", img: "xorg.png", desc: "Connect with me professionally." },
+            { name: "Github", icon: "🐙", link: "https://github.com", img: "rice1.png", desc: "Check out my latest open source projects." },
+            { name: "Gmail", icon: "📧", link: "mailto:user@gmail.com", img: "xorg.png", desc: "Send me a direct email inquiry." }
         ];
 
         let systemState = 'idle'; let userInput = ""; let intervals = [];
@@ -459,7 +544,6 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         function openArticle(index) {
             populateArticle(index);
             articleContainer.style.display = 'flex';
-            // Wait for display:flex to apply, then trigger animation
             requestAnimationFrame(() => {
                 articleContainer.classList.add('active');
                 mainStage.classList.add('blur');
@@ -468,31 +552,75 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
 
         function switchArticle(index) {
             const content = document.getElementById('article-main-col');
-            // 1. Fade Out
             content.classList.add('switching');
-            
-            // 2. Wait for fade out, then swap & fade IN
             setTimeout(() => {
                 populateArticle(index);
-                content.scrollTop = 0; // Reset scroll
+                content.scrollTop = 0;
                 content.classList.remove('switching');
             }, 200);
         }
 
-        function closeArticle(e) {
-            // Check if triggered by ID match (background click) OR explicit call
-            if (e && e.target && e.target.id !== 'article-overlay-container' && e.target.id !== 'nav-home') return;
+        // --- SOCIALS FUNCTIONS ---
+        function openSocials() {
+            const listContainer = document.getElementById('socials-list-container');
+            listContainer.innerHTML = '';
+            
+            // Default Preview
+            document.getElementById('soc-prev-img').src = socialData[0].img;
+            document.getElementById('soc-prev-desc').textContent = socialData[0].desc;
 
-            articleContainer.classList.remove('active');
-            mainStage.classList.remove('blur');
-            setTimeout(() => { articleContainer.style.display = 'none'; }, 300);
+            socialData.forEach((item, index) => {
+                const capsule = document.createElement('div');
+                capsule.className = 'social-capsule';
+                
+                // Info Area (Click updates preview)
+                const info = document.createElement('div');
+                info.className = 'social-info';
+                info.innerHTML = `<span style="font-size:1.2rem;">${item.icon}</span> <span class="header-text" style="font-size:0.7rem; margin:0;">${item.name}</span>`;
+                info.onclick = () => {
+                    document.getElementById('soc-prev-img').src = item.img;
+                    document.getElementById('soc-prev-desc').textContent = item.desc;
+                };
+
+                // Arrow Area (Click opens link)
+                const arrow = document.createElement('div');
+                arrow.className = 'social-arrow';
+                arrow.innerHTML = '&#8599;'; // NE Arrow
+                arrow.onclick = () => window.open(item.link, '_blank');
+
+                capsule.appendChild(info);
+                capsule.appendChild(arrow);
+                listContainer.appendChild(capsule);
+            });
+
+            socialsContainer.style.display = 'flex';
+            requestAnimationFrame(() => {
+                socialsContainer.classList.add('active');
+                mainStage.classList.add('blur');
+            });
+        }
+
+        // Shared Close Function for both overlays
+        function closeAllOverlays(e) {
+            // If explicit call (e.g. Nav Home) OR click on overlay background
+            if (e.target && (e.target.classList.contains('modal-overlay') || e.target.id === 'nav-home')) {
+                articleContainer.classList.remove('active');
+                socialsContainer.classList.remove('active');
+                mainStage.classList.remove('blur');
+                setTimeout(() => { 
+                    articleContainer.style.display = 'none'; 
+                    socialsContainer.style.display = 'none';
+                }, 300);
+            }
         }
 
         // Listeners
         bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
         biosTrigger.addEventListener('click', () => { if (systemState === 'idle') startBios(); else resetAll(); });
         screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
-        navHome.addEventListener('click', () => closeArticle({ target: { id: 'nav-home' } }));
+        
+        navHome.addEventListener('click', (e) => closeAllOverlays(e));
+        navSocials.addEventListener('click', openSocials);
 
         document.addEventListener('keydown', (e) => {
             if (systemState !== 'boot_wait') return;
