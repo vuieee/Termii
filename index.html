@@ -140,7 +140,6 @@
         .cursor-blink { display: inline-block; width: 8px; height: 14px; background: var(--term-teal); animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* --- FIXED JITTER ISSUE --- */
         .easter-egg-trigger { 
             cursor: pointer; 
             text-decoration: none; 
@@ -156,19 +155,17 @@
 
         /* === BRANDING ASCII STYLE === */
         .branding-text { 
-            font-family: var(--font-body); /* Monospace needed for ASCII alignment */
+            font-family: var(--font-body); 
             font-weight: bold; 
-            font-size: 0.35rem; /* Adjusted to fit the ASCII width */
-            line-height: 1.1;
+            font-size: 0.55rem; /* Resized to match original header width */
+            line-height: 1.0;
             text-align: center; 
             color: var(--term-teal); 
             opacity: 0.8; 
-            margin: 1vh 0; 
+            margin: 1.5vh 0; 
             flex-shrink: 0;
-            white-space: pre; /* Essential for ASCII Art */
-            display: flex;
-            justify-content: center;
-            overflow-x: hidden;
+            white-space: pre; 
+            align-self: center; /* Ensures centering in flex column */
         }
 
         .bios-footer { display: flex; gap: 1vw; align-items: flex-end; font-family: var(--font-body); flex-shrink: 0; margin-top: 0.5vh; }
@@ -726,7 +723,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         navHome.addEventListener('click', (e) => closeAllOverlays(e));
         navSocials.addEventListener('click', openSocials);
 
-        // ... [Rest of boot/bios/hack logic] ...
+        // ... [Rest of boot/bios/hack logic remains same] ...
         function startBoot() {
             systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
             bootTrigger.textContent = "EXIT"; bootTrigger.classList.add('active');
