@@ -47,7 +47,7 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
-        /* --- LOADING SCREEN (UPDATED) --- */
+        /* --- LOADING SCREEN (Exact Match) --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--term-bg);
@@ -55,26 +55,19 @@
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             transition: opacity 0.5s ease-out;
-        }
-        
-        /* Vignette Effect */
-        #loading-screen::after {
-            content: "";
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 60%, black 100%);
-            pointer-events: none;
+            /* Vignette Effect */
+            background: radial-gradient(circle, transparent 60%, black 100%), var(--term-bg);
         }
 
-        .loading-container {
+        .loading-content {
             width: 300px;
-            /* Container to align text and bar */
             display: flex;
             flex-direction: column;
-            align-items: flex-start; 
+            align-items: flex-start; /* Align text to start of bar */
         }
 
         #loading-text { 
-            font-family: var(--font-body); /* More terminal-like */
+            font-family: var(--font-body); 
             font-weight: bold; 
             margin-bottom: 5px; 
             font-size: 0.9rem; 
@@ -85,14 +78,14 @@
         #loading-bar-container { 
             width: 100%; 
             height: 25px;
-            border: 3px solid var(--term-white); /* Thicker border like image */
+            border: 3px solid var(--term-white); 
             padding: 3px; 
-            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
 
         #loading-bar { 
             height: 100%; 
-            background-color: var(--term-white); /* White fill */
+            background-color: var(--term-white); 
             width: 0%; 
             transition: width 0.1s linear; 
         }
@@ -180,40 +173,51 @@
         #bios-trigger.active { color: var(--term-green); font-weight: bold; text-shadow: 0 0 10px var(--term-green); }
         #screen-trigger.active { color: var(--term-white); font-weight: bold; text-shadow: 0 0 10px var(--term-white); }
 
-        /* === BRANDING ASCII STYLE === */
-        .branding-text { 
-            font-family: var(--font-body); 
-            font-weight: bold; 
-            font-size: 0.55rem; 
-            line-height: 1.0;
-            text-align: center; 
-            color: var(--term-teal); 
-            opacity: 0.8; 
-            margin: 1.5vh 0; 
-            flex-shrink: 0;
-            white-space: pre; 
-            align-self: center;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        /* Restored Footer Layout: 3 Columns */
+        /* --- RESTORED FOOTER LAYOUT --- */
         .bios-footer { 
             display: flex; 
-            justify-content: space-between; /* Space them out: Left - Center - Right */
+            justify-content: space-between; /* Spread elements across */
             align-items: flex-end; 
             font-family: var(--font-body); 
             flex-shrink: 0; 
-            margin-top: auto; 
+            margin-top: 0.5vh; 
             gap: 1vw;
+            padding-bottom: 2px;
         }
-        
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        /* Centered Inputs in footer flow */
         .inputs-grid { 
             display: grid; 
             grid-template-columns: auto auto; 
             gap: 0.2vh 1vw; 
             font-weight: bold; 
-            text-align: center;
+            margin-bottom: 2px;
+        }
+
+        /* ASCII Art in Footer Slot */
+        .branding-text { 
+            font-family: var(--font-body); 
+            font-weight: bold; 
+            font-size: 0.3rem; /* Tiny size to fit footer height */
+            line-height: 0.9;
+            text-align: center; 
+            color: var(--term-teal); 
+            opacity: 0.8; 
+            white-space: pre; 
+            margin-bottom: 2px;
+        }
+
+        .footer-right {
+            display: flex; 
+            flex-direction: column; 
+            text-align: right;
+            gap: 2px;
         }
 
         .repos-box { border: 2px solid var(--term-teal); padding: 1.5vh; flex-shrink: 0; }
@@ -236,7 +240,6 @@
         .social-btn { width: 100%; background: transparent; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.6rem; padding: 1vh; text-align: center; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .social-btn:hover { background: var(--term-teal); color: black; box-shadow: 0 0 10px var(--term-teal); }
 
-        /* Modal Overlays */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 1000; display: none; 
@@ -370,7 +373,7 @@
     <div class="crt-scanlines"></div>
 
     <div id="loading-screen">
-        <div class="loading-container">
+        <div class="loading-content">
             <div id="loading-text">Initializing . . .</div>
             <div id="loading-bar-container">
                 <div id="loading-bar"></div>
@@ -426,16 +429,10 @@
                     </div>
                 </div>
 
-                <div class="branding-text">
-     _  ___  ____  _   _ _   _   _      ____  _____ ____ ___ ____ _   _ ____  
-    | |/ _ \/ ___|| | | | | | | / \    |  _ \| ____/ ___|_ _/ ___| \ | / ___| 
- _  | | | | \___ \| |_| | | | |/ _ \   | | | |  _| \___ \| | |  _|  \| \___ \ 
-| |_| | |_| |___) |  _  | |_| / ___ \  | |_| | |___ ___) | | |_| | |\  |___) |
- \___/ \___/|____/|_| |_|\___/_/   \_\ |____/|_____|____/___\____|_| \_|____/ 
-                </div>
+                <div class="branding-text">JOSHUA DESIGN</div>
 
                 <div class="bios-footer body-text text-xs">
-                    <div>
+                    <div class="footer-left">
                         <div class="opacity-50">@ECHO OFF</div>
                         <div class="opacity-50">WEBPAGE</div>
                         <div class="opacity-50">
@@ -453,7 +450,15 @@
                         <span class="header-text" style="font-size: 0.6rem; margin:0;">GIMP FIGMA</span>
                     </div>
 
-                    <div class="opacity-50" style="display:flex; flex-direction:column; text-align: right;">
+                    <div class="branding-text">
+     _  ___  ____  _   _ _   _   _      ____  _____ ____ ___ ____ _   _ ____  
+    | |/ _ \/ ___|| | | | | | | / \    |  _ \| ____/ ___|_ _/ ___| \ | / ___| 
+ _  | | | | \___ \| |_| | | | |/ _ \   | | | |  _| \___ \| | |  _|  \| \___ \ 
+| |_| | |_| |___) |  _  | |_| / ___ \  | |_| | |___ ___) | | |_| | |\  |___) |
+ \___/ \___/|____/|_| |_|\___/_/   \_\ |____/|_____|____/___\____|_| \_|____/ 
+                    </div>
+
+                    <div class="footer-right opacity-50">
                         <span>E()()</span><span>E()()</span><span>E()()</span>
                     </div>
                 </div>
@@ -626,11 +631,13 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             loadingBar.style.width = pct + "%";
             
             if (loadedCount >= totalImages) {
+                // All loaded: transition
                 setTimeout(() => {
                     loadingScreen.style.opacity = 0;
                     mainContent.classList.add('active');
                     setTimeout(() => {
                         loadingScreen.style.display = 'none';
+                        // Apply src to HTML elements now that they are cached
                         document.getElementById('lain-img').src = "assets/images/lainheader.png";
                         document.querySelectorAll('.article-thumb img').forEach((img, idx) => {
                             img.src = articlesData[idx].img;
@@ -640,6 +647,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             }
         }
 
+        // Trigger loading
         allImages.forEach(src => {
             const img = new Image();
             img.onload = checkLoad;
