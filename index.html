@@ -47,7 +47,7 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
-        /* --- LOADING SCREEN (Teal) --- */
+        /* --- LOADING SCREEN --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--term-bg);
@@ -71,20 +71,20 @@
             margin-bottom: 5px; 
             font-size: 0.9rem; 
             letter-spacing: 1px;
-            color: var(--term-teal); /* Changed to Teal */
+            color: var(--term-teal);
         }
 
         #loading-bar-container { 
             width: 100%; 
             height: 25px;
-            border: 3px solid var(--term-teal); /* Changed to Teal */
+            border: 3px solid var(--term-teal); 
             padding: 3px; 
             box-shadow: 0 0 10px rgba(80, 255, 247, 0.2);
         }
 
         #loading-bar { 
             height: 100%; 
-            background-color: var(--term-teal); /* Changed to Teal */
+            background-color: var(--term-teal); 
             width: 0%; 
             transition: width 0.1s linear; 
         }
@@ -100,7 +100,7 @@
         }
         .content-wrapper.active { opacity: 1; }
 
-        /* --- LOCALIZED CRT EFFECT (For Images Only) --- */
+        /* CRT SCANLINES (Applied to Images Only) */
         .scanlines {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 5;
@@ -387,7 +387,6 @@
             padding-right: 10px;
             flex: 1;
         }
-        
         .articles-list-container::-webkit-scrollbar { width: 14px; display: block; }
         .articles-list-container::-webkit-scrollbar-track { background: transparent; }
         .articles-list-container::-webkit-scrollbar-thumb { 
@@ -579,8 +578,6 @@
 </head>
 <body>
 
-    <div class="crt-scanlines"></div>
-
     <div id="loading-screen">
         <div class="loading-content">
             <div id="loading-text">Initializing . . .</div>
@@ -694,14 +691,16 @@
                         <div class="article-card" onclick="openArticle(0)">
                             <div class="header-text" style="font-size: 0.65rem;">SWITCHING TO LINUX</div>
                             <div class="article-thumb">
-                                <div class="scanlines"></div> <img src="" data-src="assets/images/rice1.png" alt="Linux Rice">
+                                <div class="scanlines"></div>
+                                <img src="" data-src="assets/images/rice1.png" alt="Linux Rice">
                             </div>
                             <div class="body-text text-xs opacity-50">Why I moved from Windows to Arch, and why Window Managers are superior.</div>
                         </div>
                         <div class="article-card" onclick="openArticle(1)">
                             <div class="header-text" style="font-size: 0.65rem;">ENABLE VRR XORG</div>
                             <div class="article-thumb">
-                                <div class="scanlines"></div> <img src="" data-src="assets/images/xorg.png" alt="Xorg Config">
+                                <div class="scanlines"></div>
+                                <img src="" data-src="assets/images/xorg.png" alt="Xorg Config">
                             </div>
                             <div class="body-text text-xs opacity-50">Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.</div>
                         </div>
@@ -733,7 +732,8 @@
         <div class="expanded-article" onclick="event.stopPropagation()">
             <div class="article-main" id="article-main-col">
                 <div class="article-main-thumb">
-                    <div class="scanlines"></div> <img id="exp-img" src="" alt="Expanded Image">
+                    <div class="scanlines"></div>
+                    <img id="exp-img" src="" alt="Expanded Image">
                 </div>
                 <div class="article-title-box">
                     <div class="header-text" id="exp-title">TITLE HERE</div>
@@ -769,8 +769,7 @@
                     <option value="name">SORT BY: NAME</option>
                 </select>
             </div>
-            <div id="repos-list-content" class="repos-list-container">
-                </div>
+            <div id="repos-list-content" class="repos-list-container"></div>
         </div>
     </div>
 
@@ -781,7 +780,8 @@
                 <div class="socials-list" id="socials-list-container"></div>
                 <div class="socials-preview">
                     <div class="social-preview-thumb">
-                        <div class="scanlines"></div> <img id="soc-prev-img" src="" alt="Social Preview">
+                        <div class="scanlines"></div>
+                        <img id="soc-prev-img" src="" alt="Social Preview">
                     </div>
                     <div class="social-preview-desc" id="soc-prev-desc"></div>
                 </div>
@@ -800,50 +800,41 @@
         const lainImg = document.getElementById('lain-img');
         const hackOverlay = document.getElementById('hack-overlay');
         const biosOverlay = document.getElementById('bios-overlay');
+        
+        // Modals
         const articleContainer = document.getElementById('article-overlay-container');
         const articlesListOverlay = document.getElementById('articles-list-overlay');
         const reposContainer = document.getElementById('repos-overlay-container');
         const socialsContainer = document.getElementById('socials-overlay-container');
+        
         const mainStage = document.getElementById('main-stage');
         const hackOutput = document.getElementById('hack-output');
         const hackInputLine = document.getElementById('hack-input-line');
         const userInputDisplay = document.getElementById('user-input');
         
-        // --- CONTENT DATA ---
-        const longLorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-
-Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-
-At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
-
-Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.`;
+        const longLorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`;
 
         const articlesData = [
             {
                 title: "SWITCHING TO LINUX",
                 img: "assets/images/rice1.png",
-                desc: "Why I moved from Windows to Arch, and why Window Managers are superior.",
-                longText: `MY JOURNEY TO ARCH LINUX\n\n${longLorem}\n\nSection 2: The Config\n\n${longLorem}`
+                desc: "Why I moved from Windows to Arch.",
+                longText: `MY JOURNEY TO ARCH LINUX\n\n${longLorem}`
             },
             {
                 title: "ENABLE VRR XORG",
                 img: "assets/images/xorg.png",
-                desc: "Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.",
-                longText: `XORG VRR CONFIGURATION GUIDE\n\n${longLorem}\n\nSection 2: Troubleshooting\n\n${longLorem}`
+                desc: "Variable Refresh Rate Config.",
+                longText: `XORG VRR GUIDE\n\n${longLorem}`
             }
         ];
 
-        // MOCK REPO DATA
         const reposData = [
-            { name: "NVIM-CONFIG", lang: "Lua", desc: "My personal Neovim configuration files with LSP support.", date: "2025-12-01", url: "#" },
-            { name: "ARCH-INSTALL", lang: "Bash", desc: "Automated Arch Linux installation script for minimal setup.", date: "2026-01-10", url: "#" },
-            { name: "TERMII-WEB", lang: "HTML", desc: "Source code for this terminal website portal.", date: "2026-02-01", url: "#" },
-            { name: "DOTFILES", lang: "Bash", desc: "Collection of config files for Hyprland, Waybar, etc.", date: "2025-11-20", url: "#" },
-            { name: "PY-SCRIPTS", lang: "Python", desc: "Various utility scripts for system automation.", date: "2025-10-05", url: "#" }
+            { name: "NVIM-CONFIG", lang: "Lua", desc: "Neovim config.", date: "2025-12-01", url: "#" },
+            { name: "ARCH-INSTALL", lang: "Bash", desc: "Arch install script.", date: "2026-01-10", url: "#" },
+            { name: "TERMII-WEB", lang: "HTML", desc: "This website source.", date: "2026-02-01", url: "#" },
+            { name: "DOTFILES", lang: "Bash", desc: "Hyprland dotfiles.", date: "2025-11-20", url: "#" },
+            { name: "PY-SCRIPTS", lang: "Python", desc: "Automation scripts.", date: "2025-10-05", url: "#" }
         ];
 
         const icons = {
@@ -852,6 +843,13 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             github: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>`,
             gmail: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819v-5.818l-5.454-3.818v9.636h-2.182v-9.636l-5.455 3.818v5.818h-3.818c-.904 0-1.636-.732-1.636-1.636v-13.909c0-.219.046-.432.129-.627l10.91 7.636 10.909-7.636c.083.195.129.409.129.627z"/></svg>`
         };
+
+        const socialData = [
+            { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "My Discord community." },
+            { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Professional network." },
+            { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "Open source projects." },
+            { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Email me." }
+        ];
 
         // --- PRELOADER LOGIC ---
         const allImages = [
@@ -877,23 +875,17 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             loadingBar.style.width = pct + "%";
             
             if (loadedCount >= totalImages) {
-                // All loaded: transition
                 setTimeout(() => {
                     loadingScreen.style.opacity = 0;
                     mainContent.classList.add('active');
                     setTimeout(() => {
                         loadingScreen.style.display = 'none';
-                        // Apply src to HTML elements now that they are cached
                         document.getElementById('lain-img').src = "assets/images/lainheader.png";
-                        document.querySelectorAll('.article-thumb img').forEach((img, idx) => {
-                            img.src = articlesData[idx].img;
-                        });
                     }, 500);
                 }, 200);
             }
         }
 
-        // Trigger loading
         allImages.forEach(src => {
             const img = new Image();
             img.onload = checkLoad;
@@ -918,44 +910,25 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             hackOutput.innerHTML = ""; userInput = "";
         }
 
-        function forceClose(container) {
-            container.classList.remove('active');
-            container.style.display = 'none';
-        }
-
         function closeAllOverlays(e, exceptContainer) {
             if(closeTimeout) clearTimeout(closeTimeout);
-            if (exceptContainer) {
-                if (exceptContainer !== articleContainer) forceClose(articleContainer);
-                if (exceptContainer !== socialsContainer) forceClose(socialsContainer);
-                if (exceptContainer !== articlesListOverlay) forceClose(articlesListOverlay);
-                if (exceptContainer !== reposContainer) forceClose(reposContainer);
-            } else {
-                if (!e || (e.target && (e.target.classList.contains('modal-overlay') || e.target.id === 'nav-home'))) {
-                    articleContainer.classList.remove('active');
-                    socialsContainer.classList.remove('active');
-                    articlesListOverlay.classList.remove('active');
-                    reposContainer.classList.remove('active');
-                    mainStage.classList.remove('blur');
-                    closeTimeout = setTimeout(() => {
-                        articleContainer.style.display = 'none';
-                        socialsContainer.style.display = 'none';
-                        articlesListOverlay.style.display = 'none';
-                        reposContainer.style.display = 'none';
-                    }, 300);
+            const modals = [articleContainer, articlesListOverlay, reposContainer, socialsContainer];
+            
+            modals.forEach(modal => {
+                if (modal !== exceptContainer && modal.style.display !== 'none') {
+                    modal.classList.remove('active');
+                    setTimeout(() => { modal.style.display = 'none'; }, 300);
                 }
+            });
+
+            if (!exceptContainer) {
+                // Closing everything
+                mainStage.classList.remove('blur');
             }
         }
 
-        function handleOverlayClick(e) { if (e.target.classList.contains('modal-overlay')) closeAllOverlays(); }
-
         function openArticlesList() {
-            if(closeTimeout) clearTimeout(closeTimeout);
-            forceClose(socialsContainer);
-            forceClose(articleContainer);
-            forceClose(reposContainer);
-            
-            // Populate list dynamically
+            closeAllOverlays(null, articlesListOverlay);
             const container = document.getElementById('articles-list-content');
             container.innerHTML = '';
             
@@ -963,7 +936,6 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                 const row = document.createElement('div');
                 row.className = 'article-row';
                 row.onclick = () => openArticle(index);
-                
                 row.innerHTML = `
                     <div class="article-row-thumb">
                         <div class="scanlines"></div>
@@ -972,8 +944,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                     <div class="article-row-info">
                         <div class="article-row-title">${article.title}</div>
                         <div class="article-row-desc">${article.desc}</div>
-                    </div>
-                `;
+                    </div>`;
                 container.appendChild(row);
             });
 
@@ -982,84 +953,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         }
 
         function openArticle(index) {
-            if(closeTimeout) clearTimeout(closeTimeout);
-            forceClose(socialsContainer);
-            forceClose(articlesListOverlay); 
-            forceClose(reposContainer);
-            populateArticle(index);
-            articleContainer.style.display = 'flex';
-            requestAnimationFrame(() => { articleContainer.classList.add('active'); mainStage.classList.add('blur'); });
-        }
-
-        function openSocials() {
-            if(closeTimeout) clearTimeout(closeTimeout);
-            forceClose(articleContainer);
-            forceClose(articlesListOverlay);
-            forceClose(reposContainer);
-            populateSocials();
-            socialsContainer.style.display = 'flex';
-            requestAnimationFrame(() => { socialsContainer.classList.add('active'); mainStage.classList.add('blur'); });
-        }
-
-        // --- NEW: OPEN REPOS MODAL ---
-        function openRepos() {
-            if(closeTimeout) clearTimeout(closeTimeout);
-            forceClose(articleContainer);
-            forceClose(articlesListOverlay);
-            forceClose(socialsContainer);
-            renderRepos(); // Initial render
-            reposContainer.style.display = 'flex';
-            requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); });
-        }
-
-        // --- NEW: REPOS LOGIC (UPDATED WITH CORRECT BUTTON STYLE) ---
-        function renderRepos() {
-            const container = document.getElementById('repos-list-content');
-            const searchVal = document.getElementById('repo-search').value.toLowerCase();
-            const langVal = document.getElementById('repo-lang').value;
-            const sortVal = document.getElementById('repo-sort').value;
-
-            container.innerHTML = '';
-
-            let filtered = reposData.filter(repo => {
-                const matchesSearch = repo.name.toLowerCase().includes(searchVal) || repo.desc.toLowerCase().includes(searchVal);
-                const matchesLang = langVal === 'ALL' || repo.lang === langVal;
-                return matchesSearch && matchesLang;
-            });
-
-            // Sorting
-            filtered.sort((a, b) => {
-                if (sortVal === 'new') return new Date(b.date) - new Date(a.date);
-                if (sortVal === 'old') return new Date(a.date) - new Date(b.date);
-                if (sortVal === 'name') return a.name.localeCompare(b.name);
-            });
-
-            filtered.forEach(repo => {
-                const card = document.createElement('div');
-                card.className = 'repo-row-card';
-                card.innerHTML = `
-                    <div class="repo-header">
-                        <span class="repo-name">${repo.name}</span>
-                    </div>
-                    <button class="repo-get-btn" onclick="window.open('${repo.url}', '_blank')">GET</button>
-                    
-                    <div class="repo-desc-row">${repo.desc}</div>
-                    <div class="repo-meta">
-                        <span>LANG: ${repo.lang}</span>
-                        <span>UPDATED: ${repo.date}</span>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Add Listeners for Repos
-        document.getElementById('repo-search').addEventListener('input', renderRepos);
-        document.getElementById('repo-lang').addEventListener('change', renderRepos);
-        document.getElementById('repo-sort').addEventListener('change', renderRepos);
-
-
-        function populateArticle(index) {
+            closeAllOverlays(null, articleContainer);
             const data = articlesData[index];
             const otherIndex = (index === 0) ? 1 : 0;
             const recData = articlesData[otherIndex];
@@ -1078,20 +972,69 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                     </div>
                     <div class="body-text text-xs opacity-50">${recData.desc}</div>
                 </div>`;
+
+            articleContainer.style.display = 'flex';
+            requestAnimationFrame(() => { articleContainer.classList.add('active'); mainStage.classList.add('blur'); });
         }
 
         function switchArticle(index) {
             const content = document.getElementById('article-main-col');
             content.classList.add('switching');
-            setTimeout(() => { populateArticle(index); content.scrollTop = 0; content.classList.remove('switching'); }, 200);
+            setTimeout(() => { openArticle(index); content.scrollTop = 0; content.classList.remove('switching'); }, 200);
         }
 
-        function populateSocials() {
+        function openRepos() {
+            closeAllOverlays(null, reposContainer);
+            renderRepos();
+            reposContainer.style.display = 'flex';
+            requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); });
+        }
+
+        function renderRepos() {
+            const container = document.getElementById('repos-list-content');
+            const searchVal = document.getElementById('repo-search').value.toLowerCase();
+            const langVal = document.getElementById('repo-lang').value;
+            const sortVal = document.getElementById('repo-sort').value;
+
+            container.innerHTML = '';
+
+            let filtered = reposData.filter(repo => {
+                const matchesSearch = repo.name.toLowerCase().includes(searchVal) || repo.desc.toLowerCase().includes(searchVal);
+                const matchesLang = langVal === 'ALL' || repo.lang === langVal;
+                return matchesSearch && matchesLang;
+            });
+
+            filtered.sort((a, b) => {
+                if (sortVal === 'new') return new Date(b.date) - new Date(a.date);
+                if (sortVal === 'old') return new Date(a.date) - new Date(b.date);
+                if (sortVal === 'name') return a.name.localeCompare(b.name);
+            });
+
+            filtered.forEach(repo => {
+                const card = document.createElement('div');
+                card.className = 'repo-row-card';
+                card.innerHTML = `
+                    <div class="repo-header"><span class="repo-name">${repo.name}</span></div>
+                    <button class="repo-get-btn" onclick="window.open('${repo.url}', '_blank')">GET</button>
+                    <div class="repo-desc-row">${repo.desc}</div>
+                    <div class="repo-meta"><span>LANG: ${repo.lang}</span><span>UPDATED: ${repo.date}</span></div>`;
+                container.appendChild(card);
+            });
+        }
+
+        document.getElementById('repo-search').addEventListener('input', renderRepos);
+        document.getElementById('repo-lang').addEventListener('change', renderRepos);
+        document.getElementById('repo-sort').addEventListener('change', renderRepos);
+
+        function openSocials() {
+            closeAllOverlays(null, socialsContainer);
             const listContainer = document.getElementById('socials-list-container');
             listContainer.innerHTML = '';
-            const defaultItem = socialData[0];
-            document.getElementById('soc-prev-img').src = defaultItem.img;
-            document.getElementById('soc-prev-desc').textContent = defaultItem.desc;
+            
+            if(socialData.length > 0) {
+                document.getElementById('soc-prev-img').src = socialData[0].img;
+                document.getElementById('soc-prev-desc').textContent = socialData[0].desc;
+            }
 
             socialData.forEach((item, index) => {
                 const capsule = document.createElement('div');
@@ -1114,16 +1057,22 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                 capsule.appendChild(arrow);
                 listContainer.appendChild(capsule);
             });
+
+            socialsContainer.style.display = 'flex';
+            requestAnimationFrame(() => { socialsContainer.classList.add('active'); mainStage.classList.add('blur'); });
         }
 
+        // Event Listeners
         bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
         biosTrigger.addEventListener('click', () => { if (systemState === 'idle') startBios(); else resetAll(); });
         screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'assets/images/lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
-        navHome.addEventListener('click', (e) => closeAllOverlays(e));
-        navSocials.addEventListener('click', openSocials);
+        
+        navHome.addEventListener('click', () => closeAllOverlays(null, null));
         navArticles.addEventListener('click', openArticlesList);
         navRepos.addEventListener('click', openRepos);
+        navSocials.addEventListener('click', openSocials);
 
+        // Boot/Hack/Bios logic remains same
         function startBoot() {
             systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
             bootTrigger.textContent = "EXIT"; bootTrigger.classList.add('active');
