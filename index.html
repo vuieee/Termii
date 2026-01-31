@@ -47,7 +47,7 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
-        /* --- LOADING SCREEN --- */
+        /* --- LOADING SCREEN (Teal + Vignette) --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--term-bg);
@@ -71,7 +71,7 @@
             margin-bottom: 5px; 
             font-size: 0.9rem; 
             letter-spacing: 1px;
-            color: var(--term-teal);
+            color: var(--term-teal); 
         }
 
         #loading-bar-container { 
@@ -100,12 +100,11 @@
         }
         .content-wrapper.active { opacity: 1; }
 
-        /* CRT SCANLINES (Applied to Images Only) */
-        .scanlines {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 5;
+        .crt-scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 999;
             background: repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0, 0, 0, 0.2) 3px, rgba(0, 0, 0, 0.2) 4px);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.7);
         }
 
         .header-text { font-family: var(--font-head); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8vh; }
@@ -578,6 +577,7 @@
 </head>
 <body>
 
+    <div class="scanlines" style="position:fixed; z-index:9998; pointer-events:none; opacity:0; display:none;"></div> 
     <div id="loading-screen">
         <div class="loading-content">
             <div id="loading-text">Initializing . . .</div>
@@ -844,13 +844,6 @@
             gmail: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819v-5.818l-5.454-3.818v9.636h-2.182v-9.636l-5.455 3.818v5.818h-3.818c-.904 0-1.636-.732-1.636-1.636v-13.909c0-.219.046-.432.129-.627l10.91 7.636 10.909-7.636c.083.195.129.409.129.627z"/></svg>`
         };
 
-        const socialData = [
-            { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "My Discord community." },
-            { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Professional network." },
-            { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "Open source projects." },
-            { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Email me." }
-        ];
-
         // --- PRELOADER LOGIC ---
         const allImages = [
             "assets/images/lainheader.png", 
@@ -1026,11 +1019,12 @@
         document.getElementById('repo-lang').addEventListener('change', renderRepos);
         document.getElementById('repo-sort').addEventListener('change', renderRepos);
 
-        function openSocials() {
-            closeAllOverlays(null, socialsContainer);
+        // --- RESTORED SOCIALS FUNCTION ---
+        function populateSocials() {
             const listContainer = document.getElementById('socials-list-container');
             listContainer.innerHTML = '';
             
+            // Set default preview to first item
             if(socialData.length > 0) {
                 document.getElementById('soc-prev-img').src = socialData[0].img;
                 document.getElementById('soc-prev-desc').textContent = socialData[0].desc;
@@ -1039,25 +1033,35 @@
             socialData.forEach((item, index) => {
                 const capsule = document.createElement('div');
                 capsule.className = 'social-capsule';
+                
                 const info = document.createElement('div');
                 info.className = 'social-info';
                 if(index === 0) info.classList.add('active');
+                
                 info.innerHTML = `${item.icon} <span class="header-text" style="font-size:0.7rem; margin:0;">${item.name}</span>`;
+                
+                // Click to update preview
                 info.onclick = () => {
                     document.getElementById('soc-prev-img').src = item.img;
                     document.getElementById('soc-prev-desc').textContent = item.desc;
                     document.querySelectorAll('.social-info').forEach(el => el.classList.remove('active'));
                     info.classList.add('active');
                 };
+
                 const arrow = document.createElement('div');
                 arrow.className = 'social-arrow';
                 arrow.innerHTML = '&#8599;'; 
                 arrow.onclick = () => window.open(item.link, '_blank');
+
                 capsule.appendChild(info);
                 capsule.appendChild(arrow);
                 listContainer.appendChild(capsule);
             });
+        }
 
+        function openSocials() {
+            closeAllOverlays(null, socialsContainer);
+            populateSocials(); // Ensure data is ready before showing
             socialsContainer.style.display = 'flex';
             requestAnimationFrame(() => { socialsContainer.classList.add('active'); mainStage.classList.add('blur'); });
         }
