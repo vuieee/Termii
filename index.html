@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Termii: A stylized terminal-based web portal with retro aesthetics.">
     <title>Termii_</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='0' y='0' width='64' height='64' fill='black'/%3E%3Ctext x='5' y='48' fill='%2350fff7' font-family='monospace' font-weight='bold' font-size='46'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+    
+    <link rel="preload" as="image" href="assets/images/lainheader.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +30,7 @@
             --top-align: 10vh; 
         }
 
+        /* Global Reset */
         *::-webkit-scrollbar { display: none; }
         * { scrollbar-width: none; box-sizing: border-box; }
 
@@ -51,7 +55,7 @@
             z-index: 9999;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            transition: opacity 0.8s ease-out;
+            transition: opacity 0.5s ease-out; /* Faster fade */
         }
         #loading-text { 
             font-family: var(--font-head); 
@@ -70,14 +74,14 @@
             height: 100%; 
             background-color: var(--term-teal); 
             width: 0%; 
-            transition: width 0.2s linear; 
+            transition: width 0.1s linear; /* Snappier bar */
             box-shadow: 0 0 10px var(--term-teal);
         }
 
-        /* --- CONTENT FADE IN --- */
+        /* --- MAIN CONTENT WRAPPER --- */
         .content-wrapper {
             opacity: 0;
-            transition: opacity 1s ease-in;
+            transition: opacity 0.8s ease-in; /* Faster content reveal */
             height: 100%;
             width: 100%;
             display: flex;
@@ -85,6 +89,7 @@
         }
         .content-wrapper.active { opacity: 1; }
 
+        /* CRT Effect */
         .crt-scanlines {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 999;
@@ -92,11 +97,13 @@
             box-shadow: inset 0 0 80px rgba(0,0,0,0.7);
         }
 
+        /* Typography Helper Classes */
         .header-text { font-family: var(--font-head); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8vh; }
         .body-text { font-size: 0.8rem; line-height: 1.3; opacity: 0.8; }
         .text-xs { font-size: 0.65rem; }
         .opacity-50 { opacity: 0.5; }
 
+        /* Layout */
         header { display: flex; justify-content: space-between; margin-bottom: 1vh; opacity: 0.7; flex-shrink: 0; z-index: 1002; position: relative; }
 
         nav {
@@ -120,6 +127,8 @@
 
         .left-panel { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
         .right-panel { display: flex; flex-direction: column; gap: 1.5vh; height: 100%; overflow: hidden; }
+        
+        /* Unix Box takes remaining space */
         .unix-box { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-bottom: 1vh; position: relative; }
 
         .img-wrapper {
@@ -130,6 +139,7 @@
         .img-wrapper::after { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--term-teal); mix-blend-mode: color; opacity: 1; pointer-events: none; z-index: 2; }
         .img-wrapper::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.95) 100%); }
 
+        /* Term/BIOS Overlays */
         .term-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; font-family: var(--font-body); padding: 10px; z-index: 4; display: none; flex-direction: column; overflow: hidden; }
         #hack-overlay { color: var(--term-teal); font-size: 0.7rem; justify-content: flex-start; word-break: break-all; line-height: 1.5; }
         #bios-overlay { color: #ddd; font-size: 0.6rem; gap: 8px; }
@@ -150,41 +160,27 @@
             transition: all 0.2s; 
             user-select: none;
             display: inline-block;
-            width: 70px;
+            width: 70px; /* Fixed width to prevent layout jitter */
             text-align: center;
         }
         #boot-trigger.active { color: var(--term-red); font-weight: bold; text-shadow: 0 0 10px var(--term-red); }
         #bios-trigger.active { color: var(--term-green); font-weight: bold; text-shadow: 0 0 10px var(--term-green); }
         #screen-trigger.active { color: var(--term-white); font-weight: bold; text-shadow: 0 0 10px var(--term-white); }
 
-        /* === NEW LAYOUT ELEMENTS === */
-        
-        /* 1. The Inputs (Moved UP) */
+        /* Left Panel Organization */
         .inputs-display { 
             display: grid; 
             grid-template-columns: auto auto; 
             gap: 0.2vh 1vw; 
             font-weight: bold; 
-            margin: 1.5vh 0; /* Spacing below image */
-            justify-content: center; /* Center them nicely */
+            margin: 1.5vh 0;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
-        /* 2. The Tech Stack Box (Below Inputs) */
-        .tech-stack-box {
-            border: 2px solid var(--term-teal);
-            padding: 1.5vh;
-            margin-bottom: 1vh;
-            text-align: center;
-            font-family: var(--font-head);
-            font-size: 0.8rem;
-            color: var(--term-white);
-            box-shadow: 0 0 5px rgba(80, 255, 247, 0.2);
-        }
-
-        /* 3. The Footer (Now containing ASCII) */
         .bios-footer { 
             display: grid; 
-            grid-template-columns: 1fr 2fr 1fr; /* Left, Center (ASCII), Right */
+            grid-template-columns: 1fr 2fr 1fr; /* Grid for footer alignment */
             align-items: flex-end; 
             font-family: var(--font-body); 
             flex-shrink: 0; 
@@ -193,8 +189,8 @@
         }
         
         .footer-ascii {
-            font-family: var(--font-body); /* Monospace needed for ASCII */
-            font-size: 0.25rem; /* Scaled down to fit footer height */
+            font-family: var(--font-body); 
+            font-size: 0.25rem; 
             line-height: 1.0;
             white-space: pre;
             color: var(--term-teal);
@@ -203,6 +199,7 @@
             overflow: hidden;
         }
 
+        /* Right Panel Content */
         .repos-box { border: 2px solid var(--term-teal); padding: 1.5vh; flex-shrink: 0; }
         .repo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1vh; }
         .repo-card { border: 2px solid var(--term-teal); padding: 1vh; position: relative; }
@@ -223,7 +220,7 @@
         .social-btn { width: 100%; background: transparent; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.6rem; padding: 1vh; text-align: center; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .social-btn:hover { background: var(--term-teal); color: black; box-shadow: 0 0 10px var(--term-teal); }
 
-        /* Modal Overlays */
+        /* Modal System */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 1000; display: none; 
@@ -273,14 +270,7 @@
         .article-main-thumb img { width: 100%; height: auto; display: block; filter: none; }
 
         .article-title-box { border: none; padding: 0; width: 100%; margin-bottom: var(--gap-size); flex-shrink: 0; }
-        
-        #exp-title { 
-            font-size: 2rem; 
-            line-height: 1.4; 
-            text-align: left; 
-            margin: 0; 
-        }
-
+        #exp-title { font-size: 2rem; line-height: 1.4; text-align: left; margin: 0; }
         .article-body-text { font-family: var(--font-body); font-size: 0.9rem; line-height: 1.6; color: rgba(80, 255, 247, 0.9); white-space: pre-wrap; padding-bottom: 5vh; width: 100%; }
 
         .article-sidebar { display: flex; flex-direction: column; gap: 2vh; overflow-y: auto; }
@@ -423,10 +413,6 @@
                     <span class="header-text" style="font-size: 0.7rem; margin:0;">HTML CSS JS</span>
                     <span class="opacity-50">INPUT 2:</span>
                     <span class="header-text" style="font-size: 0.7rem; margin:0;">GIMP FIGMA</span>
-                </div>
-
-                <div class="tech-stack-box">
-                    TECH STACK
                 </div>
 
                 <div class="bios-footer body-text text-xs">
@@ -633,8 +619,8 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                         document.querySelectorAll('.article-thumb img').forEach((img, idx) => {
                             img.src = articlesData[idx].img;
                         });
-                    }, 800);
-                }, 500); // Small delay to show 100%
+                    }, 500);
+                }, 200);
             }
         }
 
@@ -642,7 +628,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         allImages.forEach(src => {
             const img = new Image();
             img.onload = checkLoad;
-            img.onerror = checkLoad; // Proceed even if error
+            img.onerror = checkLoad; 
             img.src = src;
         });
 
@@ -709,7 +695,6 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             const otherIndex = (index === 0) ? 1 : 0;
             const recData = articlesData[otherIndex];
             
-            // REVERTED: Using full text again, NO SPLITTING
             document.getElementById('exp-title').textContent = data.title;
             document.getElementById('exp-img').src = data.img;
             document.getElementById('exp-text').textContent = data.longText;
@@ -760,7 +745,6 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         navHome.addEventListener('click', (e) => closeAllOverlays(e));
         navSocials.addEventListener('click', openSocials);
 
-        // ... [Rest of boot/bios/hack logic] ...
         function startBoot() {
             systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
             bootTrigger.textContent = "EXIT"; bootTrigger.classList.add('active');
