@@ -7,11 +7,8 @@
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='0' y='0' width='64' height='64' fill='black'/%3E%3Ctext x='5' y='48' fill='%2350fff7' font-family='monospace' font-weight='bold' font-size='46'%3E%26gt;_%3C/text%3E%3C/svg%3E">
     
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
-            /* Colors */
             --term-teal: #50fff7;
             --term-green: #00ff41;
             --term-yellow: #f1ff5e;
@@ -19,9 +16,9 @@
             --term-white: #ffffff;
             --term-bg: #050505;
             
-            /* Typography & Layout */
-            --font-head: 'Press Start 2P', cursive;
-            --font-body: 'Fira Code', monospace;
+            --font-head: 'Courier New', Courier, monospace; 
+            --font-body: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+            
             --gap-size: 2vh; 
             --top-align: 10vh; 
         }
@@ -43,6 +40,47 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
+        /* --- LOADING SCREEN --- */
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--term-bg);
+            z-index: 9999;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            transition: opacity 0.8s ease-out;
+        }
+        #loading-text { 
+            font-family: var(--font-head); 
+            font-weight: bold; 
+            margin-bottom: 2vh; 
+            font-size: 1rem; 
+            letter-spacing: 2px;
+        }
+        #loading-bar-container { 
+            width: 300px; 
+            height: 20px;
+            border: 2px solid var(--term-teal); 
+            padding: 2px; 
+        }
+        #loading-bar { 
+            height: 100%; 
+            background-color: var(--term-teal); 
+            width: 0%; 
+            transition: width 0.2s linear; 
+            box-shadow: 0 0 10px var(--term-teal);
+        }
+
+        /* --- CONTENT FADE IN --- */
+        .content-wrapper {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-wrapper.active { opacity: 1; }
+
         .crt-scanlines {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 999;
@@ -50,7 +88,7 @@
             box-shadow: inset 0 0 80px rgba(0,0,0,0.7);
         }
 
-        .header-text { font-family: var(--font-head); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8vh; }
+        .header-text { font-family: var(--font-head); font-weight: bold; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8vh; }
         .body-text { font-size: 0.8rem; line-height: 1.3; opacity: 0.8; }
         .text-xs { font-size: 0.65rem; }
         .opacity-50 { opacity: 0.5; }
@@ -64,7 +102,7 @@
         }
         .nav-item {
             padding: 1vh; text-align: center; border-right: 2px solid var(--term-teal);
-            font-family: var(--font-head); font-size: 0.8rem; cursor: pointer; transition: background 0.2s;
+            font-family: var(--font-head); font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: background 0.2s;
         }
         .nav-item:last-child { border-right: none; }
         .nav-item:hover { background: rgba(80, 255, 247, 0.15); }
@@ -102,19 +140,29 @@
         .cursor-blink { display: inline-block; width: 8px; height: 14px; background: var(--term-teal); animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        .easter-egg-trigger { cursor: default; text-decoration: none; transition: all 0.2s; user-select: none; }
-        #boot-trigger.active { cursor: pointer; color: var(--term-red); font-weight: bold; text-shadow: 0 0 10px var(--term-red); }
-        #bios-trigger.active { cursor: pointer; color: var(--term-green); font-weight: bold; text-shadow: 0 0 10px var(--term-green); }
-        #screen-trigger.active { cursor: pointer; color: var(--term-white); font-weight: bold; text-shadow: 0 0 10px var(--term-white); }
+        /* --- FIXED JITTER ISSUE --- */
+        .easter-egg-trigger { 
+            cursor: pointer; 
+            text-decoration: none; 
+            transition: all 0.2s; 
+            user-select: none;
+            /* Fix: Strict width so changing text doesn't move neighbors */
+            display: inline-block;
+            width: 70px;
+            text-align: center;
+        }
+        #boot-trigger.active { color: var(--term-red); font-weight: bold; text-shadow: 0 0 10px var(--term-red); }
+        #bios-trigger.active { color: var(--term-green); font-weight: bold; text-shadow: 0 0 10px var(--term-green); }
+        #screen-trigger.active { color: var(--term-white); font-weight: bold; text-shadow: 0 0 10px var(--term-white); }
 
-        .branding-text { font-family: var(--font-head); font-size: 2.5rem; text-align: center; color: transparent; -webkit-text-stroke: 2px var(--term-teal); opacity: 0.8; margin: 0.5vh 0; letter-spacing: 5px; flex-shrink: 0; }
+        .branding-text { font-family: var(--font-head); font-weight: bold; font-size: 2.5rem; text-align: center; color: transparent; -webkit-text-stroke: 2px var(--term-teal); opacity: 0.8; margin: 0.5vh 0; letter-spacing: 5px; flex-shrink: 0; }
         .bios-footer { display: flex; gap: 1vw; align-items: flex-end; font-family: var(--font-body); flex-shrink: 0; margin-top: 0.5vh; }
         .inputs-grid { display: grid; grid-template-columns: auto auto; gap: 0.2vh 1vw; font-weight: bold; }
 
         .repos-box { border: 2px solid var(--term-teal); padding: 1.5vh; flex-shrink: 0; }
         .repo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1vh; }
         .repo-card { border: 2px solid var(--term-teal); padding: 1vh; position: relative; }
-        .btn-get { position: absolute; top: 1vh; right: 1vh; background: none; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.55rem; cursor: pointer; padding: 2px 4px; }
+        .btn-get { position: absolute; top: 1vh; right: 1vh; background: none; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-weight: bold; font-size: 0.55rem; cursor: pointer; padding: 2px 4px; }
         .btn-get:hover { background: var(--term-teal); color: black; }
 
         .bottom-split { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vh; overflow: hidden; }
@@ -128,10 +176,9 @@
         .comments-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1vh; margin-bottom: 1vh; }
         .comment { border-bottom: 1px solid rgba(80, 255, 247, 0.3); padding-bottom: 0.8vh; flex-shrink: 0; }
         .social-buttons { display: block; margin-top: auto; padding-top: 1vh; }
-        .social-btn { width: 100%; background: transparent; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.6rem; padding: 1vh; text-align: center; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .social-btn { width: 100%; background: transparent; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-weight: bold; font-size: 0.6rem; padding: 1vh; text-align: center; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .social-btn:hover { background: var(--term-teal); color: black; box-shadow: 0 0 10px var(--term-teal); }
 
-        /* Modal Overlays */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 1000; display: none; 
@@ -143,7 +190,6 @@
         }
         .modal-overlay.active { backdrop-filter: blur(5px); background: rgba(0,0,0,0.6); }
 
-        /* Article Modal */
         .expanded-article {
             width: 90vw; height: 85vh; 
             background: var(--term-bg);
@@ -185,6 +231,7 @@
         
         #exp-title { 
             font-size: 2rem; 
+            font-weight: bold;
             line-height: 1.4; 
             text-align: left; 
             margin: 0; 
@@ -193,13 +240,12 @@
         .article-body-text { font-family: var(--font-body); font-size: 0.9rem; line-height: 1.6; color: rgba(80, 255, 247, 0.9); white-space: pre-wrap; padding-bottom: 5vh; width: 100%; }
 
         .article-sidebar { display: flex; flex-direction: column; gap: 2vh; overflow-y: auto; }
-        .rec-header { border: 1px solid var(--term-teal); padding: 1vh; text-align: center; margin-bottom: var(--gap-size); }
+        .rec-header { border: 1px solid var(--term-teal); padding: 1vh; text-align: center; margin-bottom: var(--gap-size); font-weight: bold; }
         .rec-card { border: 2px solid var(--term-teal); padding: 1vh; cursor: pointer; overflow: hidden; }
         .rec-thumb { width: 100%; height: auto; border: 1px solid var(--term-teal); margin-bottom: 1vh; overflow: hidden; background: #000; }
         .rec-thumb img { width: 100%; height: auto; display: block; filter: none; transition: transform 0.4s ease; }
         .rec-card:hover .rec-thumb img { transform: scale(1.1); }
 
-        /* Socials Modal */
         .expanded-socials {
             width: 60vw; height: 60vh; 
             background: var(--term-bg);
@@ -216,7 +262,7 @@
 
         .socials-header {
             border: 2px solid var(--term-teal); padding: 1vh;
-            text-align: center; font-family: var(--font-head); font-size: 1rem;
+            text-align: center; font-family: var(--font-head); font-weight: bold; font-size: 1rem;
             margin-bottom: 2vh; flex-shrink: 0;
         }
 
@@ -251,7 +297,6 @@
 
         .socials-preview { display: flex; flex-direction: column; gap: 1.5vh; }
 
-        /* Consistent Thumbnail Sizing */
         .social-preview-thumb {
             flex: 1; border: 2px solid var(--term-teal);
             overflow: hidden; position: relative; background: #000;
@@ -274,121 +319,135 @@
 
     <div class="crt-scanlines"></div>
 
-    <header class="body-text text-xs">
-        <span>ASCII TERMINAL WEBGATE</span>
-        <span>COPYRIGHT JOSHUA DESIGN(C) 2026</span>
-        <span>VER V1.04</span>
-        <span>WEB......1</span>
-    </header>
+    <div id="loading-screen">
+        <div id="loading-text">INITIALIZING SYSTEM...</div>
+        <div id="loading-bar-container">
+            <div id="loading-bar"></div>
+        </div>
+    </div>
 
-    <nav>
-        <div class="nav-item" id="nav-home">HOME</div>
-        <div class="nav-item">ARTICLES</div>
-        <div class="nav-item">REPOS</div>
-        <div class="nav-item" id="nav-socials">SOCIALS</div>
-        <div class="nav-item">UNIX</div>
-    </nav>
+    <div class="content-wrapper" id="main-content">
+        <header class="body-text text-xs">
+            <span>ASCII TERMINAL WEBGATE</span>
+            <span>COPYRIGHT JOSHUA DESIGN(C) 2026</span>
+            <span>VER V1.04</span>
+            <span>WEB......1</span>
+        </header>
 
-    <main class="main-stage" id="main-stage">
-        <section class="left-panel">
-            <div class="unix-box">
-                <div class="header-text" style="text-align: center;">LAIN V1-01 . . .</div>
-                <div class="img-wrapper">
-                    <img id="lain-img" src="assets/images/lainheader.png" alt="Lain Interface">
-                    <div id="hack-overlay" class="term-overlay">
-                        <div id="hack-output"></div>
-                        <div id="hack-input-line" style="display:none;">> <span id="user-input"></span><span class="cursor-blink"></span></div>
-                    </div>
-                    <div id="bios-overlay" class="term-overlay">
-                        <div class="header-text" style="color:var(--term-green);">SYSTEM MONITOR v2.0</div>
-                        <div class="bios-section">
-                            <div class="bios-row"><span>CPU Total</span><div class="bar-container"><div id="bar-cpu" class="bar-fill" style="width:0%"></div></div><span id="val-cpu">0%</span></div>
-                            <div class="bios-row"><span class="color-dim">Core 0</span><div class="bar-container"><div id="bar-c0" class="bar-fill" style="width:0%"></div></div><span id="val-c0">0%</span></div>
-                            <div class="bios-row"><span class="color-dim">Core 1</span><div class="bar-container"><div id="bar-c1" class="bar-fill" style="width:0%"></div></div><span id="val-c1">0%</span></div>
+        <nav>
+            <div class="nav-item" id="nav-home">HOME</div>
+            <div class="nav-item">ARTICLES</div>
+            <div class="nav-item">REPOS</div>
+            <div class="nav-item" id="nav-socials">SOCIALS</div>
+            <div class="nav-item">UNIX</div>
+        </nav>
+
+        <main class="main-stage" id="main-stage">
+            <section class="left-panel">
+                <div class="unix-box">
+                    <div class="header-text" style="text-align: center;">LAIN V1-01 . . .</div>
+                    <div class="img-wrapper">
+                        <img id="lain-img" src="" data-src="assets/images/lainheader.png" alt="Lain Interface">
+                        <div id="hack-overlay" class="term-overlay">
+                            <div id="hack-output"></div>
+                            <div id="hack-input-line" style="display:none;">> <span id="user-input"></span><span class="cursor-blink"></span></div>
                         </div>
-                        <div class="bios-section">
-                            <div class="bios-row"><span>MEM</span><div class="bar-container"><div id="bar-mem" class="bar-fill" style="width:0%"></div></div><span id="val-mem">0G</span></div>
-                            <div class="bios-row"><span>SWAP</span><div class="bar-container"><div id="bar-swp" class="bar-fill" style="width:0%"></div></div><span id="val-swp">0G</span></div>
+                        <div id="bios-overlay" class="term-overlay">
+                            <div class="header-text" style="color:var(--term-green);">SYSTEM MONITOR v2.0</div>
+                            <div class="bios-section">
+                                <div class="bios-row"><span>CPU Total</span><div class="bar-container"><div id="bar-cpu" class="bar-fill" style="width:0%"></div></div><span id="val-cpu">0%</span></div>
+                                <div class="bios-row"><span class="color-dim">Core 0</span><div class="bar-container"><div id="bar-c0" class="bar-fill" style="width:0%"></div></div><span id="val-c0">0%</span></div>
+                                <div class="bios-row"><span class="color-dim">Core 1</span><div class="bar-container"><div id="bar-c1" class="bar-fill" style="width:0%"></div></div><span id="val-c1">0%</span></div>
+                            </div>
+                            <div class="bios-section">
+                                <div class="bios-row"><span>MEM</span><div class="bar-container"><div id="bar-mem" class="bar-fill" style="width:0%"></div></div><span id="val-mem">0G</span></div>
+                                <div class="bios-row"><span>SWAP</span><div class="bar-container"><div id="bar-swp" class="bar-fill" style="width:0%"></div></div><span id="val-swp">0G</span></div>
+                            </div>
+                            <div class="bios-section" style="flex:1;">
+                                <div class="bios-row"><span>TASKS: <span id="val-tasks" class="color-green">142</span></span> <span>UPTIME: <span id="val-uptime">00:00:00</span></span></div>
+                                <table class="proc-table">
+                                    <thead><tr><th>PID</th><th>USER</th><th>CPU%</th><th>MEM%</th><th>CMD</th></tr></thead>
+                                    <tbody id="proc-list-body"></tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="bios-section" style="flex:1;">
-                            <div class="bios-row"><span>TASKS: <span id="val-tasks" class="color-green">142</span></span> <span>UPTIME: <span id="val-uptime">00:00:00</span></span></div>
-                            <table class="proc-table">
-                                <thead><tr><th>PID</th><th>USER</th><th>CPU%</th><th>MEM%</th><th>CMD</th></tr></thead>
-                                <tbody id="proc-list-body"></tbody>
-                            </table>
+                    </div>
+                </div>
+
+                <div class="branding-text">JOSHUA DESIGN</div>
+
+                <div class="bios-footer body-text text-xs">
+                    <div>
+                        <div class="opacity-50">@ECHO OFF</div>
+                        <div class="opacity-50">WEBPAGE</div>
+                        <div class="opacity-50">
+                            :: 
+                            <span id="bios-trigger" class="easter-egg-trigger">BIOS</span> 
+                            <span id="boot-trigger" class="easter-egg-trigger">BOOT</span> 
+                            <span id="screen-trigger" class="easter-egg-trigger">SCREEN</span>
+                        </div>
+                    </div>
+                    <div class="inputs-grid">
+                        <span class="opacity-50">INPUT 1:</span>
+                        <span class="header-text" style="font-size: 0.6rem; margin:0;">HTML CSS JS</span>
+                        <span class="opacity-50">INPUT 2:</span>
+                        <span class="header-text" style="font-size: 0.6rem; margin:0;">GIMP FIGMA</span>
+                    </div>
+                    <div class="opacity-50" style="display:flex; flex-direction:column; margin-left: auto;">
+                        <span>E()()</span><span>E()()</span><span>E()()</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="right-panel">
+                <div class="repos-box">
+                    <div class="header-text" style="text-align: center;">RECENTLY FORKED REPOSITORIES</div>
+                    <div class="repo-row">
+                        <div class="repo-card">
+                            <div class="header-text" style="margin-bottom:0.5vh;">NVIM-CONFIG</div>
+                            <div class="body-text text-xs opacity-50">Lua • v4.0<br>My personal Neovim configuration files.</div>
+                            <button class="btn-get">GET</button>
+                        </div>
+                        <div class="repo-card">
+                            <div class="header-text" style="margin-bottom:0.5vh;">ARCH-INSTALL</div>
+                            <div class="body-text text-xs opacity-50">Bash • v2.0<br>Automated Arch Linux installation script.</div>
+                            <button class="btn-get">GET</button>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="branding-text">JOSHUA DESIGN</div>
-
-            <div class="bios-footer body-text text-xs">
-                <div>
-                    <div class="opacity-50">@ECHO OFF</div>
-                    <div class="opacity-50">WEBPAGE</div>
-                    <div class="opacity-50">:: <span id="bios-trigger" class="easter-egg-trigger">BIOS</span> <span id="boot-trigger" class="easter-egg-trigger">BOOT</span> <span id="screen-trigger" class="easter-egg-trigger">SCREEN</span></div>
-                </div>
-                <div class="inputs-grid">
-                    <span class="opacity-50">INPUT 1:</span>
-                    <span class="header-text" style="font-size: 0.6rem; margin:0;">HTML CSS JS</span>
-                    <span class="opacity-50">INPUT 2:</span>
-                    <span class="header-text" style="font-size: 0.6rem; margin:0;">GIMP FIGMA</span>
-                </div>
-                <div class="opacity-50" style="display:flex; flex-direction:column; margin-left: auto;">
-                    <span>E()()</span><span>E()()</span><span>E()()</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="right-panel">
-            <div class="repos-box">
-                <div class="header-text" style="text-align: center;">RECENTLY FORKED REPOSITORIES</div>
-                <div class="repo-row">
-                    <div class="repo-card">
-                        <div class="header-text" style="margin-bottom:0.5vh;">NVIM-CONFIG</div>
-                        <div class="body-text text-xs opacity-50">Lua • v4.0<br>My personal Neovim configuration files.</div>
-                        <button class="btn-get">GET</button>
-                    </div>
-                    <div class="repo-card">
-                        <div class="header-text" style="margin-bottom:0.5vh;">ARCH-INSTALL</div>
-                        <div class="body-text text-xs opacity-50">Bash • v2.0<br>Automated Arch Linux installation script.</div>
-                        <button class="btn-get">GET</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bottom-split">
-                <div class="articles-stack">
-                    <div class="article-card" onclick="openArticle(0)">
-                        <div class="header-text" style="font-size: 0.65rem;">SWITCHING TO LINUX</div>
-                        <div class="article-thumb">
-                            <img src="assets/images/rice1.png" alt="Linux Rice">
+                <div class="bottom-split">
+                    <div class="articles-stack">
+                        <div class="article-card" onclick="openArticle(0)">
+                            <div class="header-text" style="font-size: 0.65rem;">SWITCHING TO LINUX</div>
+                            <div class="article-thumb">
+                                <img src="" data-src="assets/images/rice1.png" alt="Linux Rice">
+                            </div>
+                            <div class="body-text text-xs opacity-50">Why I moved from Windows to Arch, and why Window Managers are superior.</div>
                         </div>
-                        <div class="body-text text-xs opacity-50">Why I moved from Windows to Arch, and why Window Managers are superior.</div>
-                    </div>
-                    <div class="article-card" onclick="openArticle(1)">
-                        <div class="header-text" style="font-size: 0.65rem;">ENABLE VRR XORG</div>
-                        <div class="article-thumb">
-                            <img src="assets/images/xorg.png" alt="Xorg Config">
+                        <div class="article-card" onclick="openArticle(1)">
+                            <div class="header-text" style="font-size: 0.65rem;">ENABLE VRR XORG</div>
+                            <div class="article-thumb">
+                                <img src="" data-src="assets/images/xorg.png" alt="Xorg Config">
+                            </div>
+                            <div class="body-text text-xs opacity-50">Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.</div>
                         </div>
-                        <div class="body-text text-xs opacity-50">Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.</div>
                     </div>
-                </div>
 
-                <div class="comments-box">
-                    <div class="header-text" style="text-align: center;">COMMENTS</div>
-                    <div class="comments-list">
-                        <div class="comment"><div class="header-text" style="font-size: 0.6rem; margin:0;">ANON:</div><div class="body-text text-xs opacity-50 italic">nice he uses arch</div></div>
-                        <div class="comment"><div class="header-text" style="font-size: 0.6rem; margin:0;">JUSTLLOYD:</div><div class="body-text text-xs opacity-50 italic">where the lolitas at??</div></div>
-                        <div class="comment"><div class="header-text" style="font-size: 0.6rem; margin:0;">ROVELGOATED:</div><div class="body-text text-xs opacity-50 italic">idk i prefer rovel's, but this is highkey good.</div></div>
-                        <div class="comment"><div class="header-text" style="font-size: 0.6rem; margin:0;">FEMMAN:</div><div class="body-text text-xs opacity-50 italic">safad baddies located</div></div>
+                    <div class="comments-box">
+                        <div class="header-text" style="text-align: center;">COMMENTS</div>
+                        <div class="comments-list">
+                            <div class="comment"><div class="header-text" style="font-size: 0.6rem; margin:0;">ANON:</div><div class="body-text text-xs opacity-50 italic">nice he uses arch</div></div>
+                            <div class="comment"><div class="header-text" style="font-size: 0.6rem; margin:0;">JUSTLLOYD:</div><div class="body-text text-xs opacity-50 italic">where the lolitas at??</div></div>
+                            <div class="comment"><div class="header-text" style="font-size: 0.6rem; margin:0;">ROVELGOATED:</div><div class="body-text text-xs opacity-50 italic">idk i prefer rovel's, but this is highkey good.</div></div>
+                            <div class="comment"><div class="header-text" style="font-size: 0.6rem; margin:0;">FEMMAN:</div><div class="body-text text-xs opacity-50 italic">safad baddies located</div></div>
+                        </div>
+                        <div class="social-buttons"><button class="social-btn">ENTER COMMENT</button></div>
                     </div>
-                    <div class="social-buttons"><button class="social-btn">ENTER COMMENT</button></div>
                 </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
+    </div>
 
     <div id="article-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="expanded-article" onclick="event.stopPropagation()">
@@ -441,7 +500,7 @@
         const hackInputLine = document.getElementById('hack-input-line');
         const userInputDisplay = document.getElementById('user-input');
         
-        // --- DATA ---
+        // --- CONTENT DATA ---
         const longLorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
@@ -469,7 +528,6 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             }
         ];
 
-        // FULL ICONS
         const icons = {
             discord: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>`,
             linkedin: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>`,
@@ -484,13 +542,57 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a direct message." }
         ];
 
+        // --- PRELOADER LOGIC ---
+        const allImages = [
+            "assets/images/lainheader.png", 
+            "assets/images/lain.gif",
+            "assets/images/rice1.png", 
+            "assets/images/xorg.png",
+            "assets/images/discordthumbail.png",
+            "assets/images/linkedinthumbnail.png",
+            "assets/images/githubthumbnail.png",
+            "assets/images/gmailthumbnail.png"
+        ];
+
+        let loadedCount = 0;
+        const totalImages = allImages.length;
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingBar = document.getElementById('loading-bar');
+        const mainContent = document.getElementById('main-content');
+
+        function checkLoad() {
+            loadedCount++;
+            const pct = Math.floor((loadedCount / totalImages) * 100);
+            loadingBar.style.width = pct + "%";
+            
+            if (loadedCount >= totalImages) {
+                // All loaded: transition
+                setTimeout(() => {
+                    loadingScreen.style.opacity = 0;
+                    mainContent.classList.add('active');
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        // Apply src to HTML elements now that they are cached
+                        document.getElementById('lain-img').src = "assets/images/lainheader.png";
+                        document.querySelectorAll('.article-thumb img').forEach((img, idx) => {
+                            img.src = articlesData[idx].img;
+                        });
+                    }, 800);
+                }, 500); // Small delay to show 100%
+            }
+        }
+
+        // Trigger loading
+        allImages.forEach(src => {
+            const img = new Image();
+            img.onload = checkLoad;
+            img.onerror = checkLoad; // Proceed even if error
+            img.src = src;
+        });
+
+        // --- SYSTEM VARIABLES ---
         let systemState = 'idle'; let userInput = ""; let intervals = [];
         let closeTimeout = null;
-
-        function preloadImages() {
-            socialData.forEach(item => { const img = new Image(); img.src = item.img; });
-        }
-        preloadImages();
 
         const codeSnippets = ["sudo inject --force -p 8080", "decrypting root access...", "0x4F...", "installing rootkit v4.2...", "network scan: 4 ports open"];
         const fakeProcesses = [{ cmd: "kworker/u16", pid: 120 }, { cmd: "systemd", pid: 1 }, { cmd: "discord", pid: 4055 }, { cmd: "chrome", pid: 3201 }, { cmd: "code", pid: 5600 }];
@@ -550,9 +652,12 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             const data = articlesData[index];
             const otherIndex = (index === 0) ? 1 : 0;
             const recData = articlesData[otherIndex];
+            
+            // Reverted to single text block for scrolling behavior
             document.getElementById('exp-title').textContent = data.title;
             document.getElementById('exp-img').src = data.img;
             document.getElementById('exp-text').textContent = data.longText;
+
             const recContainer = document.getElementById('rec-card-container');
             recContainer.innerHTML = `<div class="rec-card" onclick="switchArticle(${otherIndex}); event.stopPropagation();"><div class="header-text" style="font-size:0.6rem; margin-bottom:0.5vh;">${recData.title}</div><div class="rec-thumb"><img src="${recData.img}"></div><div class="body-text text-xs opacity-50">${recData.desc}</div></div>`;
         }
@@ -599,7 +704,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         navHome.addEventListener('click', (e) => closeAllOverlays(e));
         navSocials.addEventListener('click', openSocials);
 
-        // ... [Rest of boot/bios/hack logic remains same] ...
+        // ... [Rest of boot/bios/hack logic] ...
         function startBoot() {
             systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
             bootTrigger.textContent = "EXIT"; bootTrigger.classList.add('active');
