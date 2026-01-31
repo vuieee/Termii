@@ -140,10 +140,11 @@
             width: 100vw; height: 100vh;
             z-index: 1000; 
             display: none; 
-            /* ALIGNMENT FIX: All modals start 15vh from top */
+            /* ALIGNMENT FIX: Flex Start so everything starts from the same Top */
             align-items: flex-start; 
             justify-content: center;
-            padding-top: 15vh; /* Uniform top gap */
+            /* FIXED PADDING FROM TOP - Aligns both boxes exactly the same distance from Nav */
+            padding-top: 12vh; 
             padding-left: 2vw; padding-right: 2vw;
             backdrop-filter: blur(0px); background: rgba(0,0,0,0);
             transition: backdrop-filter 0.4s ease, background 0.4s ease;
@@ -154,7 +155,8 @@
         /* === ARTICLE OVERLAY SPECIFIC === */
         /* ========================================= */
         .expanded-article {
-            width: 90vw; height: 80vh; 
+            /* RESTORED ORIGINAL LARGER SIZE */
+            width: 90vw; height: 85vh; 
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
             box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
@@ -205,7 +207,7 @@
         /* === SOCIALS OVERLAY SPECIFIC === */
         /* ========================================= */
         .expanded-socials {
-            width: 60vw; height: 65vh; 
+            width: 60vw; height: 60vh; /* Smaller height/width as requested */
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
             box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
@@ -214,7 +216,7 @@
             overflow: hidden;
             transform: scale(0.95); opacity: 0;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            margin: 0 auto; /* Horizontal Center */
+            margin: 0 auto; /* Horizontally Centered */
         }
         .modal-overlay.active .expanded-socials { transform: scale(1); opacity: 1; }
 
@@ -541,15 +543,13 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         }
 
         function closeAllOverlays() {
-            // Cancel pending animation to prevent hiding what we just tried to open
             if(closeTimeout) clearTimeout(closeTimeout);
             
-            // Start closing animation for all
+            // Start closing animation
             articleContainer.classList.remove('active');
             socialsContainer.classList.remove('active');
             mainStage.classList.remove('blur');
             
-            // Wait for animation to finish before setting display:none
             closeTimeout = setTimeout(() => {
                 articleContainer.style.display = 'none';
                 socialsContainer.style.display = 'none';
@@ -563,15 +563,11 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         }
 
         // --- OPENING FUNCTIONS ---
-        function prepareOpen() {
-            if(closeTimeout) clearTimeout(closeTimeout);
-            // Instantly hide others to prevent conflict
-            forceClose(articleContainer);
-            forceClose(socialsContainer);
-        }
-
         function openArticle(index) {
-            prepareOpen();
+            if(closeTimeout) clearTimeout(closeTimeout);
+            // Instantly hide socials if open
+            forceClose(socialsContainer);
+            
             populateArticle(index);
             articleContainer.style.display = 'flex';
             requestAnimationFrame(() => {
@@ -581,7 +577,10 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         }
 
         function openSocials() {
-            prepareOpen();
+            if(closeTimeout) clearTimeout(closeTimeout);
+            // Instantly hide article if open
+            forceClose(articleContainer);
+            
             populateSocials();
             socialsContainer.style.display = 'flex';
             requestAnimationFrame(() => {
@@ -590,7 +589,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             });
         }
 
-        // --- CONTENT POPULATION ---
+        // --- POPULATION ---
         function populateArticle(index) {
             const data = articlesData[index];
             const otherIndex = (index === 0) ? 1 : 0;
