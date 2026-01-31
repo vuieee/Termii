@@ -71,20 +71,20 @@
             margin-bottom: 5px; 
             font-size: 0.9rem; 
             letter-spacing: 1px;
-            color: var(--term-teal); 
+            color: var(--term-white);
         }
 
         #loading-bar-container { 
             width: 100%; 
             height: 25px;
-            border: 3px solid var(--term-teal); 
+            border: 3px solid var(--term-white); 
             padding: 3px; 
-            box-shadow: 0 0 10px rgba(80, 255, 247, 0.2);
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
 
         #loading-bar { 
             height: 100%; 
-            background-color: var(--term-teal); 
+            background-color: var(--term-white); 
             width: 0%; 
             transition: width 0.1s linear; 
         }
@@ -439,8 +439,7 @@
             line-height: 1.4;
         }
 
-        /* === NEW: REPOS MODAL (DESIGN UPDATE) === */
-        /* Reusing consistent sizing */
+        /* === REPOS MODAL (UPDATED) === */
         .repos-modal {
             width: 90vw; height: 85vh;
             background: var(--term-bg);
@@ -472,11 +471,6 @@
             background: black;
         }
         
-        .search-icon {
-            font-size: 1rem; margin-right: 10px;
-            filter: invert(88%) sepia(21%) saturate(935%) hue-rotate(86deg) brightness(106%) contrast(104%); /* Teal Filter roughly */
-        }
-
         #repo-search {
             background: transparent;
             border: none;
@@ -523,26 +517,29 @@
         .repo-header {
             display: flex; justify-content: space-between; align-items: flex-start;
             margin-bottom: 1vh;
-            border-bottom: 1px dashed rgba(80, 255, 247, 0.3);
             padding-bottom: 0.5vh;
+            /* REMOVED DASHED BORDER SEPARATOR */
         }
 
         .repo-name {
             font-family: var(--font-head);
             font-size: 1rem;
-            color: var(--term-white);
             background: var(--term-teal);
             color: black;
             padding: 2px 5px;
         }
 
+        /* GET Button (Matches Landing Page Style) */
         .repo-get-btn {
+            position: absolute; 
+            top: 1.5vh; 
+            right: 1.5vh;
             background: transparent;
             border: 2px solid var(--term-teal);
             color: var(--term-teal);
             font-family: var(--font-head);
-            font-size: 0.7rem;
-            padding: 0.5vh 1vh;
+            font-size: 0.55rem;
+            padding: 2px 4px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -557,6 +554,7 @@
             font-size: 0.85rem;
             opacity: 0.9;
             margin-bottom: 1vh;
+            padding-right: 60px; /* Space for absolute button */
         }
 
         .repo-meta {
@@ -742,7 +740,7 @@
         <div class="repos-modal" onclick="event.stopPropagation()">
             <div class="repos-controls">
                 <div class="search-box">
-                    <span class="icon-svg" style="font-size:1rem; margin-right:10px;">🔍</span>
+                    <span class="header-text" style="font-size:1rem; margin-right:10px; color:var(--term-teal);">&gt;</span>
                     <input type="text" id="repo-search" placeholder="SEARCH REPOSITORY...">
                 </div>
                 <select id="repo-lang" class="repo-select">
@@ -1005,7 +1003,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); });
         }
 
-        // --- NEW: REPOS LOGIC ---
+        // --- NEW: REPOS LOGIC (UPDATED WITH CORRECT BUTTON STYLE) ---
         function renderRepos() {
             const container = document.getElementById('repos-list-content');
             const searchVal = document.getElementById('repo-search').value.toLowerCase();
@@ -1033,8 +1031,9 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                 card.innerHTML = `
                     <div class="repo-header">
                         <span class="repo-name">${repo.name}</span>
-                        <button class="repo-get-btn" onclick="window.open('${repo.url}', '_blank')">GET &#8599;</button>
                     </div>
+                    <button class="repo-get-btn" onclick="window.open('${repo.url}', '_blank')">GET</button>
+                    
                     <div class="repo-desc-row">${repo.desc}</div>
                     <div class="repo-meta">
                         <span>LANG: ${repo.lang}</span>
