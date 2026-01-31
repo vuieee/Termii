@@ -280,16 +280,21 @@
             display: flex; flex-direction: column; gap: 1.5vh;
         }
 
+        /* --- CONTINGENCY FIX FOR UNIFORM THUMBNAILS --- */
         .social-preview-thumb {
             flex: 1;
             border: 2px solid var(--term-teal);
             overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
+            position: relative; /* Needed for absolute child to fill it */
             background: #000;
         }
         .social-preview-thumb img {
-            width: 100%; height: 100%; object-fit: cover;
+            position: absolute; /* Force image to fill container exactly */
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; /* Crop excess to maintain aspect ratio */
         }
+        /* ---------------------------------------------- */
 
         .social-preview-desc {
             height: 8vh;
