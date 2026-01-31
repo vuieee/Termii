@@ -190,6 +190,7 @@
         }
         .article-main-thumb img { width: 100%; height: auto; display: block; filter: none; }
 
+        /* NO BORDER AROUND TITLE */
         .article-title-box { border: none; padding: 0; width: 100%; margin-bottom: var(--gap-size); flex-shrink: 0; }
         #exp-title { font-size: 2rem; line-height: 1.1; text-align: left; margin: 0; }
         .article-body-text { font-family: var(--font-body); font-size: 0.9rem; line-height: 1.6; color: rgba(80, 255, 247, 0.9); white-space: pre-wrap; padding-bottom: 5vh; width: 100%; }
@@ -205,7 +206,7 @@
         /* === SOCIALS OVERLAY SPECIFIC === */
         /* ========================================= */
         .expanded-socials {
-            width: 60vw; height: 60vh; /* Smaller height/width as requested */
+            width: 60vw; height: 60vh; /* Smaller height/width */
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
             box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
@@ -257,6 +258,11 @@
             transition: background 0.2s;
         }
         .social-info:hover { background: rgba(80, 255, 247, 0.1); }
+        /* Active state for selected social item */
+        .social-info.active {
+            background: rgba(80, 255, 247, 0.2);
+            box-shadow: inset 0 0 10px rgba(80, 255, 247, 0.2);
+        }
 
         .social-arrow {
             width: 4vw;
@@ -449,11 +455,9 @@
                 <div class="socials-list" id="socials-list-container"></div>
                 <div class="socials-preview">
                     <div class="social-preview-thumb">
-                        <img id="soc-prev-img" src="lainheader.png" alt="Social Preview">
+                        <img id="soc-prev-img" src="" alt="Social Preview">
                     </div>
-                    <div class="social-preview-desc" id="soc-prev-desc">
-                        Select a link to view details.
-                    </div>
+                    <div class="social-preview-desc" id="soc-prev-desc"></div>
                 </div>
             </div>
         </div>
@@ -512,6 +516,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         };
 
         const socialData = [
+            // Exact filenames from your screenshot (including typo for discord)
             { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "discordthumbail.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
             { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "linkedinthumbnail.png", desc: "Manage your professional identity. Build and engage with your professional network." },
             { name: "Github", icon: icons.github, link: "https://github.com", img: "githubthumbnail.png", desc: "The world's leading AI-powered developer platform." },
@@ -520,6 +525,15 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
 
         let systemState = 'idle'; let userInput = ""; let intervals = [];
         let closeTimeout = null;
+
+        // Preload Images
+        function preloadImages() {
+            socialData.forEach(item => {
+                const img = new Image();
+                img.src = item.img;
+            });
+        }
+        preloadImages();
 
         const codeSnippets = ["sudo inject --force -p 8080", "decrypting root access...", "0x4F 0xA1 0xB3 0xC9 [ACCESS GRANTED]", "bypassing mainframe firewall...", "downloading packets: [||||||||||] 100%", "executing shellcode.bin...", "rm -rf /var/log/syslog --quiet", "initializing buffer overflow...", "connecting to host 192.168.0.x...", "user_privileges = admin", "searching for vulnerabilities...", "traceroute complete. node found.", "compile error: core dump intercepted", "overriding security protocols...", "installing rootkit v4.2...", "ssh key generated: SHA256:8f4...", "System.out.println('HACKED');", "void *p = malloc(1024);", "if (access_level > 9000) { break; }", "network scan: 4 ports open"];
         const fakeProcesses = [{ cmd: "kworker/u16", pid: 120 }, { cmd: "systemd", pid: 1 }, { cmd: "discord", pid: 4055 }, { cmd: "chrome", pid: 3201 }, { cmd: "code", pid: 5600 }, { cmd: "spotify", pid: 2100 }, { cmd: "steam", pid: 8890 }, { cmd: "Xorg", pid: 600 }, { cmd: "pulseaudio", pid: 1220 }];
@@ -623,19 +637,30 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         function populateSocials() {
             const listContainer = document.getElementById('socials-list-container');
             listContainer.innerHTML = '';
-            document.getElementById('soc-prev-img').src = socialData[0].img;
-            document.getElementById('soc-prev-desc').textContent = socialData[0].desc;
+            
+            // Set Default (First Item) Active State
+            const defaultItem = socialData[0];
+            document.getElementById('soc-prev-img').src = defaultItem.img;
+            document.getElementById('soc-prev-desc').textContent = defaultItem.desc;
 
-            socialData.forEach((item) => {
+            socialData.forEach((item, index) => {
                 const capsule = document.createElement('div');
                 capsule.className = 'social-capsule';
                 
                 const info = document.createElement('div');
                 info.className = 'social-info';
+                if(index === 0) info.classList.add('active'); // Default active styling
+
                 info.innerHTML = `${item.icon} <span class="header-text" style="font-size:0.7rem; margin:0;">${item.name}</span>`;
+                
                 info.onclick = () => {
+                    // Update Preview
                     document.getElementById('soc-prev-img').src = item.img;
                     document.getElementById('soc-prev-desc').textContent = item.desc;
+                    
+                    // Update Active State Visuals
+                    document.querySelectorAll('.social-info').forEach(el => el.classList.remove('active'));
+                    info.classList.add('active');
                 };
 
                 const arrow = document.createElement('div');
