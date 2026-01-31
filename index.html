@@ -47,36 +47,57 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
-        /* --- LOADING SCREEN OPTIMIZED --- */
+        /* --- LOADING SCREEN (UPDATED) --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--term-bg);
             z-index: 9999;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            transition: opacity 0.5s ease-out; /* Snappier fade */
+            transition: opacity 0.5s ease-out;
         }
-        #loading-text { 
-            font-family: var(--font-head); 
-            font-weight: bold; 
-            margin-bottom: 2vh; 
-            font-size: 1rem; 
-            letter-spacing: 2px;
-        }
-        #loading-bar-container { 
-            width: 300px; height: 20px;
-            border: 2px solid var(--term-teal); 
-            padding: 2px; 
-        }
-        #loading-bar { 
-            height: 100%; 
-            background-color: var(--term-teal); 
-            width: 0%; 
-            transition: width 0.1s linear; 
-            box-shadow: 0 0 10px var(--term-teal);
+        
+        /* Vignette Effect */
+        #loading-screen::after {
+            content: "";
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 60%, black 100%);
+            pointer-events: none;
         }
 
-        /* --- CONTENT FADE IN --- */
+        .loading-container {
+            width: 300px;
+            /* Container to align text and bar */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; 
+        }
+
+        #loading-text { 
+            font-family: var(--font-body); /* More terminal-like */
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            font-size: 0.9rem; 
+            letter-spacing: 1px;
+            color: var(--term-white);
+        }
+
+        #loading-bar-container { 
+            width: 100%; 
+            height: 25px;
+            border: 3px solid var(--term-white); /* Thicker border like image */
+            padding: 3px; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+        }
+
+        #loading-bar { 
+            height: 100%; 
+            background-color: var(--term-white); /* White fill */
+            width: 0%; 
+            transition: width 0.1s linear; 
+        }
+
+        /* --- CONTENT WRAPPER --- */
         .content-wrapper {
             opacity: 0;
             transition: opacity 0.8s ease-in;
@@ -168,7 +189,7 @@
             text-align: center; 
             color: var(--term-teal); 
             opacity: 0.8; 
-            margin: 1vh 0; 
+            margin: 1.5vh 0; 
             flex-shrink: 0;
             white-space: pre; 
             align-self: center;
@@ -176,16 +197,17 @@
             width: 100%;
         }
 
-        /* Restored Footer Layout */
+        /* Restored Footer Layout: 3 Columns */
         .bios-footer { 
             display: flex; 
-            justify-content: space-between;
+            justify-content: space-between; /* Space them out: Left - Center - Right */
             align-items: flex-end; 
             font-family: var(--font-body); 
             flex-shrink: 0; 
             margin-top: auto; 
             gap: 1vw;
         }
+        
         .inputs-grid { 
             display: grid; 
             grid-template-columns: auto auto; 
@@ -348,9 +370,11 @@
     <div class="crt-scanlines"></div>
 
     <div id="loading-screen">
-        <div id="loading-text">INITIALIZING SYSTEM...</div>
-        <div id="loading-bar-container">
-            <div id="loading-bar"></div>
+        <div class="loading-container">
+            <div id="loading-text">Initializing . . .</div>
+            <div id="loading-bar-container">
+                <div id="loading-bar"></div>
+            </div>
         </div>
     </div>
 
@@ -421,12 +445,14 @@
                             <span id="screen-trigger" class="easter-egg-trigger">SCREEN</span>
                         </div>
                     </div>
+                    
                     <div class="inputs-grid">
                         <span class="opacity-50">INPUT 1:</span>
                         <span class="header-text" style="font-size: 0.6rem; margin:0;">HTML CSS JS</span>
                         <span class="opacity-50">INPUT 2:</span>
                         <span class="header-text" style="font-size: 0.6rem; margin:0;">GIMP FIGMA</span>
                     </div>
+
                     <div class="opacity-50" style="display:flex; flex-direction:column; text-align: right;">
                         <span>E()()</span><span>E()()</span><span>E()()</span>
                     </div>
@@ -600,13 +626,11 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             loadingBar.style.width = pct + "%";
             
             if (loadedCount >= totalImages) {
-                // All loaded: transition
                 setTimeout(() => {
                     loadingScreen.style.opacity = 0;
                     mainContent.classList.add('active');
                     setTimeout(() => {
                         loadingScreen.style.display = 'none';
-                        // Apply src to HTML elements now that they are cached
                         document.getElementById('lain-img').src = "assets/images/lainheader.png";
                         document.querySelectorAll('.article-thumb img').forEach((img, idx) => {
                             img.src = articlesData[idx].img;
@@ -616,7 +640,6 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             }
         }
 
-        // Trigger loading
         allImages.forEach(src => {
             const img = new Image();
             img.onload = checkLoad;
