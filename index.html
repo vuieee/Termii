@@ -18,7 +18,9 @@
             --term-bg: #050505;
             --font-head: 'Press Start 2P', cursive;
             --font-body: 'Fira Code', monospace;
-            --gap-size: 3vh; 
+            
+            /* RESTORED COMPACT GAP */
+            --gap-size: 2vh; 
         }
 
         *::-webkit-scrollbar { display: none; }
@@ -140,10 +142,10 @@
             width: 100vw; height: 100vh;
             z-index: 1000; 
             display: none; 
-            /* ALIGNMENT: Start 15vh from top for CONSISTENCY */
+            /* ALIGNMENT: Start 10vh from top (RESTORED COMPACT HEIGHT) */
             align-items: flex-start; 
             justify-content: center;
-            padding-top: 15vh;
+            padding-top: 10vh; /* Was 15vh, restored to 10vh */
             padding-left: 2vw; padding-right: 2vw;
             backdrop-filter: blur(0px); background: rgba(0,0,0,0);
             transition: backdrop-filter 0.4s ease, background 0.4s ease;
@@ -206,7 +208,7 @@
         /* === SOCIALS OVERLAY SPECIFIC === */
         /* ========================================= */
         .expanded-socials {
-            width: 60vw; height: 60vh; /* Smaller height/width */
+            width: 60vw; height: 60vh; 
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
             box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
@@ -215,7 +217,7 @@
             overflow: hidden;
             transform: scale(0.95); opacity: 0;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            margin: 0 auto; /* Horizontally Centered */
+            margin: 0 auto; 
         }
         .modal-overlay.active .expanded-socials { transform: scale(1); opacity: 1; }
 
@@ -258,7 +260,6 @@
             transition: background 0.2s;
         }
         .social-info:hover { background: rgba(80, 255, 247, 0.1); }
-        /* Active state for selected social item */
         .social-info.active {
             background: rgba(80, 255, 247, 0.2);
             box-shadow: inset 0 0 10px rgba(80, 255, 247, 0.2);
@@ -285,14 +286,14 @@
             flex: 1;
             border: 2px solid var(--term-teal);
             overflow: hidden;
-            position: relative; /* Needed for absolute child to fill it */
+            position: relative; 
             background: #000;
         }
         .social-preview-thumb img {
-            position: absolute; /* Force image to fill container exactly */
+            position: absolute; 
             top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover; /* Crop excess to maintain aspect ratio */
+            object-fit: cover; 
         }
         /* ---------------------------------------------- */
 
