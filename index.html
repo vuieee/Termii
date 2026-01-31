@@ -20,7 +20,6 @@
             --term-white: #ffffff;
             --term-bg: #050505;
             
-            /* RESTORED FONT VARIABLES */
             --font-head: 'Press Start 2P', cursive;
             --font-body: 'Fira Code', monospace;
             
@@ -158,36 +157,50 @@
         #bios-trigger.active { color: var(--term-green); font-weight: bold; text-shadow: 0 0 10px var(--term-green); }
         #screen-trigger.active { color: var(--term-white); font-weight: bold; text-shadow: 0 0 10px var(--term-white); }
 
-        /* === BRANDING ASCII STYLE === */
-        .branding-text { 
-            font-family: var(--font-body); /* Must be monospace for ASCII */
+        /* === NEW LAYOUT ELEMENTS === */
+        
+        /* 1. The Inputs (Moved UP) */
+        .inputs-display { 
+            display: grid; 
+            grid-template-columns: auto auto; 
+            gap: 0.2vh 1vw; 
             font-weight: bold; 
-            font-size: 0.4rem; /* Sized to fit container */
-            line-height: 1.0;
-            text-align: center; 
-            color: var(--term-teal); 
-            opacity: 0.8; 
-            margin: 1.5vh 0; 
-            flex-shrink: 0;
-            white-space: pre; 
-            align-self: center; 
-            width: 100%;
-            overflow: hidden;
+            margin: 1.5vh 0; /* Spacing below image */
+            justify-content: center; /* Center them nicely */
         }
 
-        .bios-footer { display: flex; gap: 1vw; align-items: flex-end; font-family: var(--font-body); flex-shrink: 0; margin-top: 0.5vh; margin-bottom: 1vh; }
-        .inputs-grid { display: grid; grid-template-columns: auto auto; gap: 0.2vh 1vw; font-weight: bold; }
-
-        /* === NEW TECH STACK BOX === */
+        /* 2. The Tech Stack Box (Below Inputs) */
         .tech-stack-box {
             border: 2px solid var(--term-teal);
             padding: 1.5vh;
-            margin-top: auto; /* Pushes to bottom if space allows */
+            margin-bottom: 1vh;
             text-align: center;
             font-family: var(--font-head);
             font-size: 0.8rem;
             color: var(--term-white);
             box-shadow: 0 0 5px rgba(80, 255, 247, 0.2);
+        }
+
+        /* 3. The Footer (Now containing ASCII) */
+        .bios-footer { 
+            display: grid; 
+            grid-template-columns: 1fr 2fr 1fr; /* Left, Center (ASCII), Right */
+            align-items: flex-end; 
+            font-family: var(--font-body); 
+            flex-shrink: 0; 
+            margin-top: auto; 
+            gap: 1vw;
+        }
+        
+        .footer-ascii {
+            font-family: var(--font-body); /* Monospace needed for ASCII */
+            font-size: 0.25rem; /* Scaled down to fit footer height */
+            line-height: 1.0;
+            white-space: pre;
+            color: var(--term-teal);
+            text-align: center;
+            align-self: center;
+            overflow: hidden;
         }
 
         .repos-box { border: 2px solid var(--term-teal); padding: 1.5vh; flex-shrink: 0; }
@@ -405,12 +418,15 @@
                     </div>
                 </div>
 
-                <div class="branding-text">
-     _  ___  ____  _   _ _   _   _      ____  _____ ____ ___ ____ _   _ ____  
-    | |/ _ \/ ___|| | | | | | | / \    |  _ \| ____/ ___|_ _/ ___| \ | / ___| 
- _  | | | | \___ \| |_| | | | |/ _ \   | | | |  _| \___ \| | |  _|  \| \___ \ 
-| |_| | |_| |___) |  _  | |_| / ___ \  | |_| | |___ ___) | | |_| | |\  |___) |
- \___/ \___/|____/|_| |_|\___/_/   \_\ |____/|_____|____/___\____|_| \_|____/ 
+                <div class="inputs-display">
+                    <span class="opacity-50">INPUT 1:</span>
+                    <span class="header-text" style="font-size: 0.7rem; margin:0;">HTML CSS JS</span>
+                    <span class="opacity-50">INPUT 2:</span>
+                    <span class="header-text" style="font-size: 0.7rem; margin:0;">GIMP FIGMA</span>
+                </div>
+
+                <div class="tech-stack-box">
+                    TECH STACK
                 </div>
 
                 <div class="bios-footer body-text text-xs">
@@ -424,19 +440,18 @@
                             <span id="screen-trigger" class="easter-egg-trigger">SCREEN</span>
                         </div>
                     </div>
-                    <div class="inputs-grid">
-                        <span class="opacity-50">INPUT 1:</span>
-                        <span class="header-text" style="font-size: 0.6rem; margin:0;">HTML CSS JS</span>
-                        <span class="opacity-50">INPUT 2:</span>
-                        <span class="header-text" style="font-size: 0.6rem; margin:0;">GIMP FIGMA</span>
+                    
+                    <div class="footer-ascii">
+     _  ___  ____  _   _ _   _   _      ____  _____ ____ ___ ____ _   _ ____  
+    | |/ _ \/ ___|| | | | | | | / \    |  _ \| ____/ ___|_ _/ ___| \ | / ___| 
+ _  | | | | \___ \| |_| | | | |/ _ \   | | | |  _| \___ \| | |  _|  \| \___ \ 
+| |_| | |_| |___) |  _  | |_| / ___ \  | |_| | |___ ___) | | |_| | |\  |___) |
+ \___/ \___/|____/|_| |_|\___/_/   \_\ |____/|_____|____/___\____|_| \_|____/ 
                     </div>
-                    <div class="opacity-50" style="display:flex; flex-direction:column; margin-left: auto;">
+
+                    <div class="opacity-50" style="display:flex; flex-direction:column; text-align: right;">
                         <span>E()()</span><span>E()()</span><span>E()()</span>
                     </div>
-                </div>
-
-                <div class="tech-stack-box">
-                    Tech Stack
                 </div>
             </section>
 
