@@ -47,7 +47,7 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
-        /* --- LOADING SCREEN (Teal + Vignette) --- */
+        /* --- LOADING SCREEN (Teal) --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--term-bg);
@@ -71,20 +71,20 @@
             margin-bottom: 5px; 
             font-size: 0.9rem; 
             letter-spacing: 1px;
-            color: var(--term-teal); 
+            color: var(--term-teal); /* Changed to Teal */
         }
 
         #loading-bar-container { 
             width: 100%; 
             height: 25px;
-            border: 3px solid var(--term-teal); 
+            border: 3px solid var(--term-teal); /* Changed to Teal */
             padding: 3px; 
             box-shadow: 0 0 10px rgba(80, 255, 247, 0.2);
         }
 
         #loading-bar { 
             height: 100%; 
-            background-color: var(--term-teal); 
+            background-color: var(--term-teal); /* Changed to Teal */
             width: 0%; 
             transition: width 0.1s linear; 
         }
@@ -100,11 +100,12 @@
         }
         .content-wrapper.active { opacity: 1; }
 
-        .crt-scanlines {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 999;
+        /* --- LOCALIZED CRT EFFECT (For Images Only) --- */
+        .scanlines {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 5;
             background: repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0, 0, 0, 0.2) 3px, rgba(0, 0, 0, 0.2) 4px);
-            box-shadow: inset 0 0 80px rgba(0,0,0,0.7);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
         .header-text { font-family: var(--font-head); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8vh; }
@@ -225,7 +226,7 @@
         .bottom-split { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vh; overflow: hidden; }
         .articles-stack { display: flex; flex-direction: column; gap: 1.5vh; overflow-y: auto; padding-right: 5px; }
         .article-card { border: 2px solid var(--term-teal); padding: 1.5vh; display: flex; flex-direction: column; justify-content: center; cursor: pointer; flex-shrink: 0; }
-        .article-thumb { width: 100%; height: auto; margin: 1.2vh 0; border: 1px solid var(--term-teal); overflow: hidden; background: #000; }
+        .article-thumb { width: 100%; height: auto; margin: 1.2vh 0; border: 1px solid var(--term-teal); overflow: hidden; background: #000; position: relative; }
         .article-thumb img { width: 100%; height: auto; display: block; filter: brightness(0.9); transition: transform 0.4s ease; }
         .article-card:hover .article-thumb img { transform: scale(1.1); }
 
@@ -236,7 +237,7 @@
         .social-btn { width: 100%; background: transparent; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.6rem; padding: 1vh; text-align: center; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .social-btn:hover { background: var(--term-teal); color: black; box-shadow: 0 0 10px var(--term-teal); }
 
-        /* Modal Overlays */
+        /* Modal Overlays (Shared) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 1000; display: none; 
@@ -282,7 +283,7 @@
 
         .article-main-thumb {
             width: 100%; height: auto; border: 1px solid var(--term-teal);
-            margin-bottom: var(--gap-size); background: #000; flex-shrink: 0; overflow: hidden;
+            margin-bottom: var(--gap-size); background: #000; flex-shrink: 0; overflow: hidden; position: relative;
         }
         .article-main-thumb img { width: 100%; height: auto; display: block; filter: none; }
 
@@ -293,7 +294,7 @@
         .article-sidebar { display: flex; flex-direction: column; gap: 2vh; overflow-y: auto; }
         .rec-header { border: 1px solid var(--term-teal); padding: 1vh; text-align: center; margin-bottom: var(--gap-size); }
         .rec-card { border: 2px solid var(--term-teal); padding: 1vh; cursor: pointer; overflow: hidden; }
-        .rec-thumb { width: 100%; height: auto; border: 1px solid var(--term-teal); margin-bottom: 1vh; overflow: hidden; background: #000; }
+        .rec-thumb { width: 100%; height: auto; border: 1px solid var(--term-teal); margin-bottom: 1vh; overflow: hidden; background: #000; position: relative; }
         .rec-thumb img { width: 100%; height: auto; display: block; filter: none; transition: transform 0.4s ease; }
         .rec-card:hover .rec-thumb img { transform: scale(1.1); }
 
@@ -386,6 +387,7 @@
             padding-right: 10px;
             flex: 1;
         }
+        
         .articles-list-container::-webkit-scrollbar { width: 14px; display: block; }
         .articles-list-container::-webkit-scrollbar-track { background: transparent; }
         .articles-list-container::-webkit-scrollbar-thumb { 
@@ -411,6 +413,7 @@
             border: 1px solid var(--term-teal);
             overflow: hidden;
             background: #000;
+            position: relative;
         }
         .article-row-thumb img {
             width: 100%; height: 100%;
@@ -461,25 +464,23 @@
             align-items: center;
         }
 
-        /* Fixed Alignment for Search Icon and Text */
         .search-box {
             flex: 2;
             display: flex;
-            align-items: center; /* This forces vertical center */
+            align-items: center;
             border: 2px solid var(--term-teal);
             padding: 0.5vh 1vh;
             background: black;
-            height: 40px; /* Fixed height helps alignment */
+            height: 40px;
         }
         
-        /* The ">" Icon */
         .search-icon-symbol {
             color: var(--term-teal);
             font-family: var(--font-head);
             font-weight: bold;
             font-size: 1.2rem;
             margin-right: 10px;
-            margin-top: -2px; /* Slight micro-adjustment for specific font baseline */
+            margin-top: -2px;
         }
 
         #repo-search {
@@ -527,7 +528,6 @@
         }
         .repo-row-card:hover { background: rgba(80, 255, 247, 0.05); }
 
-        /* Removed Border Separator here as requested */
         .repo-header {
             display: flex; justify-content: space-between; align-items: flex-start;
             margin-bottom: 1vh;
@@ -542,7 +542,6 @@
             padding: 2px 5px;
         }
 
-        /* GET Button (Matches Landing Page Style) */
         .repo-get-btn {
             position: absolute; 
             top: 1.5vh; 
@@ -567,7 +566,7 @@
             font-size: 0.85rem;
             opacity: 0.9;
             margin-bottom: 1vh;
-            padding-right: 60px; /* Space for absolute button */
+            padding-right: 60px;
         }
 
         .repo-meta {
@@ -612,6 +611,7 @@
                 <div class="unix-box">
                     <div class="header-text" style="text-align: center;">LAIN V1-01 . . .</div>
                     <div class="img-wrapper">
+                        <div class="scanlines"></div>
                         <img id="lain-img" src="" data-src="assets/images/lainheader.png" alt="Lain Interface">
                         <div id="hack-overlay" class="term-overlay">
                             <div id="hack-output"></div>
@@ -694,14 +694,14 @@
                         <div class="article-card" onclick="openArticle(0)">
                             <div class="header-text" style="font-size: 0.65rem;">SWITCHING TO LINUX</div>
                             <div class="article-thumb">
-                                <img src="" data-src="assets/images/rice1.png" alt="Linux Rice">
+                                <div class="scanlines"></div> <img src="" data-src="assets/images/rice1.png" alt="Linux Rice">
                             </div>
                             <div class="body-text text-xs opacity-50">Why I moved from Windows to Arch, and why Window Managers are superior.</div>
                         </div>
                         <div class="article-card" onclick="openArticle(1)">
                             <div class="header-text" style="font-size: 0.65rem;">ENABLE VRR XORG</div>
                             <div class="article-thumb">
-                                <img src="" data-src="assets/images/xorg.png" alt="Xorg Config">
+                                <div class="scanlines"></div> <img src="" data-src="assets/images/xorg.png" alt="Xorg Config">
                             </div>
                             <div class="body-text text-xs opacity-50">Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.</div>
                         </div>
@@ -733,7 +733,7 @@
         <div class="expanded-article" onclick="event.stopPropagation()">
             <div class="article-main" id="article-main-col">
                 <div class="article-main-thumb">
-                    <img id="exp-img" src="" alt="Expanded Image">
+                    <div class="scanlines"></div> <img id="exp-img" src="" alt="Expanded Image">
                 </div>
                 <div class="article-title-box">
                     <div class="header-text" id="exp-title">TITLE HERE</div>
@@ -781,7 +781,7 @@
                 <div class="socials-list" id="socials-list-container"></div>
                 <div class="socials-preview">
                     <div class="social-preview-thumb">
-                        <img id="soc-prev-img" src="" alt="Social Preview">
+                        <div class="scanlines"></div> <img id="soc-prev-img" src="" alt="Social Preview">
                     </div>
                     <div class="social-preview-desc" id="soc-prev-desc"></div>
                 </div>
@@ -852,13 +852,6 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             github: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>`,
             gmail: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819v-5.818l-5.454-3.818v9.636h-2.182v-9.636l-5.455 3.818v5.818h-3.818c-.904 0-1.636-.732-1.636-1.636v-13.909c0-.219.046-.432.129-.627l10.91 7.636 10.909-7.636c.083.195.129.409.129.627z"/></svg>`
         };
-
-        const socialData = [
-            { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
-            { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Manage your professional identity. Build and engage with your professional network." },
-            { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "My open source repositories." },
-            { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a direct message." }
-        ];
 
         // --- PRELOADER LOGIC ---
         const allImages = [
@@ -972,7 +965,10 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                 row.onclick = () => openArticle(index);
                 
                 row.innerHTML = `
-                    <div class="article-row-thumb"><img src="${article.img}"></div>
+                    <div class="article-row-thumb">
+                        <div class="scanlines"></div>
+                        <img src="${article.img}">
+                    </div>
                     <div class="article-row-info">
                         <div class="article-row-title">${article.title}</div>
                         <div class="article-row-desc">${article.desc}</div>
@@ -1073,7 +1069,15 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             document.getElementById('exp-text').textContent = data.longText;
 
             const recContainer = document.getElementById('rec-card-container');
-            recContainer.innerHTML = `<div class="rec-card" onclick="switchArticle(${otherIndex}); event.stopPropagation();"><div class="header-text" style="font-size:0.6rem; margin-bottom:0.5vh;">${recData.title}</div><div class="rec-thumb"><img src="${recData.img}"></div><div class="body-text text-xs opacity-50">${recData.desc}</div></div>`;
+            recContainer.innerHTML = `
+                <div class="rec-card" onclick="switchArticle(${otherIndex}); event.stopPropagation();">
+                    <div class="header-text" style="font-size:0.6rem; margin-bottom:0.5vh;">${recData.title}</div>
+                    <div class="rec-thumb">
+                        <div class="scanlines"></div>
+                        <img src="${recData.img}">
+                    </div>
+                    <div class="body-text text-xs opacity-50">${recData.desc}</div>
+                </div>`;
         }
 
         function switchArticle(index) {
