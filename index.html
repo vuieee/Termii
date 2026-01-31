@@ -155,8 +155,7 @@
         /* === ARTICLE OVERLAY SPECIFIC === */
         /* ========================================= */
         .expanded-article {
-            /* RESTORED ORIGINAL LARGER SIZE */
-            width: 90vw; height: 85vh; 
+            width: 90vw; height: 85vh; /* Standard Article Size */
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
             box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
@@ -424,7 +423,7 @@
         </section>
     </main>
 
-    <div id="article-overlay-container" class="modal-overlay" onclick="handleOverlayClick(event)">
+    <div id="article-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="expanded-article" onclick="event.stopPropagation()">
             <div class="article-main" id="article-main-col">
                 <div class="article-main-thumb">
@@ -444,7 +443,7 @@
         </div>
     </div>
 
-    <div id="socials-overlay-container" class="modal-overlay" onclick="handleOverlayClick(event)">
+    <div id="socials-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="expanded-socials" onclick="event.stopPropagation()">
             <div class="socials-header">FIND ME HERE</div>
             <div class="socials-content-grid">
@@ -514,10 +513,10 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         };
 
         const socialData = [
-            { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "rice1.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
-            { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "xorg.png", desc: "Manage your professional identity. Build and engage with your professional network." },
-            { name: "Github", icon: icons.github, link: "https://github.com", img: "rice1.png", desc: "The world's leading AI-powered developer platform." },
-            { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "xorg.png", desc: "Secure, smart, and easy to use email." }
+            { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "discordthumbnail.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
+            { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "linkedinthumbnail.png", desc: "Manage your professional identity. Build and engage with your professional network." },
+            { name: "Github", icon: icons.github, link: "https://github.com", img: "githubthumbnail.png", desc: "The world's leading AI-powered developer platform." },
+            { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "gmailthumbnail.png", desc: "Secure, smart, and easy to use email." }
         ];
 
         let systemState = 'idle'; let userInput = ""; let intervals = [];
@@ -542,18 +541,25 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             container.style.display = 'none';
         }
 
-        function closeAllOverlays() {
+        function closeAllOverlays(e, exceptContainer) {
             if(closeTimeout) clearTimeout(closeTimeout);
-            
-            // Start closing animation
-            articleContainer.classList.remove('active');
-            socialsContainer.classList.remove('active');
-            mainStage.classList.remove('blur');
-            
-            closeTimeout = setTimeout(() => {
-                articleContainer.style.display = 'none';
-                socialsContainer.style.display = 'none';
-            }, 300);
+
+            // If switching to a new container, instantly hide others
+            if (exceptContainer) {
+                if (exceptContainer !== articleContainer) forceClose(articleContainer);
+                if (exceptContainer !== socialsContainer) forceClose(socialsContainer);
+            } else {
+                // If closing all (clicking background or Home), animate close
+                if (!e || (e.target && (e.target.classList.contains('modal-overlay') || e.target.id === 'nav-home'))) {
+                    articleContainer.classList.remove('active');
+                    socialsContainer.classList.remove('active');
+                    mainStage.classList.remove('blur');
+                    closeTimeout = setTimeout(() => {
+                        articleContainer.style.display = 'none';
+                        socialsContainer.style.display = 'none';
+                    }, 300);
+                }
+            }
         }
 
         function handleOverlayClick(e) {
@@ -565,7 +571,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         // --- OPENING FUNCTIONS ---
         function openArticle(index) {
             if(closeTimeout) clearTimeout(closeTimeout);
-            // Instantly hide socials if open
+            // Instantly hide socials to prevent conflict
             forceClose(socialsContainer);
             
             populateArticle(index);
@@ -578,7 +584,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
 
         function openSocials() {
             if(closeTimeout) clearTimeout(closeTimeout);
-            // Instantly hide article if open
+            // Instantly hide articles to prevent conflict
             forceClose(articleContainer);
             
             populateSocials();
@@ -653,7 +659,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         biosTrigger.addEventListener('click', () => { if (systemState === 'idle') startBios(); else resetAll(); });
         screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
         
-        navHome.addEventListener('click', closeAllOverlays);
+        navHome.addEventListener('click', (e) => closeAllOverlays(e));
         navSocials.addEventListener('click', openSocials);
 
         document.addEventListener('keydown', (e) => {
