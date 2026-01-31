@@ -6,16 +6,20 @@
     <title>Termii_</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='0' y='0' width='64' height='64' fill='black'/%3E%3Ctext x='5' y='48' fill='%2350fff7' font-family='monospace' font-weight='bold' font-size='46'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+    
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
+            /* Colors */
             --term-teal: #50fff7;
             --term-green: #00ff41;
             --term-yellow: #f1ff5e;
             --term-red: #ff3333;
             --term-white: #ffffff;
             --term-bg: #050505;
+            
+            /* Typography & Layout */
             --font-head: 'Press Start 2P', cursive;
             --font-body: 'Fira Code', monospace;
             --gap-size: 2vh; 
@@ -46,13 +50,11 @@
             box-shadow: inset 0 0 80px rgba(0,0,0,0.7);
         }
 
-        /* TYPOGRAPHY */
         .header-text { font-family: var(--font-head); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8vh; }
         .body-text { font-size: 0.8rem; line-height: 1.3; opacity: 0.8; }
         .text-xs { font-size: 0.65rem; }
         .opacity-50 { opacity: 0.5; }
 
-        /* LAYOUT */
         header { display: flex; justify-content: space-between; margin-bottom: 1vh; opacity: 0.7; flex-shrink: 0; z-index: 1002; position: relative; }
 
         nav {
@@ -67,7 +69,6 @@
         .nav-item:last-child { border-right: none; }
         .nav-item:hover { background: rgba(80, 255, 247, 0.15); }
 
-        /* MAIN STAGE */
         .main-stage {
             display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5vw;
             flex: 1; min-height: 0; overflow: hidden;
@@ -79,7 +80,6 @@
         .right-panel { display: flex; flex-direction: column; gap: 1.5vh; height: 100%; overflow: hidden; }
         .unix-box { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-bottom: 1vh; position: relative; }
 
-        /* IMAGE WRAPPERS */
         .img-wrapper {
             flex: 1; border: 2px solid var(--term-teal); overflow: hidden;
             display: flex; justify-content: center; align-items: center; padding: 2px; position: relative;
@@ -88,7 +88,6 @@
         .img-wrapper::after { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--term-teal); mix-blend-mode: color; opacity: 1; pointer-events: none; z-index: 2; }
         .img-wrapper::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.95) 100%); }
 
-        /* OVERLAYS */
         .term-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; font-family: var(--font-body); padding: 10px; z-index: 4; display: none; flex-direction: column; overflow: hidden; }
         #hack-overlay { color: var(--term-teal); font-size: 0.7rem; justify-content: flex-start; word-break: break-all; line-height: 1.5; }
         #bios-overlay { color: #ddd; font-size: 0.6rem; gap: 8px; }
@@ -103,7 +102,6 @@
         .cursor-blink { display: inline-block; width: 8px; height: 14px; background: var(--term-teal); animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* FOOTER */
         .easter-egg-trigger { cursor: default; text-decoration: none; transition: all 0.2s; user-select: none; }
         #boot-trigger.active { cursor: pointer; color: var(--term-red); font-weight: bold; text-shadow: 0 0 10px var(--term-red); }
         #bios-trigger.active { cursor: pointer; color: var(--term-green); font-weight: bold; text-shadow: 0 0 10px var(--term-green); }
@@ -113,14 +111,12 @@
         .bios-footer { display: flex; gap: 1vw; align-items: flex-end; font-family: var(--font-body); flex-shrink: 0; margin-top: 0.5vh; }
         .inputs-grid { display: grid; grid-template-columns: auto auto; gap: 0.2vh 1vw; font-weight: bold; }
 
-        /* REPOS */
         .repos-box { border: 2px solid var(--term-teal); padding: 1.5vh; flex-shrink: 0; }
         .repo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1vh; }
         .repo-card { border: 2px solid var(--term-teal); padding: 1vh; position: relative; }
         .btn-get { position: absolute; top: 1vh; right: 1vh; background: none; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.55rem; cursor: pointer; padding: 2px 4px; }
         .btn-get:hover { background: var(--term-teal); color: black; }
 
-        /* ARTICLES & COMMENTS */
         .bottom-split { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vh; overflow: hidden; }
         .articles-stack { display: flex; flex-direction: column; gap: 1.5vh; overflow-y: auto; padding-right: 5px; }
         .article-card { border: 2px solid var(--term-teal); padding: 1.5vh; display: flex; flex-direction: column; justify-content: center; cursor: pointer; flex-shrink: 0; }
@@ -135,13 +131,10 @@
         .social-btn { width: 100%; background: transparent; border: 2px solid var(--term-teal); color: var(--term-teal); font-family: var(--font-head); font-size: 0.6rem; padding: 1vh; text-align: center; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .social-btn:hover { background: var(--term-teal); color: black; box-shadow: 0 0 10px var(--term-teal); }
 
-        /* ========================================= */
-        /* === MODAL OVERLAY (SHARED) === */
-        /* ========================================= */
+        /* Modal Overlays */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: 1000; display: none; 
-            /* ALIGNMENT: 10vh from top (COMPACT) */
             align-items: flex-start; justify-content: center;
             padding-top: var(--top-align);
             padding-left: 2vw; padding-right: 2vw;
@@ -150,9 +143,9 @@
         }
         .modal-overlay.active { backdrop-filter: blur(5px); background: rgba(0,0,0,0.6); }
 
-        /* === ARTICLE MODAL === */
+        /* Article Modal */
         .expanded-article {
-            width: 90vw; height: 85vh; /* Large Size */
+            width: 90vw; height: 85vh; 
             background: var(--term-bg);
             border: 2px solid var(--term-teal);
             box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
@@ -190,7 +183,6 @@
 
         .article-title-box { border: none; padding: 0; width: 100%; margin-bottom: var(--gap-size); flex-shrink: 0; }
         
-        /* RESTORED TITLE STYLE (No subtitle slot) */
         #exp-title { 
             font-size: 2rem; 
             line-height: 1.4; 
@@ -207,7 +199,7 @@
         .rec-thumb img { width: 100%; height: auto; display: block; filter: none; transition: transform 0.4s ease; }
         .rec-card:hover .rec-thumb img { transform: scale(1.1); }
 
-        /* === SOCIALS MODAL === */
+        /* Socials Modal */
         .expanded-socials {
             width: 60vw; height: 60vh; 
             background: var(--term-bg);
@@ -259,7 +251,7 @@
 
         .socials-preview { display: flex; flex-direction: column; gap: 1.5vh; }
 
-        /* THUMBNAIL CONTINGENCY - FORCE FIT */
+        /* Consistent Thumbnail Sizing */
         .social-preview-thumb {
             flex: 1; border: 2px solid var(--term-teal);
             overflow: hidden; position: relative; background: #000;
@@ -406,7 +398,7 @@
                 </div>
                 <div class="article-title-box">
                     <div class="header-text" id="exp-title">TITLE HERE</div>
-                    </div>
+                </div>
                 <div class="article-body-text" id="exp-text">
                     LOREM IPSUM...
                 </div>
@@ -449,7 +441,7 @@
         const hackInputLine = document.getElementById('hack-input-line');
         const userInputDisplay = document.getElementById('user-input');
         
-        // --- FULL TEXT RESTORED ---
+        // --- DATA ---
         const longLorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
@@ -488,8 +480,8 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         const socialData = [
             { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
             { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Manage your professional identity. Build and engage with your professional network." },
-            { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "The world's leading AI-powered developer platform." },
-            { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Secure, smart, and easy to use email." }
+            { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "My open source repositories." },
+            { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a direct message." }
         ];
 
         let systemState = 'idle'; let userInput = ""; let intervals = [];
@@ -558,12 +550,9 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             const data = articlesData[index];
             const otherIndex = (index === 0) ? 1 : 0;
             const recData = articlesData[otherIndex];
-            
-            // REVERTED: Directly using full text, no splitting
             document.getElementById('exp-title').textContent = data.title;
             document.getElementById('exp-img').src = data.img;
             document.getElementById('exp-text').textContent = data.longText;
-
             const recContainer = document.getElementById('rec-card-container');
             recContainer.innerHTML = `<div class="rec-card" onclick="switchArticle(${otherIndex}); event.stopPropagation();"><div class="header-text" style="font-size:0.6rem; margin-bottom:0.5vh;">${recData.title}</div><div class="rec-thumb"><img src="${recData.img}"></div><div class="body-text text-xs opacity-50">${recData.desc}</div></div>`;
         }
