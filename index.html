@@ -47,7 +47,7 @@
             text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
         }
 
-        /* --- LOADING SCREEN (Updated to Teal Theme) --- */
+        /* --- LOADING SCREEN --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--term-bg);
@@ -71,20 +71,20 @@
             margin-bottom: 5px; 
             font-size: 0.9rem; 
             letter-spacing: 1px;
-            color: var(--term-teal); /* Changed to Teal */
+            color: var(--term-teal); 
         }
 
         #loading-bar-container { 
             width: 100%; 
             height: 25px;
-            border: 3px solid var(--term-teal); /* Changed to Teal */
+            border: 3px solid var(--term-teal); 
             padding: 3px; 
             box-shadow: 0 0 10px rgba(80, 255, 247, 0.2);
         }
 
         #loading-bar { 
             height: 100%; 
-            background-color: var(--term-teal); /* Changed to Teal */
+            background-color: var(--term-teal); 
             width: 0%; 
             transition: width 0.1s linear; 
         }
@@ -366,7 +366,6 @@
         .icon-svg { width: 1.2rem; height: 1.2rem; fill: var(--term-teal); }
 
         /* === NEW: ARTICLES LIST OVERLAY === */
-        /* Reusing dimensions/styles for consistency */
         .articles-list-modal {
             width: 90vw; height: 85vh;
             background: var(--term-bg);
@@ -384,11 +383,10 @@
             overflow-y: auto;
             display: flex; flex-direction: column;
             gap: 2vh;
-            padding-right: 10px; /* Space for scrollbar */
+            padding-right: 10px;
             flex: 1;
         }
         
-        /* Custom scrollbar for this container too */
         .articles-list-container::-webkit-scrollbar { width: 14px; display: block; }
         .articles-list-container::-webkit-scrollbar-track { background: transparent; }
         .articles-list-container::-webkit-scrollbar-thumb { 
@@ -398,10 +396,9 @@
             border-radius: 99px;
         }
 
-        /* List Item Card Style */
         .article-row {
             display: grid;
-            grid-template-columns: 250px 1fr; /* Fixed Thumbnail | Flexible Text */
+            grid-template-columns: 250px 1fr; 
             gap: 2vw;
             border: 2px solid var(--term-teal);
             padding: 1.5vh;
@@ -442,6 +439,132 @@
             line-height: 1.4;
         }
 
+        /* === NEW: REPOS MODAL (DESIGN UPDATE) === */
+        /* Reusing consistent sizing */
+        .repos-modal {
+            width: 90vw; height: 85vh;
+            background: var(--term-bg);
+            border: 2px solid var(--term-teal);
+            box-shadow: 0 0 20px rgba(80, 255, 247, 0.2);
+            padding: 2.5vh;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.95); opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .modal-overlay.active .repos-modal { transform: scale(1); opacity: 1; }
+
+        .repos-controls {
+            display: flex;
+            gap: 1.5vw;
+            margin-bottom: 2vh;
+            border-bottom: 2px solid var(--term-teal);
+            padding-bottom: 2vh;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            border: 2px solid var(--term-teal);
+            padding: 0.5vh;
+            background: black;
+        }
+        
+        .search-icon {
+            font-size: 1rem; margin-right: 10px;
+            filter: invert(88%) sepia(21%) saturate(935%) hue-rotate(86deg) brightness(106%) contrast(104%); /* Teal Filter roughly */
+        }
+
+        #repo-search {
+            background: transparent;
+            border: none;
+            color: var(--term-teal);
+            font-family: var(--font-head);
+            font-size: 0.8rem;
+            width: 100%;
+            outline: none;
+        }
+        #repo-search::placeholder { color: rgba(80, 255, 247, 0.5); }
+
+        .repo-select {
+            flex: 1;
+            background: black;
+            color: var(--term-teal);
+            border: 2px solid var(--term-teal);
+            font-family: var(--font-head);
+            font-size: 0.7rem;
+            padding: 0.5vh;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .repos-list-container {
+            overflow-y: auto;
+            display: flex; flex-direction: column;
+            gap: 1.5vh;
+            padding-right: 10px;
+            flex: 1;
+        }
+        .repos-list-container::-webkit-scrollbar { width: 14px; display: block; }
+        .repos-list-container::-webkit-scrollbar-track { background: transparent; }
+        .repos-list-container::-webkit-scrollbar-thumb { background-color: var(--term-teal); border: 5px solid transparent; background-clip: content-box; border-radius: 99px; }
+
+        .repo-row-card {
+            border: 2px solid var(--term-teal);
+            padding: 1.5vh;
+            position: relative;
+            background: rgba(0,0,0,0.3);
+            transition: background 0.2s;
+        }
+        .repo-row-card:hover { background: rgba(80, 255, 247, 0.05); }
+
+        .repo-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 1vh;
+            border-bottom: 1px dashed rgba(80, 255, 247, 0.3);
+            padding-bottom: 0.5vh;
+        }
+
+        .repo-name {
+            font-family: var(--font-head);
+            font-size: 1rem;
+            color: var(--term-white);
+            background: var(--term-teal);
+            color: black;
+            padding: 2px 5px;
+        }
+
+        .repo-get-btn {
+            background: transparent;
+            border: 2px solid var(--term-teal);
+            color: var(--term-teal);
+            font-family: var(--font-head);
+            font-size: 0.7rem;
+            padding: 0.5vh 1vh;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .repo-get-btn:hover {
+            background: var(--term-teal);
+            color: black;
+            box-shadow: 0 0 10px var(--term-teal);
+        }
+
+        .repo-desc-row {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 1vh;
+        }
+
+        .repo-meta {
+            display: flex; gap: 2vw;
+            font-size: 0.7rem; opacity: 0.6;
+            font-family: var(--font-body);
+        }
+
     </style>
 </head>
 <body>
@@ -468,7 +591,7 @@
         <nav>
             <div class="nav-item" id="nav-home">HOME</div>
             <div class="nav-item" id="nav-articles">ARTICLES</div>
-            <div class="nav-item">REPOS</div>
+            <div class="nav-item" id="nav-repos">REPOS</div>
             <div class="nav-item" id="nav-socials">SOCIALS</div>
             <div class="nav-item">UNIX</div>
         </nav>
@@ -591,8 +714,7 @@
     <div id="articles-list-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="articles-list-modal" onclick="event.stopPropagation()">
             <div class="socials-header">ARTICLES LOG</div>
-            <div class="articles-list-container" id="articles-list-content">
-                </div>
+            <div class="articles-list-container" id="articles-list-content"></div>
         </div>
     </div>
 
@@ -613,6 +735,31 @@
                 <div class="rec-header header-text">RECOMMENDED</div>
                 <div id="rec-card-container"></div>
             </div>
+        </div>
+    </div>
+
+    <div id="repos-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
+        <div class="repos-modal" onclick="event.stopPropagation()">
+            <div class="repos-controls">
+                <div class="search-box">
+                    <span class="icon-svg" style="font-size:1rem; margin-right:10px;">🔍</span>
+                    <input type="text" id="repo-search" placeholder="SEARCH REPOSITORY...">
+                </div>
+                <select id="repo-lang" class="repo-select">
+                    <option value="ALL">LANGUAGE (ALL)</option>
+                    <option value="Lua">LUA</option>
+                    <option value="Bash">BASH</option>
+                    <option value="HTML">HTML</option>
+                    <option value="Python">PYTHON</option>
+                </select>
+                <select id="repo-sort" class="repo-select">
+                    <option value="new">SORT BY: NEW</option>
+                    <option value="old">SORT BY: OLD</option>
+                    <option value="name">SORT BY: NAME</option>
+                </select>
+            </div>
+            <div id="repos-list-content" class="repos-list-container">
+                </div>
         </div>
     </div>
 
@@ -637,12 +784,14 @@
         const screenTrigger = document.getElementById('screen-trigger');
         const navHome = document.getElementById('nav-home');
         const navArticles = document.getElementById('nav-articles');
+        const navRepos = document.getElementById('nav-repos');
         const navSocials = document.getElementById('nav-socials');
         const lainImg = document.getElementById('lain-img');
         const hackOverlay = document.getElementById('hack-overlay');
         const biosOverlay = document.getElementById('bios-overlay');
         const articleContainer = document.getElementById('article-overlay-container');
         const articlesListOverlay = document.getElementById('articles-list-overlay');
+        const reposContainer = document.getElementById('repos-overlay-container');
         const socialsContainer = document.getElementById('socials-overlay-container');
         const mainStage = document.getElementById('main-stage');
         const hackOutput = document.getElementById('hack-output');
@@ -675,6 +824,15 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                 desc: "Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.",
                 longText: `XORG VRR CONFIGURATION GUIDE\n\n${longLorem}\n\nSection 2: Troubleshooting\n\n${longLorem}`
             }
+        ];
+
+        // MOCK REPO DATA
+        const reposData = [
+            { name: "NVIM-CONFIG", lang: "Lua", desc: "My personal Neovim configuration files with LSP support.", date: "2025-12-01", url: "#" },
+            { name: "ARCH-INSTALL", lang: "Bash", desc: "Automated Arch Linux installation script for minimal setup.", date: "2026-01-10", url: "#" },
+            { name: "TERMII-WEB", lang: "HTML", desc: "Source code for this terminal website portal.", date: "2026-02-01", url: "#" },
+            { name: "DOTFILES", lang: "Bash", desc: "Collection of config files for Hyprland, Waybar, etc.", date: "2025-11-20", url: "#" },
+            { name: "PY-SCRIPTS", lang: "Python", desc: "Various utility scripts for system automation.", date: "2025-10-05", url: "#" }
         ];
 
         const icons = {
@@ -767,16 +925,19 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
                 if (exceptContainer !== articleContainer) forceClose(articleContainer);
                 if (exceptContainer !== socialsContainer) forceClose(socialsContainer);
                 if (exceptContainer !== articlesListOverlay) forceClose(articlesListOverlay);
+                if (exceptContainer !== reposContainer) forceClose(reposContainer);
             } else {
                 if (!e || (e.target && (e.target.classList.contains('modal-overlay') || e.target.id === 'nav-home'))) {
                     articleContainer.classList.remove('active');
                     socialsContainer.classList.remove('active');
                     articlesListOverlay.classList.remove('active');
+                    reposContainer.classList.remove('active');
                     mainStage.classList.remove('blur');
                     closeTimeout = setTimeout(() => {
                         articleContainer.style.display = 'none';
                         socialsContainer.style.display = 'none';
                         articlesListOverlay.style.display = 'none';
+                        reposContainer.style.display = 'none';
                     }, 300);
                 }
             }
@@ -788,6 +949,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             if(closeTimeout) clearTimeout(closeTimeout);
             forceClose(socialsContainer);
             forceClose(articleContainer);
+            forceClose(reposContainer);
             
             // Populate list dynamically
             const container = document.getElementById('articles-list-content');
@@ -815,7 +977,8 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         function openArticle(index) {
             if(closeTimeout) clearTimeout(closeTimeout);
             forceClose(socialsContainer);
-            forceClose(articlesListOverlay); // Close the list when opening reader
+            forceClose(articlesListOverlay); 
+            forceClose(reposContainer);
             populateArticle(index);
             articleContainer.style.display = 'flex';
             requestAnimationFrame(() => { articleContainer.classList.add('active'); mainStage.classList.add('blur'); });
@@ -825,10 +988,68 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
             if(closeTimeout) clearTimeout(closeTimeout);
             forceClose(articleContainer);
             forceClose(articlesListOverlay);
+            forceClose(reposContainer);
             populateSocials();
             socialsContainer.style.display = 'flex';
             requestAnimationFrame(() => { socialsContainer.classList.add('active'); mainStage.classList.add('blur'); });
         }
+
+        // --- NEW: OPEN REPOS MODAL ---
+        function openRepos() {
+            if(closeTimeout) clearTimeout(closeTimeout);
+            forceClose(articleContainer);
+            forceClose(articlesListOverlay);
+            forceClose(socialsContainer);
+            renderRepos(); // Initial render
+            reposContainer.style.display = 'flex';
+            requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); });
+        }
+
+        // --- NEW: REPOS LOGIC ---
+        function renderRepos() {
+            const container = document.getElementById('repos-list-content');
+            const searchVal = document.getElementById('repo-search').value.toLowerCase();
+            const langVal = document.getElementById('repo-lang').value;
+            const sortVal = document.getElementById('repo-sort').value;
+
+            container.innerHTML = '';
+
+            let filtered = reposData.filter(repo => {
+                const matchesSearch = repo.name.toLowerCase().includes(searchVal) || repo.desc.toLowerCase().includes(searchVal);
+                const matchesLang = langVal === 'ALL' || repo.lang === langVal;
+                return matchesSearch && matchesLang;
+            });
+
+            // Sorting
+            filtered.sort((a, b) => {
+                if (sortVal === 'new') return new Date(b.date) - new Date(a.date);
+                if (sortVal === 'old') return new Date(a.date) - new Date(b.date);
+                if (sortVal === 'name') return a.name.localeCompare(b.name);
+            });
+
+            filtered.forEach(repo => {
+                const card = document.createElement('div');
+                card.className = 'repo-row-card';
+                card.innerHTML = `
+                    <div class="repo-header">
+                        <span class="repo-name">${repo.name}</span>
+                        <button class="repo-get-btn" onclick="window.open('${repo.url}', '_blank')">GET &#8599;</button>
+                    </div>
+                    <div class="repo-desc-row">${repo.desc}</div>
+                    <div class="repo-meta">
+                        <span>LANG: ${repo.lang}</span>
+                        <span>UPDATED: ${repo.date}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Add Listeners for Repos
+        document.getElementById('repo-search').addEventListener('input', renderRepos);
+        document.getElementById('repo-lang').addEventListener('change', renderRepos);
+        document.getElementById('repo-sort').addEventListener('change', renderRepos);
+
 
         function populateArticle(index) {
             const data = articlesData[index];
@@ -885,6 +1106,7 @@ Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saep
         navHome.addEventListener('click', (e) => closeAllOverlays(e));
         navSocials.addEventListener('click', openSocials);
         navArticles.addEventListener('click', openArticlesList);
+        navRepos.addEventListener('click', openRepos);
 
         function startBoot() {
             systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
