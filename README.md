@@ -4,13 +4,13 @@
 
   # ▀▄▀▄▀▄ 𝚃𝙴𝚁𝙼𝙸𝙸_ ▄▀▄▀▄▀
   
-  **A STYLIZED TERMINAL GATEWAY // WEBCORE // ANIME AESTHETIC**
+  **A STYLIZED TERMINAL WESBITE // WEBCORE // ANIME AESTHETIC**
 
   [![Status](https://img.shields.io/website?label=SYSTEM&style=for-the-badge&url=https%3A%2F%2Fvuieee.github.io%2FTermii%2F)](https://vuieee.github.io/Termii/)
   [![License](https://img.shields.io/badge/LICENSE-MIT-50fff7?style=for-the-badge&labelColor=000000)](LICENSE)
   [![Vibe](https://img.shields.io/badge/VIBE-WIRED-00ff41?style=for-the-badge&labelColor=000000)](https://vuieee.github.io/Termii/)
 
-  [ **ENTER SETUP** ](https://vuieee.github.io/Termii/)
+  [ **ENTER TERMII** ](https://vuieee.github.io/Termii/)
 
 </div>
 
