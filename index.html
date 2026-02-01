@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Termii_ Web Interface">
     <title>Termii_</title>
     
     <link rel="preload" as="image" href="assets/images/lainheader.png">
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='0' y='0' width='64' height='64' fill='black'/%3E%3Ctext x='5' y='48' fill='%2350fff7' font-family='monospace' font-weight='bold' font-size='46'%3E%26gt;_%3C/text%3E%3C/svg%3E">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -165,27 +163,7 @@
     <div id="articles-list-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="articles-list-modal" onclick="event.stopPropagation()">
             <div class="socials-header">ARTICLES LOG</div>
-            <div id="admin-controls" class="admin-controls"><button class="add-article-btn" onclick="openEditor()">[+] ADD ARTICLE</button></div>
             <div class="articles-list-container" id="articles-list-content"></div>
-            <div class="admin-trigger" onclick="adminLogin()">π</div>
-        </div>
-    </div>
-
-    <div id="editor-overlay" class="modal-overlay">
-        <div class="expanded-article" style="display:flex; flex-direction:column;" onclick="event.stopPropagation()">
-            <div class="socials-header">NEW ENTRY</div>
-            <input type="text" id="edit-title" class="editor-input" placeholder="ARTICLE TITLE">
-            <input type="text" id="edit-desc" class="editor-input" placeholder="SHORT DESCRIPTION">
-            <input type="text" id="edit-img" class="editor-input" placeholder="IMAGE URL (assets/images/...)">
-            <div class="editor-toolbar">
-                <button class="tool-btn" onclick="formatDoc('bold')"><b>B</b></button>
-                <button class="tool-btn" onclick="formatDoc('italic')"><i>I</i></button>
-            </div>
-            <div id="edit-body" class="editor-body" contenteditable="true">Start typing...</div>
-            <div class="editor-actions">
-                <button class="social-btn" style="width:auto;" onclick="closeEditor()">CANCEL</button>
-                <button class="social-btn" style="width:auto; background:var(--term-teal); color:black;" onclick="saveArticle()">SAVE</button>
-            </div>
         </div>
     </div>
 
@@ -230,9 +208,7 @@
     <div id="unix-gallery-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="unix-gallery-modal" onclick="event.stopPropagation()">
             <div class="socials-header">UNIX RICE GALLERY</div>
-            
             <div id="unix-grid" class="unix-grid-view"></div>
-
             <div id="unix-expanded" class="unix-expanded-view">
                 <div class="gallery-toolbar">
                     <button class="gallery-btn" onclick="zoomImage(0.2)">+</button>
