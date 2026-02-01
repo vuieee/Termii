@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Termii_ Web Interface">
     <title>Termii_</title>
     
     <link rel="preload" as="image" href="assets/images/lainheader.png">
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='0' y='0' width='64' height='64' fill='black'/%3E%3Ctext x='5' y='48' fill='%2350fff7' font-family='monospace' font-weight='bold' font-size='46'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -15,6 +17,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div class="crt-scanlines"></div>
 
     <div id="loading-screen">
         <div class="loading-content">
@@ -52,7 +56,6 @@
                             <div id="hack-output"></div>
                             <div id="hack-input-line" style="display:none;">> <span id="user-input"></span><span class="cursor-blink"></span></div>
                         </div>
-                        
                         <div id="bios-overlay" class="term-overlay">
                             <div class="header-text" style="color:var(--term-green);">SYSTEM MONITOR v2.0</div>
                             <div class="bios-section">
@@ -170,8 +173,13 @@
     <div id="article-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="expanded-article" onclick="event.stopPropagation()">
             <div class="article-main" id="article-main-col">
-                <div class="article-main-thumb"><div class="scanlines"></div><img id="exp-img" src="" alt="Expanded Image"></div>
-                <div class="article-title-box"><div class="header-text" id="exp-title">TITLE</div></div>
+                <div class="article-main-thumb">
+                    <div class="scanlines"></div>
+                    <img id="exp-img" src="" alt="Expanded Image">
+                </div>
+                <div class="article-title-box">
+                    <div class="header-text" id="exp-title">TITLE HERE</div>
+                </div>
                 <div class="article-body-text" id="exp-text"></div>
             </div>
             <div class="article-sidebar" id="article-sidebar-col">
@@ -184,9 +192,22 @@
     <div id="repos-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="repos-modal" onclick="event.stopPropagation()">
             <div class="repos-controls">
-                <div class="search-box"><span class="search-icon-symbol">&gt;</span><input type="text" id="repo-search" placeholder="SEARCH REPOSITORIES..."></div>
-                <select id="repo-lang" class="repo-select"><option value="ALL">ALL</option><option value="Lua">LUA</option><option value="Bash">BASH</option></select>
-                <select id="repo-sort" class="repo-select"><option value="new">NEW</option><option value="old">OLD</option></select>
+                <div class="search-box">
+                    <span class="search-icon-symbol">&gt;</span>
+                    <input type="text" id="repo-search" placeholder="SEARCH REPOSITORIES...">
+                </div>
+                <select id="repo-lang" class="repo-select">
+                    <option value="ALL">LANGUAGE (ALL)</option>
+                    <option value="Lua">LUA</option>
+                    <option value="Bash">BASH</option>
+                    <option value="HTML">HTML</option>
+                    <option value="Python">PYTHON</option>
+                </select>
+                <select id="repo-sort" class="repo-select">
+                    <option value="new">SORT BY: NEW</option>
+                    <option value="old">SORT BY: OLD</option>
+                    <option value="name">SORT BY: NAME</option>
+                </select>
             </div>
             <div id="repos-list-content" class="repos-list-container"></div>
         </div>
@@ -198,26 +219,11 @@
             <div class="socials-content-grid">
                 <div class="socials-list" id="socials-list-container"></div>
                 <div class="socials-preview">
-                    <div class="social-preview-thumb"><div class="scanlines"></div><img id="soc-prev-img" src="" alt="Preview"></div>
+                    <div class="social-preview-thumb">
+                        <div class="scanlines"></div>
+                        <img id="soc-prev-img" src="" alt="Social Preview">
+                    </div>
                     <div class="social-preview-desc" id="soc-prev-desc"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="unix-gallery-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
-        <div class="unix-gallery-modal" onclick="event.stopPropagation()">
-            <div class="socials-header">UNIX RICE GALLERY</div>
-            <div id="unix-grid" class="unix-grid-view"></div>
-            <div id="unix-expanded" class="unix-expanded-view">
-                <div class="gallery-toolbar">
-                    <button class="gallery-btn" onclick="zoomImage(0.2)">+</button>
-                    <button class="gallery-btn" onclick="zoomImage(-0.2)">-</button>
-                    <button class="gallery-btn" onclick="resetZoom()">RESET</button>
-                    <button class="gallery-btn" onclick="closeUnixImage()">CLOSE</button>
-                </div>
-                <div class="gallery-viewport" id="gallery-viewport" onmousedown="startDrag(event)">
-                    <img id="unix-expanded-img" class="gallery-image" src="" alt="Expanded Rice">
                 </div>
             </div>
         </div>
