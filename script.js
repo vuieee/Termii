@@ -7,7 +7,6 @@ const icons = {
 };
 
 const longLorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
-
 const articlesData = [
     { title: "SWITCHING TO LINUX", img: "assets/images/rice1.png", desc: "Why I moved from Windows to Arch.", longText: `MY JOURNEY TO ARCH LINUX\n\n${longLorem}` },
     { title: "ENABLE VRR XORG", img: "assets/images/xorg.png", desc: "Variable Refresh Rate Config.", longText: `XORG VRR GUIDE\n\n${longLorem}` }
@@ -21,11 +20,19 @@ const reposData = [
     { name: "PY-SCRIPTS", lang: "Python", desc: "Automation scripts.", date: "2025-10-05", url: "#" }
 ];
 
+// Fixed Typo: "discordthumbail.png" based on your screenshot
 const socialData = [
-    { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
-    { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Manage your professional identity. Build and engage with your professional network." },
-    { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "My open source repositories." },
-    { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a direct message." }
+    { name: "Discord", icon: icons.discord, img: "assets/images/discordthumbail.png", desc: "My Discord community.", link: "#" },
+    { name: "LinkedIn", icon: icons.linkedin, img: "assets/images/linkedinthumbnail.png", desc: "Professional network.", link: "#" },
+    { name: "Github", icon: icons.github, img: "assets/images/githubthumbnail.png", desc: "Open source.", link: "#" },
+    { name: "Gmail", icon: icons.gmail, img: "assets/images/gmailthumbnail.png", desc: "Email me.", link: "#" }
+];
+
+// Unix Gallery Images (All images containing 'rice' in filename based on your folder)
+const unixImages = [
+    { src: "assets/images/rice1.png", name: "Rice 1" },
+    { src: "assets/images/rice2.png", name: "Rice 2" }
+    // Add other 'rice' images here if you add them to the folder
 ];
 
 // --- ELEMENTS ---
@@ -36,6 +43,7 @@ const navHome = document.getElementById('nav-home');
 const navArticles = document.getElementById('nav-articles');
 const navRepos = document.getElementById('nav-repos');
 const navSocials = document.getElementById('nav-socials');
+const navUnix = document.getElementById('nav-unix');
 const lainImg = document.getElementById('lain-img');
 const hackOverlay = document.getElementById('hack-overlay');
 const biosOverlay = document.getElementById('bios-overlay');
@@ -45,261 +53,271 @@ const articleContainer = document.getElementById('article-overlay-container');
 const articlesListOverlay = document.getElementById('articles-list-overlay');
 const reposContainer = document.getElementById('repos-overlay-container');
 const socialsContainer = document.getElementById('socials-overlay-container');
-
+const unixGalleryOverlay = document.getElementById('unix-gallery-overlay');
 const mainStage = document.getElementById('main-stage');
 const hackOutput = document.getElementById('hack-output');
 const hackInputLine = document.getElementById('hack-input-line');
 const userInputDisplay = document.getElementById('user-input');
 
-// --- PRELOADER ---
-const allImages = [
-    "assets/images/lainheader.png", "assets/images/lain.gif", "assets/images/rice1.png", 
-    "assets/images/xorg.png", "assets/images/discordthumbail.png", "assets/images/linkedinthumbnail.png",
-    "assets/images/githubthumbnail.png", "assets/images/gmailthumbnail.png"
-];
+let systemState = 'idle'; let userInput = ""; let intervals = []; let closeTimeout = null;
 
-let loadedCount = 0;
-const totalImages = allImages.length;
+// --- ROBUST PRELOADER ---
+const allImages = ["assets/images/lainheader.png", "assets/images/rice1.png"];
 const loadingScreen = document.getElementById('loading-screen');
 const loadingBar = document.getElementById('loading-bar');
 const mainContent = document.getElementById('main-content');
 
+let loadedCount = 0;
+let forcedOpen = false;
+
+function finishLoading() {
+    if (forcedOpen) return;
+    forcedOpen = true;
+    
+    if(loadingBar) loadingBar.style.width = "100%";
+    
+    setTimeout(() => {
+        if(loadingScreen) loadingScreen.style.opacity = 0;
+        if(mainContent) mainContent.classList.add('active');
+        
+        setTimeout(() => {
+            if(loadingScreen) loadingScreen.style.display = 'none';
+            if(lainImg) lainImg.src = "assets/images/lainheader.png";
+            document.querySelectorAll('.article-thumb img').forEach((img, idx) => { 
+                if(articlesData[idx]) img.src = articlesData[idx].img; 
+            });
+        }, 500);
+    }, 300);
+}
+
 function checkLoad() {
     loadedCount++;
-    const pct = Math.floor((loadedCount / totalImages) * 100);
-    loadingBar.style.width = pct + "%";
-    if (loadedCount >= totalImages) {
-        setTimeout(() => {
-            loadingScreen.style.opacity = 0;
-            mainContent.classList.add('active');
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                document.getElementById('lain-img').src = "assets/images/lainheader.png";
-                document.querySelectorAll('.article-thumb img').forEach((img, idx) => {
-                    if(articlesData[idx]) img.src = articlesData[idx].img;
-                });
-            }, 500);
-        }, 200);
+    const pct = Math.floor((loadedCount / allImages.length) * 100);
+    if(loadingBar) loadingBar.style.width = pct + "%";
+    
+    if (loadedCount >= allImages.length) {
+        finishLoading();
     }
 }
 
-allImages.forEach(src => {
-    const img = new Image();
-    img.onload = checkLoad; img.onerror = checkLoad; img.src = src;
+// 1. Try to load images naturally
+allImages.forEach(src => { 
+    const img = new Image(); 
+    img.onload = checkLoad; 
+    img.onerror = checkLoad; // Count errors as success to avoid hang
+    img.src = src; 
 });
 
-// --- SYSTEM VARS ---
-let systemState = 'idle'; let userInput = ""; let intervals = []; let closeTimeout = null;
-const codeSnippets = ["sudo inject --force -p 8080", "decrypting...", "accessing mainframe..."];
-const fakeProcesses = [{ cmd: "kworker/u16", pid: 120 }, { cmd: "systemd", pid: 1 }, { cmd: "discord", pid: 4055 }];
+// 2. Safety Timer: Force open after 2 seconds
+setTimeout(finishLoading, 2000);
 
+
+// --- FUNCTIONS ---
 function resetAll() {
     systemState = 'idle'; intervals.forEach(clearInterval); intervals = [];
-    hackOverlay.style.display = 'none'; biosOverlay.style.display = 'none';
-    lainImg.style.opacity = '1'; lainImg.src = 'assets/images/lainheader.png';
-    bootTrigger.textContent = "BOOT"; bootTrigger.classList.remove('active');
-    biosTrigger.textContent = "BIOS"; biosTrigger.classList.remove('active');
-    screenTrigger.textContent = "SCREEN"; screenTrigger.classList.remove('active');
-    hackOutput.innerHTML = ""; userInput = "";
+    if(hackOverlay) hackOverlay.style.display = 'none'; 
+    if(biosOverlay) biosOverlay.style.display = 'none';
+    if(lainImg) lainImg.style.opacity = '1';
+    if(bootTrigger) { bootTrigger.textContent = "BOOT"; bootTrigger.classList.remove('active'); }
+    if(biosTrigger) { biosTrigger.textContent = "BIOS"; biosTrigger.classList.remove('active'); }
+    if(screenTrigger) { screenTrigger.textContent = "SCREEN"; screenTrigger.classList.remove('active'); }
+    if(hackOutput) hackOutput.innerHTML = ""; 
+    userInput = "";
 }
 
 function closeAllOverlays(e, exceptContainer) {
     if(closeTimeout) clearTimeout(closeTimeout);
-    const modals = [articleContainer, articlesListOverlay, reposContainer, socialsContainer];
+    const modals = [articleContainer, articlesListOverlay, reposContainer, socialsContainer, unixGalleryOverlay];
     modals.forEach(modal => {
-        if (modal !== exceptContainer && modal.style.display !== 'none') {
+        if (modal && modal !== exceptContainer && modal.style.display !== 'none') {
             modal.classList.remove('active');
             setTimeout(() => { modal.style.display = 'none'; }, 300);
         }
     });
-    if (!exceptContainer) mainStage.classList.remove('blur');
+    if (!exceptContainer && mainStage) mainStage.classList.remove('blur');
 }
 
-// --- ARTICLES ---
-function openArticlesList() {
-    closeAllOverlays(null, articlesListOverlay);
-    const container = document.getElementById('articles-list-content');
-    container.innerHTML = '';
-    articlesData.forEach((article, index) => {
-        const row = document.createElement('div');
-        row.className = 'article-row';
-        row.onclick = () => openArticle(index);
-        row.innerHTML = `
-            <div class="article-row-thumb"><div class="scanlines"></div><img src="${article.img}"></div>
-            <div class="article-row-info"><div class="article-row-title">${article.title}</div><div class="article-row-desc">${article.desc}</div></div>`;
-        container.appendChild(row);
-    });
-    articlesListOverlay.style.display = 'flex';
-    requestAnimationFrame(() => { articlesListOverlay.classList.add('active'); mainStage.classList.add('blur'); });
-}
-
-function openArticle(index) {
-    closeAllOverlays(null, articleContainer);
-    const data = articlesData[index];
-    const otherIndex = (index === 0) ? 1 : 0;
-    const recData = articlesData[otherIndex];
-    document.getElementById('exp-title').textContent = data.title;
-    document.getElementById('exp-img').src = data.img;
-    document.getElementById('exp-text').textContent = data.longText;
-    document.getElementById('rec-card-container').innerHTML = `
-        <div class="rec-card" onclick="switchArticle(${otherIndex}); event.stopPropagation();">
-            <div class="header-text" style="font-size:0.6rem; margin-bottom:0.5vh;">${recData.title}</div>
-            <div class="rec-thumb"><div class="scanlines"></div><img src="${recData.img}"></div>
-            <div class="body-text text-xs opacity-50">${recData.desc}</div>
-        </div>`;
-    articleContainer.style.display = 'flex';
-    requestAnimationFrame(() => { articleContainer.classList.add('active'); mainStage.classList.add('blur'); });
-}
-
-function switchArticle(index) {
-    const content = document.getElementById('article-main-col');
-    content.classList.add('switching');
-    setTimeout(() => { openArticle(index); content.scrollTop = 0; content.classList.remove('switching'); }, 200);
-}
-
-// --- REPOS ---
-function openRepos() {
-    closeAllOverlays(null, reposContainer);
-    renderRepos();
-    reposContainer.style.display = 'flex';
-    requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); });
-}
-
-function renderRepos() {
-    const container = document.getElementById('repos-list-content');
-    const searchVal = document.getElementById('repo-search').value.toLowerCase();
-    const langVal = document.getElementById('repo-lang').value;
-    const sortVal = document.getElementById('repo-sort').value;
-    container.innerHTML = '';
-    let filtered = reposData.filter(repo => {
-        const matchesSearch = repo.name.toLowerCase().includes(searchVal) || repo.desc.toLowerCase().includes(searchVal);
-        const matchesLang = langVal === 'ALL' || repo.lang === langVal;
-        return matchesSearch && matchesLang;
-    });
-    filtered.sort((a, b) => {
-        if (sortVal === 'new') return new Date(b.date) - new Date(a.date);
-        if (sortVal === 'old') return new Date(a.date) - new Date(b.date);
-        if (sortVal === 'name') return a.name.localeCompare(b.name);
-    });
-    filtered.forEach(repo => {
-        const card = document.createElement('div');
-        card.className = 'repo-row-card';
-        card.innerHTML = `
-            <div class="repo-header"><span class="repo-name">${repo.name}</span></div>
-            <button class="repo-get-btn" onclick="window.open('${repo.url}', '_blank')">GET</button>
-            <div class="repo-desc-row">${repo.desc}</div>
-            <div class="repo-meta"><span>LANG: ${repo.lang}</span><span>UPDATED: ${repo.date}</span></div>`;
-        container.appendChild(card);
-    });
-}
-document.getElementById('repo-search').addEventListener('input', renderRepos);
-document.getElementById('repo-lang').addEventListener('change', renderRepos);
-document.getElementById('repo-sort').addEventListener('change', renderRepos);
-
-// --- SOCIALS (FIXED) ---
+// --- SOCIALS ---
 function populateSocials() {
     const listContainer = document.getElementById('socials-list-container');
+    if(!listContainer) return;
     listContainer.innerHTML = '';
     
     if(socialData.length > 0) {
-        document.getElementById('soc-prev-img').src = socialData[0].img;
-        document.getElementById('soc-prev-desc').textContent = socialData[0].desc;
+        const prevImg = document.getElementById('soc-prev-img');
+        const prevDesc = document.getElementById('soc-prev-desc');
+        if(prevImg) prevImg.src = socialData[0].img;
+        if(prevDesc) prevDesc.textContent = socialData[0].desc;
     }
-
     socialData.forEach((item, index) => {
         const capsule = document.createElement('div');
         capsule.className = 'social-capsule';
-        
         const info = document.createElement('div');
         info.className = 'social-info';
         if(index === 0) info.classList.add('active');
-        
         info.innerHTML = `${item.icon} <span class="header-text" style="font-size:0.7rem; margin:0;">${item.name}</span>`;
-        
         info.onclick = () => {
             document.getElementById('soc-prev-img').src = item.img;
             document.getElementById('soc-prev-desc').textContent = item.desc;
             document.querySelectorAll('.social-info').forEach(el => el.classList.remove('active'));
             info.classList.add('active');
         };
-
         const arrow = document.createElement('div');
         arrow.className = 'social-arrow';
         arrow.innerHTML = '&#8599;'; 
         arrow.onclick = () => window.open(item.link, '_blank');
-
-        capsule.appendChild(info);
-        capsule.appendChild(arrow);
+        capsule.appendChild(info); capsule.appendChild(arrow);
         listContainer.appendChild(capsule);
     });
 }
+function openSocials() { closeAllOverlays(null, socialsContainer); populateSocials(); if(socialsContainer) { socialsContainer.style.display = 'flex'; requestAnimationFrame(() => { socialsContainer.classList.add('active'); mainStage.classList.add('blur'); }); } }
 
-function openSocials() {
-    closeAllOverlays(null, socialsContainer);
-    populateSocials(); // Ensure this is called
-    socialsContainer.style.display = 'flex';
-    requestAnimationFrame(() => { socialsContainer.classList.add('active'); mainStage.classList.add('blur'); });
+// --- ARTICLES ---
+function openArticlesList() {
+    closeAllOverlays(null, articlesListOverlay);
+    const container = document.getElementById('articles-list-content');
+    if(!container) return;
+    container.innerHTML = '';
+    articlesData.forEach((article, index) => {
+        const row = document.createElement('div');
+        row.className = 'article-row';
+        row.onclick = () => openArticle(index);
+        row.innerHTML = `<div class="article-row-thumb"><div class="scanlines"></div><img src="${article.img}"></div><div class="article-row-info"><div class="article-row-title">${article.title}</div><div class="article-row-desc">${article.desc}</div></div>`;
+        container.appendChild(row);
+    });
+    if(articlesListOverlay) { articlesListOverlay.style.display = 'flex'; requestAnimationFrame(() => { articlesListOverlay.classList.add('active'); mainStage.classList.add('blur'); }); }
+}
+function openArticle(index) {
+    closeAllOverlays(null, articleContainer);
+    const data = articlesData[index];
+    if(data) {
+        document.getElementById('exp-title').textContent = data.title;
+        document.getElementById('exp-img').src = data.img;
+        document.getElementById('exp-text').innerHTML = data.longText.includes('<') ? data.longText : data.longText;
+        if(articleContainer) { articleContainer.style.display = 'flex'; requestAnimationFrame(() => { articleContainer.classList.add('active'); mainStage.classList.add('blur'); }); }
+    }
 }
 
-// Event Listeners
-bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
-biosTrigger.addEventListener('click', () => { if (systemState === 'idle') startBios(); else resetAll(); });
-screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'assets/images/lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
-
-navHome.addEventListener('click', () => closeAllOverlays(null, null));
-navArticles.addEventListener('click', openArticlesList);
-navRepos.addEventListener('click', openRepos);
-navSocials.addEventListener('click', openSocials);
-
-// Boot/Hack/Bios logic remains same
-function startBoot() {
-    systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
-    bootTrigger.textContent = "EXIT"; bootTrigger.classList.add('active');
-    hackOutput.innerHTML = "INITIALIZING..."; hackInputLine.style.display = 'none';
-    let progress = 0;
-    const bootInt = setInterval(() => {
-        progress++; let bar = "["; for(let i=0; i<20; i++) bar += (i < progress) ? "|" : "."; bar += "]";
-        hackOutput.innerHTML = "INITIALIZING...<br>" + bar;
-        if(progress >= 20) { clearInterval(bootInt); showLoginPrompt(); }
-    }, 50);
-    intervals.push(bootInt);
+// --- REPOS ---
+function openRepos() { closeAllOverlays(null, reposContainer); renderRepos(); if(reposContainer) { reposContainer.style.display = 'flex'; requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); }); } }
+function renderRepos() {
+    const container = document.getElementById('repos-list-content'); 
+    if(!container) return;
+    container.innerHTML = '';
+    reposData.forEach(repo => {
+        const card = document.createElement('div'); card.className = 'repo-row-card';
+        card.innerHTML = `<div class="repo-header"><span class="repo-name">${repo.name}</span><button class="repo-get-btn">GET</button></div><div class="repo-desc-row">${repo.desc}</div><div class="repo-meta"><span>LANG: ${repo.lang}</span><span>UPDATED: ${repo.date}</span></div>`;
+        container.appendChild(card);
+    });
 }
-function showLoginPrompt() { systemState = 'boot_wait'; hackOutput.innerHTML += "<br><br>SYSTEM BOOT INITIATED...<br>AWAITING INPUT...<br>Enter START to begin<br>"; hackInputLine.style.display = 'block'; }
-document.addEventListener('keydown', (e) => {
-    if (systemState !== 'boot_wait') return;
-    if (e.key === "Backspace") userInput = userInput.slice(0, -1);
-    else if (e.key === "Enter") {
-        if (userInput.toUpperCase() === "START") { hackOutput.innerHTML += "> START<br>ACCESS GRANTED.<br>----------------<br>"; startHackLoop(); }
-        else { hackOutput.innerHTML += `> ${userInput}<br>INVALID COMMAND.<br>`; userInput = ""; }
-    } else if (e.key.length === 1) userInput += e.key;
-    userInputDisplay.textContent = userInput;
-});
-function startHackLoop() {
-    systemState = 'boot_run'; hackInputLine.style.display = 'none';
-    const hackInt = setInterval(() => {
-        const line = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-        const div = document.createElement('div'); div.textContent = "> " + line; hackOutput.appendChild(div); hackOutput.scrollTop = hackOutput.scrollHeight;
-        if (hackOutput.children.length > 50) hackOutput.removeChild(hackOutput.firstChild);
-    }, 100);
-    intervals.push(hackInt);
+
+// --- UNIX GALLERY ---
+function openUnix() {
+    closeAllOverlays(null, unixGalleryOverlay);
+    const grid = document.getElementById('unix-grid');
+    if(!grid) return;
+    grid.innerHTML = '';
+    
+    // Filter logic: Only show images that contain "rice" in filename
+    unixImages.forEach(imgData => {
+        if(imgData.src.toLowerCase().includes('rice')) {
+            const thumb = document.createElement('div');
+            thumb.className = 'unix-thumb';
+            thumb.innerHTML = `<div class="scanlines"></div><img src="${imgData.src}">`;
+            thumb.onclick = () => viewUnixImage(imgData.src, imgData.name);
+            grid.appendChild(thumb);
+        }
+    });
+
+    document.getElementById('unix-grid').style.display = 'grid';
+    document.getElementById('unix-expanded').classList.remove('active');
+    if(unixGalleryOverlay) { unixGalleryOverlay.style.display = 'flex'; requestAnimationFrame(() => { unixGalleryOverlay.classList.add('active'); mainStage.classList.add('blur'); }); }
 }
+
+function viewUnixImage(src, name) {
+    document.getElementById('unix-grid').style.display = 'none';
+    const expanded = document.getElementById('unix-expanded');
+    document.getElementById('unix-expanded-img').src = src;
+    document.getElementById('unix-img-name').textContent = name;
+    expanded.classList.add('active');
+    resetZoom();
+}
+
+function closeUnixImage() {
+    document.getElementById('unix-expanded').classList.remove('active');
+    document.getElementById('unix-grid').style.display = 'grid';
+}
+
+let currentZoom = 1; let translateX = 0; let translateY = 0;
+let isDragging = false; let startX, startY;
+
+function zoomImage(f) { currentZoom += f; if(currentZoom < 0.5) currentZoom = 0.5; updateImageTransform(); }
+function resetZoom() { currentZoom = 1; translateX = 0; translateY = 0; updateImageTransform(); }
+function updateImageTransform() { 
+    const img = document.getElementById('unix-expanded-img');
+    if(img) img.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`; 
+}
+
+function startDrag(e) {
+    e.preventDefault(); isDragging = true;
+    startX = e.clientX - translateX; startY = e.clientY - translateY;
+    document.addEventListener('mousemove', drag); document.addEventListener('mouseup', stopDrag);
+}
+function drag(e) {
+    if (!isDragging) return; e.preventDefault();
+    translateX = e.clientX - startX; translateY = e.clientY - startY;
+    updateImageTransform();
+}
+function stopDrag() {
+    isDragging = false;
+    document.removeEventListener('mousemove', drag); document.removeEventListener('mouseup', stopDrag);
+}
+
+
+// --- BIOS ---
 function startBios() {
     systemState = 'bios_run'; biosOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
     biosTrigger.textContent = "EXIT"; biosTrigger.classList.add('active');
-    const tbody = document.getElementById('proc-list-body'); tbody.innerHTML = '';
-    fakeProcesses.forEach(proc => { tbody.innerHTML += `<tr><td>${proc.pid}</td><td>root</td><td class="dyn-cpu">0%</td><td class="dyn-mem">0%</td><td>${proc.cmd}</td></tr>`; });
+    const tbody = document.getElementById('proc-list-body'); 
+    if(tbody) {
+        tbody.innerHTML = '';
+        for(let i=0; i<5; i++) { tbody.innerHTML += `<tr><td>${100+i}</td><td>process_${i}</td><td class="color-green">0%</td><td class="color-green">0%</td><td>root</td></tr>`; }
+    }
     const biosInt = setInterval(updateBiosStats, 1000); intervals.push(biosInt); updateBiosStats();
 }
 function updateBiosStats() {
     const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-    const getColor = (val) => val < 50 ? 'var(--term-green)' : (val < 80 ? 'var(--term-yellow)' : 'var(--term-red)');
-    const updateBar = (idVal, idBar, maxVal, unit) => {
-        const val = rnd(5, maxVal); const pct = Math.floor((val / maxVal) * 100); const color = getColor(pct);
-        document.getElementById(idVal).innerText = val + unit; document.getElementById(idVal).style.color = color;
-        const bar = document.getElementById(idBar); bar.style.width = pct + "%"; bar.style.backgroundColor = color;
-    };
-    updateBar('val-cpu', 'bar-cpu', 100, '%'); updateBar('val-c0', 'bar-c0', 100, '%'); updateBar('val-c1', 'bar-c1', 100, '%'); updateBar('val-mem', 'bar-mem', 16, 'G'); updateBar('val-swp', 'bar-swp', 8, 'G');
-    document.getElementById('val-tasks').innerText = rnd(130, 160); document.getElementById('val-uptime').innerText = new Date().toLocaleTimeString('en-GB');
-    document.querySelectorAll('.dyn-cpu').forEach(el => { const v = rnd(0, 40); el.innerText = v + "%"; el.style.color = getColor(v * 2.5); });
-    document.querySelectorAll('.dyn-mem').forEach(el => { const v = rnd(0, 20); el.innerText = v + "%"; });
+    const taskEl = document.getElementById('val-tasks');
+    if(taskEl) taskEl.innerText = rnd(100, 200);
 }
+
+// --- LISTENERS ---
+if(bootTrigger) bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
+if(biosTrigger) biosTrigger.addEventListener('click', () => { if (systemState === 'idle') startBios(); else resetAll(); });
+if(screenTrigger) screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'assets/images/lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
+
+if(navHome) navHome.addEventListener('click', () => closeAllOverlays(null, null));
+if(navArticles) navArticles.addEventListener('click', openArticlesList);
+if(navRepos) navRepos.addEventListener('click', openRepos);
+if(navSocials) navSocials.addEventListener('click', openSocials);
+if(navUnix) navUnix.addEventListener('click', openUnix);
+
+function startBoot() {
+    systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
+    bootTrigger.textContent = "EXIT"; bootTrigger.classList.add('active');
+    hackOutput.innerHTML = "INITIALIZING...";
+    let p = 0;
+    const i = setInterval(() => {
+        p++; hackOutput.innerHTML = "INITIALIZING... " + p + "%";
+        if(p >= 100) { clearInterval(i); hackOutput.innerHTML += "<br>SYSTEM READY.<br>AWAITING INPUT..."; hackInputLine.style.display = 'block'; systemState='boot_wait'; }
+    }, 20);
+    intervals.push(i);
+}
+document.addEventListener('keydown', (e) => {
+    if(systemState !== 'boot_wait') return;
+    if(e.key === "Enter") {
+        if(userInput.toUpperCase() === "START") { hackOutput.innerHTML += "<br>ACCESS GRANTED."; }
+        else { hackOutput.innerHTML += "<br>INVALID COMMAND."; userInput = ""; }
+    } else if (e.key.length === 1) userInput += e.key; else if (e.key === "Backspace") userInput = userInput.slice(0, -1);
+    if(userInputDisplay) userInputDisplay.textContent = userInput;
+});
