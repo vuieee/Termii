@@ -31,7 +31,7 @@
         <header class="body-text text-xs">
             <span>ASCII TERMINAL WEBGATE</span>
             <span>COPYRIGHT JOSHUA DESIGN(C) 2026</span>
-            <span>VER V1.04</span>
+            <span>VER V1.05</span>
             <span>WEB......1</span>
         </header>
 
@@ -229,15 +229,26 @@
 
     <div id="unix-gallery-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="unix-gallery-modal" onclick="event.stopPropagation()">
-            <div class="gallery-toolbar">
-                <button class="gallery-btn" onclick="zoomImage(0.2)">+</button>
-                <button class="gallery-btn" onclick="zoomImage(-0.2)">-</button>
-                <button class="gallery-btn" onclick="resetZoom()">RESET</button>
-                <button class="gallery-btn" onclick="closeAllOverlays(null, null)">MINIMIZE</button>
+            
+            <div id="unix-grid-view">
+                <div class="socials-header">UNIX RICE GALLERY</div>
+                <div class="gallery-grid-container" id="unix-grid-content">
+                    </div>
             </div>
-            <div class="gallery-viewport" id="gallery-viewport" onmousedown="startDrag(event)">
-                <img id="unix-image" class="gallery-image" src="assets/images/btop.png" alt="BTOP Monitor">
+
+            <div id="unix-detail-view" style="display: none;">
+                <div class="gallery-toolbar">
+                    <button class="gallery-btn" onclick="zoomImage(0.2)">+</button>
+                    <button class="gallery-btn" onclick="zoomImage(-0.2)">-</button>
+                    <button class="gallery-btn" onclick="resetZoom()">RESET</button>
+                    <button class="gallery-btn" style="margin-left: auto;" onclick="closeUnixDetail()">BACK TO GRID</button>
+                    <button class="gallery-btn" onclick="closeAllOverlays(null, null)">EXIT</button>
+                </div>
+                <div class="gallery-viewport" id="gallery-viewport" onmousedown="startDrag(event)">
+                    <img id="unix-image" class="gallery-image" src="" alt="Unix System View">
+                </div>
             </div>
+
         </div>
     </div>
 
