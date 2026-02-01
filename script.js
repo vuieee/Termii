@@ -22,17 +22,17 @@ const reposData = [
 ];
 
 const socialData = [
-    { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
-    { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Manage your professional identity. Build and engage with your professional network." },
-    { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "My open source repositories." },
-    { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a direct message." }
+    { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "Chat and hang out." },
+    { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Professional identity." },
+    { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "Open source repos." },
+    { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a message." }
 ];
 
 const unixImages = [
     { title: "BTOP MONITOR", img: "assets/images/btop.png" },
     { title: "HYPRLAND RICE", img: "assets/images/rice1.png" },
     { title: "XORG CONFIG", img: "assets/images/xorg.png" },
-    { title: "NVIM LUA", img: "assets/images/btop.png" }, // Reusing for demo
+    { title: "NVIM LUA", img: "assets/images/btop.png" }, 
     { title: "LAIN UI", img: "assets/images/lainheader.png" }
 ];
 
@@ -45,12 +45,10 @@ const navArticles = document.getElementById('nav-articles');
 const navRepos = document.getElementById('nav-repos');
 const navSocials = document.getElementById('nav-socials');
 const navUnix = document.getElementById('nav-unix');
-
 const lainImg = document.getElementById('lain-img');
 const hackOverlay = document.getElementById('hack-overlay');
 const biosOverlay = document.getElementById('bios-overlay');
 
-// Modals
 const articleContainer = document.getElementById('article-overlay-container');
 const articlesListOverlay = document.getElementById('articles-list-overlay');
 const reposContainer = document.getElementById('repos-overlay-container');
@@ -68,7 +66,6 @@ const allImages = [
     "assets/images/xorg.png", "assets/images/discordthumbail.png", "assets/images/linkedinthumbnail.png",
     "assets/images/githubthumbnail.png", "assets/images/gmailthumbnail.png", "assets/images/btop.png"
 ];
-
 let loadedCount = 0;
 const totalImages = allImages.length;
 const loadingScreen = document.getElementById('loading-screen');
@@ -93,11 +90,7 @@ function checkLoad() {
         }, 200);
     }
 }
-
-allImages.forEach(src => {
-    const img = new Image();
-    img.onload = checkLoad; img.onerror = checkLoad; img.src = src;
-});
+allImages.forEach(src => { const img = new Image(); img.onload = checkLoad; img.onerror = checkLoad; img.src = src; });
 
 // --- SYSTEM VARS ---
 let systemState = 'idle'; let userInput = ""; let intervals = []; let closeTimeout = null;
@@ -117,14 +110,12 @@ function resetAll() {
 function closeAllOverlays(e, exceptContainer) {
     if(closeTimeout) clearTimeout(closeTimeout);
     const modals = [articleContainer, articlesListOverlay, reposContainer, socialsContainer, unixGalleryOverlay];
-    
     modals.forEach(modal => {
         if (modal && modal !== exceptContainer && modal.style.display !== 'none') {
             modal.classList.remove('active');
             setTimeout(() => { modal.style.display = 'none'; }, 300);
         }
     });
-
     if (!exceptContainer) mainStage.classList.remove('blur');
 }
 
@@ -137,8 +128,7 @@ function openArticlesList() {
         const row = document.createElement('div');
         row.className = 'article-row';
         row.onclick = () => openArticle(index);
-        row.innerHTML = `
-            <div class="article-row-thumb"><div class="scanlines"></div><img src="${article.img}"></div>
+        row.innerHTML = `<div class="article-row-thumb"><div class="scanlines"></div><img src="${article.img}"></div>
             <div class="article-row-info"><div class="article-row-title">${article.title}</div><div class="article-row-desc">${article.desc}</div></div>`;
         container.appendChild(row);
     });
@@ -163,7 +153,6 @@ function openArticle(index) {
     articleContainer.style.display = 'flex';
     requestAnimationFrame(() => { articleContainer.classList.add('active'); mainStage.classList.add('blur'); });
 }
-
 function switchArticle(index) {
     const content = document.getElementById('article-main-col');
     content.classList.add('switching');
@@ -177,46 +166,22 @@ function openRepos() {
     reposContainer.style.display = 'flex';
     requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); });
 }
-
 function renderRepos() {
     const container = document.getElementById('repos-list-content');
-    const searchVal = document.getElementById('repo-search').value.toLowerCase();
-    const langVal = document.getElementById('repo-lang').value;
-    const sortVal = document.getElementById('repo-sort').value;
     container.innerHTML = '';
-    let filtered = reposData.filter(repo => {
-        const matchesSearch = repo.name.toLowerCase().includes(searchVal) || repo.desc.toLowerCase().includes(searchVal);
-        const matchesLang = langVal === 'ALL' || repo.lang === langVal;
-        return matchesSearch && matchesLang;
-    });
-    filtered.sort((a, b) => {
-        if (sortVal === 'new') return new Date(b.date) - new Date(a.date);
-        if (sortVal === 'old') return new Date(a.date) - new Date(b.date);
-        if (sortVal === 'name') return a.name.localeCompare(b.name);
-    });
-    filtered.forEach(repo => {
+    reposData.forEach(repo => {
         const card = document.createElement('div');
         card.className = 'repo-row-card';
-        card.innerHTML = `
-            <div class="repo-header"><span class="repo-name">${repo.name}</span></div>
-            <button class="repo-get-btn" onclick="window.open('${repo.url}', '_blank')">GET</button>
-            <div class="repo-desc-row">${repo.desc}</div>
-            <div class="repo-meta"><span>LANG: ${repo.lang}</span><span>UPDATED: ${repo.date}</span></div>`;
+        card.innerHTML = `<div class="repo-header"><span class="repo-name">${repo.name}</span></div><button class="repo-get-btn">GET</button><div class="repo-desc-row">${repo.desc}</div><div class="repo-meta"><span>LANG: ${repo.lang}</span><span>UPDATED: ${repo.date}</span></div>`;
         container.appendChild(card);
     });
 }
-document.getElementById('repo-search').addEventListener('input', renderRepos);
-document.getElementById('repo-lang').addEventListener('change', renderRepos);
-document.getElementById('repo-sort').addEventListener('change', renderRepos);
 
 // --- SOCIALS ---
 function populateSocials() {
     const listContainer = document.getElementById('socials-list-container');
     listContainer.innerHTML = '';
-    if(socialData.length > 0) {
-        document.getElementById('soc-prev-img').src = socialData[0].img;
-        document.getElementById('soc-prev-desc').textContent = socialData[0].desc;
-    }
+    if(socialData.length > 0) { document.getElementById('soc-prev-img').src = socialData[0].img; document.getElementById('soc-prev-desc').textContent = socialData[0].desc; }
     socialData.forEach((item, index) => {
         const capsule = document.createElement('div');
         capsule.className = 'social-capsule';
@@ -225,18 +190,12 @@ function populateSocials() {
         if(index === 0) info.classList.add('active');
         info.innerHTML = `${item.icon} <span class="header-text" style="font-size:0.7rem; margin:0;">${item.name}</span>`;
         info.onclick = () => {
-            document.getElementById('soc-prev-img').src = item.img;
-            document.getElementById('soc-prev-desc').textContent = item.desc;
-            document.querySelectorAll('.social-info').forEach(el => el.classList.remove('active'));
-            info.classList.add('active');
+            document.getElementById('soc-prev-img').src = item.img; document.getElementById('soc-prev-desc').textContent = item.desc;
+            document.querySelectorAll('.social-info').forEach(el => el.classList.remove('active')); info.classList.add('active');
         };
         const arrow = document.createElement('div');
-        arrow.className = 'social-arrow';
-        arrow.innerHTML = '&#8599;'; 
-        arrow.onclick = () => window.open(item.link, '_blank');
-        capsule.appendChild(info);
-        capsule.appendChild(arrow);
-        listContainer.appendChild(capsule);
+        arrow.className = 'social-arrow'; arrow.innerHTML = '&#8599;'; arrow.onclick = () => window.open(item.link, '_blank');
+        capsule.appendChild(info); capsule.appendChild(arrow); listContainer.appendChild(capsule);
     });
 }
 function openSocials() {
@@ -254,16 +213,11 @@ function openUnix() {
     renderUnixGrid();
     document.getElementById('unix-grid-view').style.display = 'flex';
     document.getElementById('unix-detail-view').style.display = 'none';
-    
     if(unixGalleryOverlay) {
         unixGalleryOverlay.style.display = 'flex';
-        requestAnimationFrame(() => { 
-            unixGalleryOverlay.classList.add('active'); 
-            mainStage.classList.add('blur'); 
-        });
+        requestAnimationFrame(() => { unixGalleryOverlay.classList.add('active'); mainStage.classList.add('blur'); });
     }
 }
-
 function renderUnixGrid() {
     const grid = document.getElementById('unix-grid-content');
     grid.innerHTML = '';
@@ -271,14 +225,10 @@ function renderUnixGrid() {
         const card = document.createElement('div');
         card.className = 'gallery-thumb-card';
         card.onclick = () => openUnixDetail(index);
-        card.innerHTML = `
-            <img src="${item.img}">
-            <div class="thumb-caption header-text">${item.title}</div>
-        `;
+        card.innerHTML = `<img src="${item.img}"><div class="thumb-caption header-text">${item.title}</div>`;
         grid.appendChild(card);
     });
 }
-
 function openUnixDetail(index) {
     const item = unixImages[index];
     document.getElementById('unix-grid-view').style.display = 'none';
@@ -286,57 +236,21 @@ function openUnixDetail(index) {
     document.getElementById('unix-image').src = item.img;
     resetZoom();
 }
-
 function closeUnixDetail() {
     document.getElementById('unix-detail-view').style.display = 'none';
     document.getElementById('unix-grid-view').style.display = 'flex';
 }
-
-function zoomImage(factor) {
-    currentZoom += factor;
-    if (currentZoom < 0.5) currentZoom = 0.5;
-    if (currentZoom > 3) currentZoom = 3;
-    updateImageTransform();
-}
-
-function resetZoom() {
-    currentZoom = 1; translateX = 0; translateY = 0;
-    updateImageTransform();
-}
-
-function updateImageTransform() {
-    const img = document.getElementById('unix-image');
-    if (img) img.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
-}
-
-function startDrag(e) {
-    e.preventDefault();
-    isDragging = true;
-    startX = e.clientX - translateX;
-    startY = e.clientY - translateY;
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', stopDrag);
-}
-
-function drag(e) {
-    if (!isDragging) return;
-    e.preventDefault();
-    translateX = e.clientX - startX;
-    translateY = e.clientY - startY;
-    updateImageTransform();
-}
-
-function stopDrag() {
-    isDragging = false;
-    document.removeEventListener('mousemove', drag);
-    document.removeEventListener('mouseup', stopDrag);
-}
+function zoomImage(factor) { currentZoom += factor; if(currentZoom < 0.5) currentZoom = 0.5; if(currentZoom > 3) currentZoom = 3; updateImageTransform(); }
+function resetZoom() { currentZoom = 1; translateX = 0; translateY = 0; updateImageTransform(); }
+function updateImageTransform() { const img = document.getElementById('unix-image'); if(img) img.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`; }
+function startDrag(e) { e.preventDefault(); isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY; document.addEventListener('mousemove', drag); document.addEventListener('mouseup', stopDrag); }
+function drag(e) { if(!isDragging) return; e.preventDefault(); translateX = e.clientX - startX; translateY = e.clientY - startY; updateImageTransform(); }
+function stopDrag() { isDragging = false; document.removeEventListener('mousemove', drag); document.removeEventListener('mouseup', stopDrag); }
 
 // Event Listeners
 bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
 biosTrigger.addEventListener('click', () => { if (systemState === 'idle') startBios(); else resetAll(); });
 screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'assets/images/lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
-
 navHome.addEventListener('click', () => closeAllOverlays(null, null));
 navArticles.addEventListener('click', openArticlesList);
 navRepos.addEventListener('click', openRepos);
