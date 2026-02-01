@@ -18,8 +18,6 @@
 </head>
 <body>
 
-    <div class="crt-scanlines"></div>
-
     <div id="loading-screen">
         <div class="loading-content">
             <div id="loading-text">Initializing . . .</div>
@@ -116,14 +114,20 @@
                     <div class="header-text" style="text-align: center;">RECENTLY FORKED REPOSITORIES</div>
                     <div class="repo-row">
                         <div class="repo-card">
-                            <div class="header-text" style="margin-bottom:0.5vh;">NVIM-CONFIG</div>
-                            <div class="body-text text-xs opacity-50">Lua • v4.0<br>My personal Neovim configuration files.</div>
-                            <button class="btn-get">GET</button>
+                            <div class="repo-header">
+                                <span class="repo-name">NVIM-CONFIG</span>
+                                <button class="btn-get">GET &#8599;</button>
+                            </div>
+                            <div class="repo-desc-row">My personal Neovim configuration files.</div>
+                            <div class="repo-meta"><span>Lua • v4.0</span></div>
                         </div>
                         <div class="repo-card">
-                            <div class="header-text" style="margin-bottom:0.5vh;">ARCH-INSTALL</div>
-                            <div class="body-text text-xs opacity-50">Bash • v2.0<br>Automated Arch Linux installation script.</div>
-                            <button class="btn-get">GET</button>
+                            <div class="repo-header">
+                                <span class="repo-name">ARCH-INSTALL</span>
+                                <button class="btn-get">GET &#8599;</button>
+                            </div>
+                            <div class="repo-desc-row">Automated Arch Linux installation script.</div>
+                            <div class="repo-meta"><span>Bash • v2.0</span></div>
                         </div>
                     </div>
                 </div>
@@ -225,6 +229,27 @@
                     </div>
                     <div class="social-preview-desc" id="soc-prev-desc"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="unix-gallery-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
+        <div class="unix-gallery-modal" onclick="event.stopPropagation()">
+            <div class="socials-header">UNIX RICE GALLERY</div>
+            
+            <div id="unix-grid" class="unix-grid-view">
+                </div>
+
+            <div id="unix-expanded" class="unix-expanded-view">
+                <div class="gallery-toolbar">
+                    <button class="gallery-btn" onclick="closeUnixImage()">BACK</button>
+                    <button class="gallery-btn" onclick="closeAllOverlays(null, null)">CLOSE</button>
+                </div>
+                <div class="gallery-viewport">
+                    <img id="unix-expanded-img" class="gallery-image" src="" alt="Expanded Rice">
+                    <div class="scanlines"></div>
+                </div>
+                <div class="gallery-info" id="unix-img-name">RICE NAME</div>
             </div>
         </div>
     </div>
