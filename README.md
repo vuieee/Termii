@@ -22,8 +22,7 @@
 **Termii** is a passion project I ahve deeply enjoyed making, it started out as a simple Web Dev - 1 assignment yet I could not stop adding in more content. I hope you will enjoy what I poured my heart into.
 
 ### [] // FEATURES // [] 
-* **Interactive Terminal:** Type commands (try `START` in the boot sequence).
-* **System Monitor:** Simulated BIOS/Resource usage dashboard.
+* **Interactive Terminal:** Click on either; BIOS, BOOT, and or, SCREEN to access the Easter Eggs.
 * **Dynamic Content:** Modals for Articles and Socials without page reloads.
 * **Asset Preloading:** Optimized image handling for instant interactions.
 
