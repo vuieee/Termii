@@ -19,7 +19,7 @@
 ### [] // SYSTEM_OVERVIEW // []
 > "If you're not remembered, then you never existed."
 
-**Termii** is a passion project I ahve deeply enjoyed making, it started out as a simple Web Dev - 1 assignment yet I could not stop adding in more content. I hope you will enjoy what I poured my heart into.
+**Termii** is a passion project I have deeply enjoyed making, it started out as a simple Web Dev - 1 assignment yet I could not stop adding in more content. I hope you will enjoy what I poured my heart into.
 
 ### [] // FEATURES // [] 
 * **Interactive Terminal:** Click on either; BIOS, BOOT, and or, SCREEN to access the Easter Eggs.
