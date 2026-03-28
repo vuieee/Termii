@@ -5,11 +5,108 @@ const icons = {
     gmail: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819v-5.818l-5.454-3.818v9.636h-2.182v-9.636l-5.455 3.818v5.818h-3.818c-.904 0-1.636-.732-1.636-1.636v-13.909c0-.219.046-.432.129-.627l10.91 7.636 10.909-7.636c.083.195.129.409.129.627z"/></svg>`
 };
 
-const longLorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
+function copyCode(btn) {
+    const codeText = btn.previousElementSibling.innerText;
+    navigator.clipboard.writeText(codeText).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "COPIED!";
+        setTimeout(() => { btn.innerText = originalText; }, 2000);
+    });
+}
+
+const article1Text = `
+<div class="article-subtitle">MY JOURNEY TO ARCH LINUX: BEYOND WINDOWS</div>
+For years, Windows was the default. It's what came on the laptop, it's what everyone used, and it's what gaming supposedly required. But eventually, the forced updates, background telemetry, and ever-increasing system bloat became too much to ignore. I needed a system that did exactly what I told it to do. Nothing more, nothing less. Enter Arch Linux.
+
+<div class="article-subtitle">Why Arch?</div>
+The appeal of Arch Linux lies in its DIY philosophy. Unlike Ubuntu or Mint which give you a pre-configured desktop, Arch gives you a black terminal screen and a blinking cursor. You build your OS from the ground up.
+
+<div class="article-subtitle">The Installation</div>
+The Arch Wiki is the holy grail here. After flashing the ISO to a USB, you boot into the live environment. Here are the core commands that shaped my system:
+
+<table class="article-table">
+    <tr><th>Step</th><th>Action</th><th>Command</th></tr>
+    <tr><td>1</td><td>Partitioning the drive (using fdisk)</td><td>
+        <div class="code-wrapper"><div class="code-content">fdisk /dev/nvme0n1</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+    </td></tr>
+    <tr><td>2</td><td>Formatting the partitions</td><td>
+        <div class="code-wrapper"><div class="code-content">mkfs.ext4 /dev/nvme0n1p2
+mkfs.fat -F 32 /dev/nvme0n1p1</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+    </td></tr>
+    <tr><td>3</td><td>Installing the base system</td><td>
+        <div class="code-wrapper"><div class="code-content">pacstrap /mnt base linux linux-firmware neovim git</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+    </td></tr>
+    <tr><td>4</td><td>Generating the fstab file</td><td>
+        <div class="code-wrapper"><div class="code-content">genfstab -U /mnt >> /mnt/etc/fstab</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+    </td></tr>
+    <tr><td>5</td><td>Chroot into system</td><td>
+        <div class="code-wrapper"><div class="code-content">arch-chroot /mnt</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+    </td></tr>
+</table>
+
+<div class="article-subtitle">The Window Manager</div>
+I ditched standard Desktop Environments (like GNOME or KDE) for a Window Manager. Tiling WMs completely change how you interact with your computer. No more dragging windows around with a mouse—everything is keyboard-driven and automatically tiles to utilize screen space perfectly.
+
+I settled on Hyprland (for Wayland) because of the buttery smooth animations and dynamic tiling. My package manager pacman became my best friend:
+<div class="code-wrapper"><div class="code-content">sudo pacman -S hyprland waybar kitty rofi</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+
+<div class="article-subtitle">The Verdict</div>
+Switching to Linux wasn't just about changing an OS; it was about reclaiming ownership of my hardware. The learning curve is steep, but the view from the top is absolutely worth it.
+`;
+
+const article2Text = `
+<div class="article-subtitle">ENABLING VARIABLE REFRESH RATE (VRR) ON XORG</div>
+Variable Refresh Rate (VRR) — commonly known by its marketing names FreeSync (AMD) or G-Sync (NVIDIA) — is an absolute game-changer. By syncing your monitor's refresh rate to your GPU's framerate, it eliminates screen tearing without the massive input lag penalty of traditional V-Sync. 
+
+However, if you are running an Xorg session (X11) on Linux, enabling VRR isn't always a one-click affair. Wayland handles this natively much better these days, but many of us still rely on X11 for specific workflow compatibilities or older games.
+
+Here is the definitive guide to getting VRR working on Xorg.
+
+<table class="article-table">
+    <tr><th>Step</th><th>Instructions</th><th>Command / Code</th></tr>
+    <tr>
+        <td>1</td>
+        <td>Check your Hardware<br><br>Make sure your monitor supports FreeSync/G-Sync and is connected via DisplayPort.</td>
+        <td>N/A</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>The AMD Configuration<br><br>If using an AMD GPU with open-source amdgpu driver, edit Xorg config.</td>
+        <td>
+            <div class="code-wrapper"><div class="code-content">sudo nano /etc/X11/xorg.conf.d/20-amdgpu.conf</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+            Add this block:
+            <div class="code-wrapper"><div class="code-content">Section "Device"
+    Identifier "AMD"
+    Driver "amdgpu"
+    Option "TearFree" "true"
+    Option "VariableRefresh" "true"
+EndSection</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+        </td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>The NVIDIA Configuration<br><br>Generate basic config and use NVIDIA control panel or edit config directly.</td>
+        <td>
+            <div class="code-wrapper"><div class="code-content">sudo nvidia-xconfig</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+            In /etc/X11/xorg.conf, under "Screen" section:
+            <div class="code-wrapper"><div class="code-content">Option "AllowVRR" "1"</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+        </td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Verification<br><br>Verify it's working for AMD after reboot. Look for 'vrr_capable: 1'.</td>
+        <td>
+            <div class="code-wrapper"><div class="code-content">xrandr --props | grep vrr</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+        </td>
+    </tr>
+</table>
+
+Keep in mind: On Xorg, VRR only works when a single window is fullscreen and uncomposited. Make sure your compositor (like picom or xcompmgr) is set to unredirect fullscreen windows!
+`;
 
 const articlesData = [
-    { title: "SWITCHING TO LINUX", img: "assets/images/rice1.png", desc: "Why I moved from Windows to Arch.", longText: `MY JOURNEY TO ARCH LINUX\n\n${longLorem}` },
-    { title: "ENABLE VRR XORG", img: "assets/images/xorg.png", desc: "Variable Refresh Rate Config.", longText: `XORG VRR GUIDE\n\n${longLorem}` }
+    { title: "SWITCHING TO LINUX", img: "assets/images/rice1.png", desc: "Why I moved from Windows to Arch, and why Window Managers are superior.", longText: article1Text },
+    { title: "ENABLE VRR XORG", img: "assets/images/xorg.png", desc: "Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.", longText: article2Text }
 ];
 
 const reposData = [
@@ -38,64 +135,52 @@ loadRecommendedRepos();
 const socialData = [
     { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
     { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Manage your professional identity. Build and engage with your professional network." },
-    { name: "Github", icon: icons.github, link: "https://github.com", img: "assets/images/githubthumbnail.png", desc: "My open source repositories." },
+    { name: "Github", icon: icons.github, link: "https://github.com/vuieee", img: "assets/images/githubthumbnail.png", desc: "My open source repositories." },
     { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a direct message." }
 ];
 
-const musieeSongs = [
-    { title: "Snowman", artist: "Sia", src: "assets/music/Sia - Snowman.mp3" },
-    { title: "undressed", artist: "sombr", src: "assets/music/sombr - undressed.mp3" },
-    { title: "Those Eyes", artist: "New West", src: "assets/music/Those Eyes.mp3" },
-    { title: "Valentine", artist: "Laufey", src: "assets/music/Valentine.mp3" },
-    { title: "Something About You", artist: "Eyedress", src: "assets/music/Something About You.mp3" },
-    { title: "falling in love", artist: "JVKE", src: "assets/music/this is what falling in love feels like (Multilingual).mp3" }
+const certData = [
+    { title: "Intermediate SQL", img: "assets/images/Intermediet SQL.jpg", desc: "DataCamp Statement of Accomplishment", date: "Nov 24, 2025" },
+    { title: "Introduction to SQL", img: "assets/images/Introduction to SQL.png", desc: "DataCamp Statement of Accomplishment", date: "Nov 14, 2025" }
 ];
 
-const biosData = {
-    tabs: ['MAIN', 'ADVANCED', 'BOOT', 'EXIT'],
-    content: {
-        'MAIN': [
-            { label: "System Time", value: "19:18:06", type: "info" },
-            { label: "System Date", value: "03/26/2026", type: "info" },
-            { label: "Memory Size", value: "16384 MB", type: "info" },
-            { label: "CPU Type", value: "Intel(R) Core(TM) i5", type: "info" }
-        ],
-        'ADVANCED': [
-            { label: "Virtualization", value: "Enabled", type: "toggle", options: ["Enabled", "Disabled"] },
-            { label: "Fast Boot", value: "Disabled", type: "toggle", options: ["Enabled", "Disabled"] },
-            { label: "Hyper-Threading", value: "Enabled", type: "toggle", options: ["Enabled", "Disabled"] }
-        ],
-        'BOOT': [
-            { label: "Boot Option #1", value: "TermiiOS", type: "info" },
-            { label: "Boot Option #2", value: "Windows Boot Manager", type: "info" },
-            { label: "Secure Boot", value: "Disabled", type: "toggle", options: ["Enabled", "Disabled"] }
-        ],
-        'EXIT': [
-            { label: "Save Changes and Exit", type: "action", action: "exit" },
-            { label: "Discard Changes and Exit", type: "action", action: "exit" }
-        ]
-    }
-};
+const musieeSongs = [
+    { title: "it's 5a.m and i couldn't sleep", artist: "Local Audio", src: "assets/music/it's 5a.m and i couldn't sleep.mp3" },
+    { title: "late night lofi", artist: "Local Audio", src: "assets/music/late night lofi.mp3" }
+];
 
-let biosCurrentTabIdx = 0;
-let biosCurrentItemIdx = 0;
+const confData = [
+    { name: "lainheader.png", type: "image", src: "assets/images/lainheader.png", size: "1.2 MB", desc: "Main header image for the landing page." },
+    { name: "rice1.png", type: "image", src: "assets/images/rice1.png", size: "3.4 MB", desc: "Screenshot of Arch Linux window manager setup." },
+    { name: "xorg.png", type: "image", src: "assets/images/xorg.png", size: "840 KB", desc: "Configuration snippet for VRR on X11." },
+    { name: "lain.gif", type: "image", src: "assets/images/lain.gif", size: "5.1 MB", desc: "Animated screen feed loop." },
+    { name: "sys_config.txt", type: "text", src: "SYSTEM_CFG=1\nVRR_ENABLED=true\nNET_PROXY=10.0.0.1\nPORT_FWD=8080\nDEBUG_MODE=false\n\n# NOTE: DO NOT MODIFY CORE VALUES\n# OVERRIDE AT OWN RISK.", size: "2 KB", desc: "System configuration parameters." }
+];
+
+let confCurrentItemIdx = 0;
 
 const bootTrigger = document.getElementById('boot-trigger');
-const biosTrigger = document.getElementById('bios-trigger');
+const confTrigger = document.getElementById('conf-trigger');
 const screenTrigger = document.getElementById('screen-trigger');
 const navHome = document.getElementById('nav-home');
 const navArticles = document.getElementById('nav-articles');
 const navRepos = document.getElementById('nav-repos');
 const navSocials = document.getElementById('nav-socials');
+const navCerts = document.getElementById('nav-certs');
 const lainImg = document.getElementById('lain-img');
 const hackOverlay = document.getElementById('hack-overlay');
-const biosOverlay = document.getElementById('bios-overlay');
+const confOverlay = document.getElementById('conf-overlay');
 const matrixCanvas = document.getElementById('matrix-canvas');
+
+const iframeOverlay = document.getElementById('iframe-overlay');
+const gameIframe = document.getElementById('game-iframe');
 
 const articleContainer = document.getElementById('article-overlay-container');
 const articlesListOverlay = document.getElementById('articles-list-overlay');
 const reposContainer = document.getElementById('repos-overlay-container');
 const socialsContainer = document.getElementById('socials-overlay-container');
+const certsListOverlay = document.getElementById('certs-list-overlay');
+const imageViewerOverlay = document.getElementById('image-viewer-overlay');
 
 const mainStage = document.getElementById('main-stage');
 const hackOutput = document.getElementById('hack-output');
@@ -145,19 +230,21 @@ function resetAll() {
     intervals.forEach(clearInterval); 
     intervals = [];
     hackOverlay.style.display = 'none'; 
-    biosOverlay.style.display = 'none';
+    confOverlay.style.display = 'none';
     matrixCanvas.style.display = 'none'; 
     matrixCanvas.style.opacity = '0';
     
-    // Clear canvas rect to ensure memory wipe
+    if (iframeOverlay) iframeOverlay.style.display = 'none';
+    if (gameIframe) gameIframe.src = '';
+    
     const ctx = matrixCanvas.getContext('2d');
     ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
     
     lainImg.style.opacity = '1'; 
     lainImg.src = 'assets/images/lainheader.png';
-    bootTrigger.textContent = "BOOT"; bootTrigger.classList.remove('active');
-    biosTrigger.textContent = "BIOS"; biosTrigger.classList.remove('active');
-    screenTrigger.textContent = "SCREEN"; screenTrigger.classList.remove('active');
+    bootTrigger.textContent = "TERMINAL"; bootTrigger.classList.remove('active');
+    confTrigger.textContent = "CONF"; confTrigger.classList.remove('active');
+    screenTrigger.textContent = "FEED"; screenTrigger.classList.remove('active');
     
     hackOutput.innerHTML = ""; 
     userInput = "";
@@ -166,7 +253,7 @@ function resetAll() {
 
 function closeAllOverlays(e, exceptContainer) {
     if(closeTimeout) clearTimeout(closeTimeout);
-    const modals = [articleContainer, articlesListOverlay, reposContainer, socialsContainer];
+    const modals = [articleContainer, articlesListOverlay, reposContainer, socialsContainer, certsListOverlay, imageViewerOverlay];
     modals.forEach(modal => {
         if (modal !== exceptContainer && modal.style.display !== 'none') {
             modal.classList.remove('active');
@@ -200,7 +287,7 @@ function openArticle(index) {
     const recData = articlesData[otherIndex];
     document.getElementById('exp-title').textContent = data.title;
     document.getElementById('exp-img').src = data.img;
-    document.getElementById('exp-text').textContent = data.longText;
+    document.getElementById('exp-text').innerHTML = data.longText;
     document.getElementById('rec-card-container').innerHTML = `
         <div class="rec-card" onclick="switchArticle(${otherIndex}); event.stopPropagation();">
             <div class="header-text" style="font-size:0.6rem; margin-bottom:0.5vh;">${recData.title}</div>
@@ -215,6 +302,80 @@ function switchArticle(index) {
     const content = document.getElementById('article-main-col');
     content.classList.add('switching');
     setTimeout(() => { openArticle(index); content.scrollTop = 0; content.classList.remove('switching'); }, 200);
+}
+
+let viewerScale = 1;
+let isDraggingViewer = false;
+let startX, startY, translateX = 0, translateY = 0;
+const viewerImg = document.getElementById('viewer-img');
+
+function openImageViewer(src) {
+    closeAllOverlays(null, imageViewerOverlay);
+    viewerImg.src = src;
+    viewerScale = 1;
+    translateX = 0;
+    translateY = 0;
+    updateViewerTransform();
+    imageViewerOverlay.style.display = 'flex';
+    requestAnimationFrame(() => { imageViewerOverlay.classList.add('active'); mainStage.classList.add('blur'); });
+}
+
+function closeImageViewer(e) {
+    e.stopPropagation();
+    closeAllOverlays(null, null);
+}
+
+viewerImg.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const zoomSensitivity = 0.15;
+    if (e.deltaY < 0) viewerScale += zoomSensitivity;
+    else viewerScale -= zoomSensitivity;
+    viewerScale = Math.max(0.5, Math.min(viewerScale, 5)); 
+    updateViewerTransform();
+});
+
+viewerImg.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    isDraggingViewer = true;
+    startX = e.clientX - translateX;
+    startY = e.clientY - translateY;
+});
+
+window.addEventListener('mousemove', (e) => {
+    if (!isDraggingViewer) return;
+    translateX = e.clientX - startX;
+    translateY = e.clientY - startY;
+    updateViewerTransform();
+});
+
+window.addEventListener('mouseup', () => {
+    isDraggingViewer = false;
+});
+
+function updateViewerTransform() {
+    viewerImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${viewerScale})`;
+}
+
+
+function openCertsList() {
+    closeAllOverlays(null, certsListOverlay);
+    const container = document.getElementById('certs-list-content');
+    container.innerHTML = '';
+    certData.forEach((cert) => {
+        const row = document.createElement('div');
+        row.className = 'article-row'; 
+        row.onclick = () => openImageViewer(cert.img); 
+        row.innerHTML = `
+            <div class="article-row-thumb"><div class="scanlines"></div><img src="${cert.img}"></div>
+            <div class="article-row-info">
+                <div class="article-row-title">${cert.title}</div>
+                <div class="article-row-desc">${cert.desc}</div>
+                <div class="article-row-desc" style="margin-top: 5px; color: var(--term-teal); opacity: 1;">${cert.date}</div>
+            </div>`;
+        container.appendChild(row);
+    });
+    certsListOverlay.style.display = 'flex';
+    requestAnimationFrame(() => { certsListOverlay.classList.add('active'); mainStage.classList.add('blur'); });
 }
 
 function openRepos() {
@@ -293,22 +454,23 @@ function openSocials() {
 }
 
 bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
-biosTrigger.addEventListener('click', () => { if (systemState === 'idle') startBios(); else resetAll(); });
+confTrigger.addEventListener('click', () => { if (systemState === 'idle') startConf(); else resetAll(); });
 screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'assets/images/lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
 
 navHome.addEventListener('click', () => closeAllOverlays(null, null));
 navArticles.addEventListener('click', openArticlesList);
 navRepos.addEventListener('click', openRepos);
 navSocials.addEventListener('click', openSocials);
+navCerts.addEventListener('click', openCertsList);
 
 function startBoot() {
     systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
     bootTrigger.textContent = "EXIT"; bootTrigger.classList.add('active');
-    hackOutput.innerHTML = "INITIALIZING BIOS..."; hackInputLine.style.display = 'none';
+    hackOutput.innerHTML = "INITIALIZING KERNEL..."; hackInputLine.style.display = 'none';
     let progress = 0;
     const bootInt = setInterval(() => {
         progress++; let bar = "["; for(let i=0; i<20; i++) bar += (i < progress) ? "|" : "."; bar += "]";
-        hackOutput.innerHTML = "INITIALIZING BIOS...<br>" + bar;
+        hackOutput.innerHTML = "INITIALIZING KERNEL...<br>" + bar;
         if(progress >= 20) { clearInterval(bootInt); showLoginPrompt(); }
     }, 50);
     intervals.push(bootInt);
@@ -322,7 +484,7 @@ function showLoginPrompt() {
 }
 
 function startSystemBoot() {
-    systemState = 'ultrakill_boot';
+    systemState = 'system_boot';
     hackInputLine.style.display = 'none';
     
     const tasks = [
@@ -410,6 +572,26 @@ function printFastfetch() {
     hackOutput.scrollTop = hackOutput.scrollHeight;
 }
 
+function resizeIframe() {
+    const overlay = document.getElementById('iframe-overlay');
+    const iframe = document.getElementById('game-iframe');
+    if(!overlay || overlay.style.display === 'none') return;
+    
+    const w = overlay.clientWidth;
+    const h = overlay.clientHeight;
+    
+    const gameW = 1280;
+    const gameH = 720;
+    
+    const scale = Math.min(w / gameW, h / gameH);
+    
+    iframe.style.width = gameW + 'px';
+    iframe.style.height = gameH + 'px';
+    iframe.style.transform = `scale(${scale})`;
+}
+
+window.addEventListener('resize', resizeIframe);
+
 function startMatrix() {
     systemState = 'matrix_run';
     hackOutput.innerHTML = "";
@@ -420,14 +602,12 @@ function startMatrix() {
     matrixCanvas.width = matrixCanvas.parentElement.clientWidth;
     matrixCanvas.height = matrixCanvas.parentElement.clientHeight;
     
-    // Mix of Latin and Katakana for the true Matrix aesthetic
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ".split('');
     const fontSize = 16; 
     const columns = matrixCanvas.width / fontSize;
     const drops = Array(Math.floor(columns)).fill(1);
     
     const matrixInt = setInterval(() => {
-        // Fade effect to create trails
         ctx.fillStyle = "rgba(0, 0, 0, 0.08)"; 
         ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
         
@@ -436,15 +616,12 @@ function startMatrix() {
         for (let i = 0; i < drops.length; i++) {
             const text = chars[Math.floor(Math.random() * chars.length)];
             
-            // Draw current leading character in white
             ctx.fillStyle = "#FFF";
             ctx.fillText(text, i * fontSize, drops[i] * fontSize);
             
-            // Overwrite the previous character with teal to create the fading trail
             ctx.fillStyle = "#50fff7";
             ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fontSize, (drops[i] - 1) * fontSize);
             
-            // Reset drop randomly after it crosses the screen
             if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
@@ -454,52 +631,48 @@ function startMatrix() {
     intervals.push(matrixInt);
 }
 
-function startBios() {
-    systemState = 'bios_run'; 
-    biosOverlay.style.display = 'flex'; 
+function startConf() {
+    systemState = 'conf_run'; 
+    confOverlay.style.display = 'flex'; 
     lainImg.style.opacity = '0';
-    biosTrigger.textContent = "EXIT"; 
-    biosTrigger.classList.add('active');
+    confTrigger.textContent = "EXIT"; 
+    confTrigger.classList.add('active');
     
-    biosCurrentTabIdx = 0;
-    biosCurrentItemIdx = 0;
-    renderBios();
+    confCurrentItemIdx = 0;
+    renderConf();
 }
 
-function renderBios() {
-    const tabContainer = document.getElementById('bios-tabs');
-    const menuContainer = document.getElementById('bios-menu');
+function renderConf() {
+    const menuContainer = document.getElementById('conf-menu');
+    const previewBox = document.getElementById('conf-preview-box');
+    const previewMeta = document.getElementById('conf-preview-meta');
     
-    tabContainer.innerHTML = '';
-    biosData.tabs.forEach((tab, index) => {
-        const tabEl = document.createElement('div');
-        tabEl.className = 'bios-tab' + (index === biosCurrentTabIdx ? ' active' : '');
-        tabEl.innerText = tab;
-        tabContainer.appendChild(tabEl);
-    });
-
     menuContainer.innerHTML = '';
-    const currentTabName = biosData.tabs[biosCurrentTabIdx];
-    const items = biosData.content[currentTabName];
-    
-    items.forEach((item, index) => {
+    confData.forEach((item, index) => {
         const row = document.createElement('div');
-        row.className = 'bios-item-row' + (index === biosCurrentItemIdx ? ' selected' : '');
-        
-        const label = document.createElement('span');
-        label.innerText = item.label;
-        row.appendChild(label);
-        
-        if (item.value !== undefined) {
-            const val = document.createElement('span');
-            val.innerText = item.type === 'toggle' ? `[${item.value}]` : item.value;
-            row.appendChild(val);
-        }
-        
+        row.className = 'conf-item' + (index === confCurrentItemIdx ? ' selected' : '');
+        row.innerText = item.name;
         menuContainer.appendChild(row);
     });
-}
 
+    const currentItem = confData[confCurrentItemIdx];
+    if (currentItem.type === 'image') {
+        previewBox.innerHTML = `<img src="${currentItem.src}" alt="${currentItem.name}">`;
+    } else if (currentItem.type === 'text') {
+        previewBox.innerHTML = `<div class="text-preview">${currentItem.src}</div>`;
+    }
+    
+    previewMeta.innerHTML = `
+        <span style="color:var(--term-teal); font-weight:bold;">${currentItem.name}</span><br>
+        <span style="opacity:0.5;">Size:</span> ${currentItem.size}<br><br>
+        ${currentItem.desc}
+    `;
+    
+    const selectedEl = menuContainer.querySelector('.selected');
+    if(selectedEl) {
+        selectedEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
 
 let mCurrentIndex = 0;
 let mIsPlaying = false;
@@ -508,19 +681,27 @@ const mTitle = document.getElementById("m-title");
 const mArtist = document.getElementById("m-artist");
 const mIndex = document.getElementById("m-index");
 const mTime = document.getElementById("m-time");
+const mVolumeSlider = document.getElementById("m-volume");
 const visContainer = document.getElementById("m-vis");
 const visBase = document.getElementById("m-vis-base");
 const playlistBox = document.getElementById("m-playlist");
 
+mVolumeSlider.addEventListener('input', (e) => {
+    audioEl.volume = e.target.value;
+});
+
 musieeSongs.forEach((song, idx) => {
     const div = document.createElement("div");
     div.className = "playlist-item";
-    div.tabIndex = 0; // Allow keyboard focus
-    div.innerHTML = `&nbsp;&nbsp;${idx + 1}&nbsp;&nbsp;&nbsp;${song.title} - ${song.artist}`;
+    div.tabIndex = 0; 
+    
+    div.innerHTML = `
+        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.title}</span>
+    `;
     
     div.onclick = () => { 
         if (mCurrentIndex === idx) {
-            togglePlay(); // Toggle if clicking the active one
+            togglePlay(); 
         } else {
             mCurrentIndex = idx;
             loadSong(mCurrentIndex); 
@@ -571,7 +752,8 @@ function updateVisualizer() {
 setInterval(updateVisualizer, 150);
 
 function loadSong(index) {
-    audioEl.src = musieeSongs[index].src;
+    audioEl.src = encodeURI(musieeSongs[index].src);
+    audioEl.load();
     mTitle.innerText = musieeSongs[index].title;
     mArtist.innerText = musieeSongs[index].artist;
     mIndex.innerText = `${index + 1} / ${musieeSongs.length}`;
@@ -628,7 +810,7 @@ audioEl.addEventListener("ended", () => {
 
 function updateTimeDisplay(current, total) {
     const pct = Math.floor((current / total) * 100);
-    mTime.innerText = formatTime(current) + " / " + formatTime(total) + " (" + pct + "%) Vol:100%";
+    mTime.innerText = formatTime(current) + " / " + formatTime(total) + " (" + pct + "%)";
 }
 
 function formatTime(seconds) {
@@ -644,33 +826,19 @@ function formatTime(seconds) {
 loadSong(mCurrentIndex);
 
 document.addEventListener('keydown', (e) => {
-    if (systemState === 'bios_run') {
+    if (systemState === 'conf_run') {
         e.preventDefault();
-        const currentTabName = biosData.tabs[biosCurrentTabIdx];
-        const items = biosData.content[currentTabName];
         
-        if (e.key === "ArrowRight") {
-            biosCurrentTabIdx = (biosCurrentTabIdx + 1) % biosData.tabs.length;
-            biosCurrentItemIdx = 0;
-            renderBios();
-        } else if (e.key === "ArrowLeft") {
-            biosCurrentTabIdx = (biosCurrentTabIdx - 1 + biosData.tabs.length) % biosData.tabs.length;
-            biosCurrentItemIdx = 0;
-            renderBios();
-        } else if (e.key === "ArrowDown") {
-            biosCurrentItemIdx = (biosCurrentItemIdx + 1) % items.length;
-            renderBios();
+        if (e.key === "ArrowDown") {
+            confCurrentItemIdx = (confCurrentItemIdx + 1) % confData.length;
+            renderConf();
         } else if (e.key === "ArrowUp") {
-            biosCurrentItemIdx = (biosCurrentItemIdx - 1 + items.length) % items.length;
-            renderBios();
+            confCurrentItemIdx = (confCurrentItemIdx - 1 + confData.length) % confData.length;
+            renderConf();
         } else if (e.key === "Enter") {
-            const selectedItem = items[biosCurrentItemIdx];
-            if (selectedItem.type === 'toggle') {
-                const currentOptIdx = selectedItem.options.indexOf(selectedItem.value);
-                selectedItem.value = selectedItem.options[(currentOptIdx + 1) % selectedItem.options.length];
-                renderBios();
-            } else if (selectedItem.type === 'action' && selectedItem.action === 'exit') {
-                resetAll();
+            const currentItem = confData[confCurrentItemIdx];
+            if (currentItem.type === 'image') {
+                openImageViewer(currentItem.src);
             }
         } else if (e.key === "Escape") {
             resetAll();
@@ -713,7 +881,7 @@ AVAILABLE COMMANDS:<br>
         return; 
     }
     
-    if(document.activeElement.tagName === "INPUT" || document.activeElement.classList.contains("playlist-item")) return;
+    if(document.activeElement.tagName === "INPUT" || document.activeElement.classList.contains("playlist-item") || imageViewerOverlay.style.display === 'flex') return;
     
     if (e.key.toLowerCase() === "p") {
         prevSong();

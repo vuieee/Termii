@@ -42,7 +42,7 @@
             <div class="nav-item" id="nav-articles">ARTICLES</div>
             <div class="nav-item" id="nav-repos">REPOS</div>
             <div class="nav-item" id="nav-socials">SOCIALS</div>
-            <div class="nav-item" id="nav-unix">UNIX</div>
+            <div class="nav-item" id="nav-certs">CERTIFICATES</div>
         </nav>
 
         <main class="main-stage" id="main-stage">
@@ -52,45 +52,56 @@
                     <div class="img-wrapper" style="position: relative;">
                         <div class="scanlines"></div>
                         <img id="lain-img" src="" data-src="assets/images/lainheader.png" alt="Lain Interface">
+                        
                         <div id="hack-overlay" class="term-overlay">
                             <div id="hack-output"></div>
                             <div id="hack-input-line" style="display:none;">> <span id="user-input"></span><span class="cursor-blink"></span></div>
                         </div>
+                        
                         <canvas id="matrix-canvas" class="term-overlay" style="z-index: 5; pointer-events: none; opacity: 0; background-color: rgba(0,0,0,0.85); display: none;"></canvas>
                         
-                        <div id="bios-overlay" class="term-overlay classic-bios">
-                            <div class="bios-header">TermiiOS BIOS Setup Utility</div>
-                            <div class="bios-tabs" id="bios-tabs"></div>
-                            <div class="bios-body">
-                                <div class="bios-menu" id="bios-menu"></div>
-                                <div class="bios-help">
-                                    Item Specific Help
-                                    <hr style="border:0; border-top:1px dashed var(--term-teal); margin: 10px 0; opacity: 0.5;">
-                                    <span id="bios-help-text">Use ↑ ↓ to select an item.<br>Press Enter to change value.</span>
+                        <div id="iframe-overlay" class="term-overlay" style="padding: 0; background: #050505; z-index: 6; display: none; align-items: center; justify-content: center; overflow: hidden;">
+                            <iframe id="game-iframe" src="" style="border: none; box-shadow: 0 0 60px rgba(255, 30, 0, 0.4); border-radius: 4px; transform-origin: center center;"></iframe>
+                        </div>
+
+                        <div id="conf-overlay" class="term-overlay classic-conf">
+                            <div class="conf-header">
+                                <span>confiee</span>
+                                <span>/assets/media</span>
+                            </div>
+                            <div class="conf-body">
+                                <div class="conf-col conf-parent">
+                                    <div class="conf-item active-parent">media/</div>
+                                </div>
+                                <div class="conf-col conf-current" id="conf-menu">
+                                    </div>
+                                <div class="conf-col conf-preview">
+                                    <div class="conf-preview-box" id="conf-preview-box">
+                                        </div>
+                                    <div class="conf-preview-meta" id="conf-preview-meta">
+                                        </div>
                                 </div>
                             </div>
-                            <div class="bios-footer-bar">
-                                <span>↑↓: Select Item</span>
-                                <span>←→: Select Menu</span>
-                                <span>Enter: Select</span>
-                                <span>ESC: Exit</span>
+                            <div class="conf-footer-bar">
+                                <span>[↑/↓ Navigate | Enter Open | ESC Exit]</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <nav class="terminal-nav">
-                    <div class="nav-item easter-egg-trigger" id="bios-trigger">BIOS</div>
-                    <div class="nav-item easter-egg-trigger" id="boot-trigger">BOOT</div>
-                    <div class="nav-item easter-egg-trigger" id="screen-trigger">SCREEN</div>
+                    <div class="nav-item easter-egg-trigger" id="conf-trigger">CONF</div>
+                    <div class="nav-item easter-egg-trigger" id="boot-trigger">TERMINAL</div>
+                    <div class="nav-item easter-egg-trigger" id="screen-trigger">FEED</div>
                 </nav>
 
                 <div class="branding-text">
-     _  ___  ____  _   _ _   _   _      ____  _____ ____ ___ ____ _   _ ____  
-    | |/ _ \/ ___|| | | | | | | / \    |  _ \| ____/ ___|_ _/ ___| \ | / ___| 
- _  | | | | \___ \| |_| | | | |/ _ \   | | | |  _| \___ \| | |  _|  \| \___ \ 
-| |_| | |_| |___) |  _  | |_| / ___ \  | |_| | |___ ___) | | |_| | |\  |___) |
- \___/ \___/|____/|_| |_|\___/_/   \_\ |____/|_____|____/___\____|_| \_|____/ 
+      ██╗  ██████╗  ███████╗ ██╗  ██╗ ██╗   ██╗  █████╗     ██████╗  ███████╗ ███████╗ ██╗  ██████╗  ███╗   ██╗ ███████╗
+      ██║ ██╔═══██╗ ██╔════╝ ██║  ██║ ██║   ██║ ██╔══██╗    ██╔══██╗ ██╔════╝ ██╔════╝ ██║ ██╔════╝  ████╗  ██║ ██╔════╝
+      ██║ ██║   ██║ ███████╗ ███████║ ██║   ██║ ███████║    ██║  ██║ █████╗   ███████╗ ██║ ██║  ███╗ ██╔██╗ ██║ ███████╗
+ ██   ██║ ██║   ██║ ╚════██║ ██╔══██║ ██║   ██║ ██╔══██║    ██║  ██║ ██╔══╝   ╚════██║ ██║ ██║   ██║ ██║╚██╗██║ ╚════██║
+ ╚█████╔╝ ╚██████╔╝ ███████║ ██║  ██║ ╚██████╔╝ ██║  ██║    ██████╔╝ ███████╗ ███████║ ██║ ╚██████╔╝ ██║ ╚████║ ███████║
+  ╚════╝   ╚═════╝  ╚══════╝ ╚═╝  ╚═╝  ╚═════╝  ╚═╝  ╚═╝    ╚═════╝  ╚══════╝ ╚══════╝ ╚═╝  ╚═════╝  ╚═╝  ╚═══╝ ╚══════╝
                 </div>
 
                 <div class="bios-footer body-text text-xs">
@@ -141,7 +152,7 @@
                     </div>
 
                     <div class="musiee-box">
-                        <div class="musiee-logo opacity-50">
+                        <div class="musiee-logo">
 ███╗   ███╗██╗   ██╗███████╗██╗███████╗███████╗
 ████╗ ████║██║   ██║██╔════╝██║██╔════╝██╔════╝
 ██╔████╔██║██║   ██║███████╗██║█████╗  █████╗  
@@ -165,8 +176,13 @@
                         </div>
 
                         <div class="musiee-player-footer text-xs">
-                            <div id="m-time">00:00:00 / 00:00:00 (0%) Vol:100%</div>
+                            <div class="musiee-time-vol-row">
+                                <div id="m-time">00:00:00 / 00:00:00 (0%)</div>
+                                <div class="vol-control">VOL <input type="range" id="m-volume" min="0" max="1" step="0.01" value="1"></div>
+                            </div>
+
                             <hr class="musiee-separator">
+                            
                             <div class="musiee-controls opacity-50">
                                 [P Prev|N Next|Space Play/Pause]
                             </div>
@@ -183,6 +199,20 @@
         <div class="articles-list-modal" onclick="event.stopPropagation()">
             <div class="socials-header">ARTICLES LOG</div>
             <div class="articles-list-container" id="articles-list-content"></div>
+        </div>
+    </div>
+    
+    <div id="certs-list-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
+        <div class="articles-list-modal" onclick="event.stopPropagation()">
+            <div class="socials-header">CERTIFICATIONS LOG</div>
+            <div class="articles-list-container" id="certs-list-content"></div>
+        </div>
+    </div>
+
+    <div id="image-viewer-overlay" class="modal-overlay" onclick="closeImageViewer(event)">
+        <div class="image-viewer-container" onclick="event.stopPropagation()">
+            <div class="close-viewer-btn" onclick="closeImageViewer(event)">[X] CLOSE</div>
+            <img id="viewer-img" src="" alt="Certificate Expanded">
         </div>
     </div>
 
