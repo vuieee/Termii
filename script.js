@@ -172,6 +172,9 @@ const hackOverlay = document.getElementById('hack-overlay');
 const confOverlay = document.getElementById('conf-overlay');
 const matrixCanvas = document.getElementById('matrix-canvas');
 
+const iframeOverlay = document.getElementById('iframe-overlay');
+const gameIframe = document.getElementById('game-iframe');
+
 const articleContainer = document.getElementById('article-overlay-container');
 const articlesListOverlay = document.getElementById('articles-list-overlay');
 const reposContainer = document.getElementById('repos-overlay-container');
@@ -230,6 +233,9 @@ function resetAll() {
     confOverlay.style.display = 'none';
     matrixCanvas.style.display = 'none'; 
     matrixCanvas.style.opacity = '0';
+    
+    if (iframeOverlay) iframeOverlay.style.display = 'none';
+    if (gameIframe) gameIframe.src = '';
     
     const ctx = matrixCanvas.getContext('2d');
     ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
@@ -478,7 +484,7 @@ function showLoginPrompt() {
 }
 
 function startSystemBoot() {
-    systemState = 'system_boot';
+    systemState = 'ultrakill_boot';
     hackInputLine.style.display = 'none';
     
     const tasks = [
@@ -566,6 +572,39 @@ function printFastfetch() {
     hackOutput.scrollTop = hackOutput.scrollHeight;
 }
 
+function resizeIframe() {
+    const overlay = document.getElementById('iframe-overlay');
+    const iframe = document.getElementById('game-iframe');
+    if(!overlay || overlay.style.display === 'none') return;
+    
+    const w = overlay.clientWidth;
+    const h = overlay.clientHeight;
+    
+    const gameW = 1280;
+    const gameH = 720;
+    
+    const scale = Math.min(w / gameW, h / gameH);
+    
+    iframe.style.width = gameW + 'px';
+    iframe.style.height = gameH + 'px';
+    iframe.style.transform = `scale(${scale})`;
+}
+
+window.addEventListener('resize', resizeIframe);
+
+function startUltrakillGame() {
+    systemState = 'game_run';
+    hackOverlay.style.display = 'none';
+    iframeOverlay.style.display = 'flex';
+    gameIframe.src = "assets/misc/Unofficial ULTRAKILL Web Version.html";
+    
+    resizeIframe(); 
+    
+    setTimeout(() => {
+        gameIframe.focus();
+    }, 100);
+}
+
 function startMatrix() {
     systemState = 'matrix_run';
     hackOutput.innerHTML = "";
@@ -578,8 +617,8 @@ function startMatrix() {
     
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ".split('');
     const fontSize = 16; 
-    const columns = matrixCanvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
+    const columns = Math.ceil(matrixCanvas.width / fontSize);
+    const drops = Array(columns).fill(1);
     
     const matrixInt = setInterval(() => {
         ctx.fillStyle = "rgba(0, 0, 0, 0.08)"; 
@@ -659,12 +698,6 @@ const mVolumeSlider = document.getElementById("m-volume");
 const visContainer = document.getElementById("m-vis");
 const visBase = document.getElementById("m-vis-base");
 const playlistBox = document.getElementById("m-playlist");
-
-audioEl.addEventListener("error", () => {
-    mTitle.innerText = "AUDIO DECODE ERROR";
-    mArtist.innerText = "Likely LFS Pointer Issue";
-    mIsPlaying = false;
-});
 
 mVolumeSlider.addEventListener('input', (e) => {
     audioEl.volume = e.target.value;
@@ -840,11 +873,17 @@ document.addEventListener('keydown', (e) => {
             } else if (userInput.toUpperCase() === "CLEAR") {
                 hackOutput.innerHTML = "";
                 userInput = "";
+            } else if (userInput.toUpperCase() === "ULTRAKILL") {
+                hackOutput.innerHTML += `> ULTRAKILL<br>ALLOCATING MEMORY...<br>LAUNCHING ENGINE...<br>`;
+                hackOutput.scrollTop = hackOutput.scrollHeight;
+                setTimeout(startUltrakillGame, 800);
+                userInput = "";
             } else if (userInput.toUpperCase() === "HELP") {
                 hackOutput.innerHTML += `> HELP<br>
 AVAILABLE COMMANDS:<br>
 <span style="color:var(--term-teal)">START</span>     - Initiates the system boot sequence.<br>
 <span style="color:var(--term-teal)">FASTFETCH</span> - Displays system information and ASCII logo.<br>
+<span style="color:var(--term-teal)">ULTRAKILL</span> - Load Unofficial Web Port into memory.<br>
 <span style="color:var(--term-teal)">CLEAR</span>     - Clears the terminal output.<br>
 <span style="color:var(--term-teal)">HELP</span>      - Displays this help message.<br>`;
                 hackOutput.scrollTop = hackOutput.scrollHeight;
