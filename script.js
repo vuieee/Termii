@@ -172,9 +172,6 @@ const hackOverlay = document.getElementById('hack-overlay');
 const confOverlay = document.getElementById('conf-overlay');
 const matrixCanvas = document.getElementById('matrix-canvas');
 
-const iframeOverlay = document.getElementById('iframe-overlay');
-const gameIframe = document.getElementById('game-iframe');
-
 const articleContainer = document.getElementById('article-overlay-container');
 const articlesListOverlay = document.getElementById('articles-list-overlay');
 const reposContainer = document.getElementById('repos-overlay-container');
@@ -233,9 +230,6 @@ function resetAll() {
     confOverlay.style.display = 'none';
     matrixCanvas.style.display = 'none'; 
     matrixCanvas.style.opacity = '0';
-    
-    if (iframeOverlay) iframeOverlay.style.display = 'none';
-    if (gameIframe) gameIframe.src = '';
     
     const ctx = matrixCanvas.getContext('2d');
     ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
@@ -572,26 +566,6 @@ function printFastfetch() {
     hackOutput.scrollTop = hackOutput.scrollHeight;
 }
 
-function resizeIframe() {
-    const overlay = document.getElementById('iframe-overlay');
-    const iframe = document.getElementById('game-iframe');
-    if(!overlay || overlay.style.display === 'none') return;
-    
-    const w = overlay.clientWidth;
-    const h = overlay.clientHeight;
-    
-    const gameW = 1280;
-    const gameH = 720;
-    
-    const scale = Math.min(w / gameW, h / gameH);
-    
-    iframe.style.width = gameW + 'px';
-    iframe.style.height = gameH + 'px';
-    iframe.style.transform = `scale(${scale})`;
-}
-
-window.addEventListener('resize', resizeIframe);
-
 function startMatrix() {
     systemState = 'matrix_run';
     hackOutput.innerHTML = "";
@@ -685,6 +659,12 @@ const mVolumeSlider = document.getElementById("m-volume");
 const visContainer = document.getElementById("m-vis");
 const visBase = document.getElementById("m-vis-base");
 const playlistBox = document.getElementById("m-playlist");
+
+audioEl.addEventListener("error", () => {
+    mTitle.innerText = "AUDIO DECODE ERROR";
+    mArtist.innerText = "Likely LFS Pointer Issue";
+    mIsPlaying = false;
+});
 
 mVolumeSlider.addEventListener('input', (e) => {
     audioEl.volume = e.target.value;
