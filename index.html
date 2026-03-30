@@ -5,21 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Termii_ Web Interface">
     <title>Termii_</title>
-    
     <link rel="preload" as="image" href="assets/images/lainheader.png">
-
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='0' y='0' width='64' height='64' fill='black'/%3E%3Ctext x='5' y='48' fill='%2350fff7' font-family='monospace' font-weight='bold' font-size='46'%3E%26gt;_%3C/text%3E%3C/svg%3E">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="crt-scanlines"></div>
-
     <div id="loading-screen">
         <div class="loading-content">
             <div id="loading-text">Initializing . . .</div>
@@ -28,15 +22,13 @@
             </div>
         </div>
     </div>
-
     <div class="content-wrapper" id="main-content">
         <header class="body-text text-xs">
             <span>ASCII TERMINAL WEBGATE</span>
             <span>COPYRIGHT JOSHUA DESIGNS(C) 2026</span>
-            <span>VER V1.04</span>
+            <span>VER V1.05</span>
             <span>WEB......1</span>
         </header>
-
         <nav>
             <div class="nav-item" id="nav-home">HOME</div>
             <div class="nav-item" id="nav-articles">ARTICLES</div>
@@ -44,7 +36,6 @@
             <div class="nav-item" id="nav-socials">SOCIALS</div>
             <div class="nav-item" id="nav-certs">CERTIFICATES</div>
         </nav>
-
         <main class="main-stage" id="main-stage">
             <section class="left-panel">
                 <div class="unix-box">
@@ -52,14 +43,11 @@
                     <div class="img-wrapper" style="position: relative;">
                         <div class="scanlines"></div>
                         <img id="lain-img" src="" data-src="assets/images/lainheader.png" alt="Lain Interface">
-                        
                         <div id="hack-overlay" class="term-overlay">
                             <div id="hack-output"></div>
                             <div id="hack-input-line" style="display:none;">> <span id="user-input"></span><span class="cursor-blink"></span></div>
                         </div>
-                        
                         <canvas id="matrix-canvas" class="term-overlay" style="z-index: 5; pointer-events: none; opacity: 0; background-color: rgba(0,0,0,0.85); display: none;"></canvas>
-
                         <div id="conf-overlay" class="term-overlay classic-conf">
                             <div class="conf-header">
                                 <span>confiee</span>
@@ -69,13 +57,10 @@
                                 <div class="conf-col conf-parent">
                                     <div class="conf-item active-parent">media/</div>
                                 </div>
-                                <div class="conf-col conf-current" id="conf-menu">
-                                    </div>
+                                <div class="conf-col conf-current" id="conf-menu"></div>
                                 <div class="conf-col conf-preview">
-                                    <div class="conf-preview-box" id="conf-preview-box">
-                                        </div>
-                                    <div class="conf-preview-meta" id="conf-preview-meta">
-                                        </div>
+                                    <div class="conf-preview-box" id="conf-preview-box"></div>
+                                    <div class="conf-preview-meta" id="conf-preview-meta"></div>
                                 </div>
                             </div>
                             <div class="conf-footer-bar">
@@ -84,13 +69,11 @@
                         </div>
                     </div>
                 </div>
-
                 <nav class="terminal-nav">
                     <div class="nav-item easter-egg-trigger" id="conf-trigger">CONF</div>
                     <div class="nav-item easter-egg-trigger" id="boot-trigger">TERMINAL</div>
                     <div class="nav-item easter-egg-trigger" id="screen-trigger">FEED</div>
                 </nav>
-
                 <div class="branding-text">
       ██╗  ██████╗  ███████╗ ██╗  ██╗ ██╗   ██╗  █████╗     ██████╗  ███████╗ ███████╗ ██╗  ██████╗  ███╗   ██╗ ███████╗
       ██║ ██╔═══██╗ ██╔════╝ ██║  ██║ ██║   ██║ ██╔══██╗    ██╔══██╗ ██╔════╝ ██╔════╝ ██║ ██╔════╝  ████╗  ██║ ██╔════╝
@@ -99,34 +82,28 @@
  ╚█████╔╝ ╚██████╔╝ ███████║ ██║  ██║ ╚██████╔╝ ██║  ██║    ██████╔╝ ███████╗ ███████║ ██║ ╚██████╔╝ ██║ ╚████║ ███████║
   ╚════╝   ╚═════╝  ╚══════╝ ╚═╝  ╚═╝  ╚═════╝  ╚═╝  ╚═╝    ╚═════╝  ╚══════╝ ╚══════╝ ╚═╝  ╚═════╝  ╚═╝  ╚═══╝ ╚══════╝
                 </div>
-
                 <div class="bios-footer body-text text-xs">
                     <div class="footer-left">
                         <div class="opacity-50">@ECHO OFF</div>
                         <div class="opacity-50">WEBPAGE</div>
                         <div class="opacity-50">:: INTERACTIVE TERMINAL_</div>
                     </div>
-                    
                     <div class="inputs-grid">
                         <span class="opacity-50">INPUT 1:</span>
                         <span class="header-text" style="font-size: 0.6rem; margin:0;">HTML CSS JS</span>
                         <span class="opacity-50">INPUT 2:</span>
                         <span class="header-text" style="font-size: 0.6rem; margin:0;">GIMP FIGMA</span>
                     </div>
-
                     <div class="footer-right opacity-50">
                         <span>E()()</span><span>E()()</span><span>E()()</span>
                     </div>
                 </div>
             </section>
-
             <section class="right-panel">
                 <div class="repos-box">
                     <div class="header-text" style="text-align: center;">RECOMMENDED REPOSITORIES</div>
-                    <div class="repo-row" id="recommended-repos">
-                    </div>
+                    <div class="repo-row" id="recommended-repos"></div>
                 </div>
-
                 <div class="bottom-split">
                     <div class="articles-stack">
                         <div class="article-card" onclick="openArticle(0)">
@@ -146,7 +123,6 @@
                             <div class="body-text text-xs opacity-50">Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.</div>
                         </div>
                     </div>
-
                     <div class="musiee-box">
                         <div class="musiee-logo">
 ███╗   ███╗██╗   ██╗███████╗██╗███████╗███████╗
@@ -156,64 +132,77 @@
 ██║ ╚═╝ ██║╚██████╔╝███████║██║███████╗███████╗
 ╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝╚══════╝╚══════╝
                         </div>
-                        
                         <div class="musiee-info">
                             <div class="musiee-track-details">
                                 <span id="m-title" class="header-text" style="color:var(--term-teal);">No Track Selected</span>
                                 <span id="m-artist" class="opacity-50">Unknown Artist</span>
                             </div>
-                            
-                            <div class="musiee-playlist-box" id="m-playlist">
-                            </div>
+                            <div class="musiee-playlist-box" id="m-playlist"></div>
                             <div id="m-index" class="musiee-index-indicator">0 / 6</div>
                         </div>
-                        
                         <div class="musiee-visualizer-wrapper">
                             <div class="musiee-visualizer" id="m-vis"></div>
                             <div class="vis-base" id="m-vis-base"></div>
                         </div>
-
                         <div class="musiee-player-footer text-xs">
                             <div class="musiee-time-vol-row">
                                 <div id="m-time">00:00:00 / 00:00:00 (0%)</div>
                                 <div class="vol-control">VOL <input type="range" id="m-volume" min="0" max="1" step="0.01" value="1"></div>
                             </div>
-
                             <hr class="musiee-separator">
-                            
                             <div class="musiee-controls opacity-50">
                                 [P Prev|N Next|Space Play/Pause]
                             </div>
                         </div>
                         <audio id="audio-element" style="display: none;"></audio>
                     </div>
-
                 </div>
             </section>
         </main>
     </div>
-
+    <div id="welcome-overlay" class="modal-overlay" onclick="closeWelcome(event)">
+        <div class="welcome-modal" onclick="event.stopPropagation()">
+            <div class="welcome-header">SYSTEM UPDATE LOG</div>
+            <div class="welcome-content">
+                <div class="header-text" style="font-size: 1.2rem; margin-bottom: 2vh; text-align: center;">WELCOME VISITOR!</div>
+                <div class="body-text" style="color: var(--term-teal);">
+                    <p style="margin-bottom: 15px;">> TERMII_ WEBGATE UPDATED TO V1.05</p>
+                    <p>> CURRENT CHANGELOG:</p>
+                    <ul class="changelog-list">
+                        <li><span style="color:var(--term-green)">[+]</span> Re-integrated ULTRAKILL Web Port (Type 'ULTRAKILL' in terminal).</li>
+                        <li><span style="color:var(--term-green)">[+]</span> Optimized Musiee player layout for fluid tracking.</li>
+                        <li><span style="color:var(--term-green)">[+]</span> Deployed responsive mobile interface viewing protocols.</li>
+                        <li><span style="color:var(--term-green)">[+]</span> Migrated audio to native high-efficiency compression.</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="welcome-close-btn" onclick="closeWelcome(event)">[ ACKNOWLEDGE ]</button>
+        </div>
+    </div>
+    <div id="iframe-overlay" class="modal-overlay" onclick="closeGame(event)">
+        <div id="game-wrapper" onclick="event.stopPropagation()">
+            <iframe id="game-iframe" src="" style="border: none; outline: none; width: 100%; height: 100%;"></iframe>
+            <div class="iframe-close-btn" onclick="closeGame(event)">[X] CLOSE</div>
+        </div>
+    </div>
     <div id="articles-list-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="articles-list-modal" onclick="event.stopPropagation()">
             <div class="socials-header">ARTICLES LOG</div>
             <div class="articles-list-container" id="articles-list-content"></div>
         </div>
     </div>
-    
     <div id="certs-list-overlay" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="articles-list-modal" onclick="event.stopPropagation()">
             <div class="socials-header">CERTIFICATIONS LOG</div>
             <div class="articles-list-container" id="certs-list-content"></div>
         </div>
     </div>
-
     <div id="image-viewer-overlay" class="modal-overlay" onclick="closeImageViewer(event)">
         <div class="image-viewer-container" onclick="event.stopPropagation()">
             <div class="close-viewer-btn" onclick="closeImageViewer(event)">[X] CLOSE</div>
             <img id="viewer-img" src="" alt="Certificate Expanded">
         </div>
     </div>
-
     <div id="article-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="expanded-article" onclick="event.stopPropagation()">
             <div class="article-main" id="article-main-col">
@@ -232,7 +221,6 @@
             </div>
         </div>
     </div>
-
     <div id="repos-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="repos-modal" onclick="event.stopPropagation()">
             <div class="repos-controls">
@@ -255,7 +243,6 @@
             <div id="repos-list-content" class="repos-list-container"></div>
         </div>
     </div>
-
     <div id="socials-overlay-container" class="modal-overlay" onclick="closeAllOverlays(event)">
         <div class="expanded-socials" onclick="event.stopPropagation()">
             <div class="socials-header">FIND ME HERE</div>
@@ -271,7 +258,6 @@
             </div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
