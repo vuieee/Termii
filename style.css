@@ -732,11 +732,30 @@ nav {
     color: black; 
     box-shadow: 0 0 15px var(--term-teal); 
 }
+/* ============================================================
+   HAMBURGER BUTTON — hidden on desktop, shown on mobile
+   ============================================================ */
+.mobile-nav-toggle {
+    display: none;
+}
+
+/* ============================================================
+   MOBILE TERMINAL INPUT — hidden on desktop
+   ============================================================ */
+#mobile-term-row {
+    display: none !important; /* overridden in mobile block */
+}
+
+/* ============================================================
+   RESPONSIVE: ≤ 900px  (tablet + mobile)
+   ============================================================ */
 @media screen and (max-width: 900px) {
+
+    /* --- Base layout --- */
     body {
         height: auto;
         min-height: 100vh;
-        overflow-y: auto; 
+        overflow-y: auto;
         padding: 2vh 4vw;
     }
     .content-wrapper {
@@ -744,26 +763,72 @@ nav {
         display: flex;
         flex-direction: column;
     }
-    .branding-text, .musiee-logo {
+
+    /* --- Header: show only the most important span --- */
+    header {
+        justify-content: center;
+        gap: 0.5vw;
+        flex-wrap: wrap;
+    }
+    header span:not(:first-child) {
         display: none;
     }
-    header {
-        flex-direction: column;
-        text-align: center;
-        gap: 1vh;
-    }
-    nav {
+
+    /* --- Hamburger button --- */
+    .mobile-nav-toggle {
         display: flex;
-        flex-wrap: wrap;
-        border: 1px solid var(--term-teal);
-        border-bottom: none;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--term-teal);
+        font-family: var(--font-head);
+        font-size: 0.75rem;
+        padding: 1.5vh 3vw;
+        cursor: pointer;
+        letter-spacing: 1px;
+        text-shadow: 0 0 4px rgba(80, 255, 247, 0.4);
+        min-height: 44px;
+    }
+    .mobile-nav-toggle:hover,
+    .mobile-nav-toggle:focus {
+        background: rgba(80, 255, 247, 0.1);
+        outline: none;
+    }
+    .hamburger-arrow {
+        transition: transform 0.25s ease;
+        font-size: 0.6rem;
+    }
+    #main-nav.open .hamburger-arrow {
+        transform: rotate(180deg);
+    }
+
+    /* --- Nav: collapse to hamburger on mobile --- */
+    nav#main-nav {
+        display: flex;
+        flex-direction: column;
+        border: 2px solid var(--term-teal);
+        margin-bottom: 1.5vh;
+        background: var(--term-bg);
+        position: relative;
+        z-index: 2000;
+    }
+    nav#main-nav .nav-item {
+        display: none;
         border-right: none;
+        border-top: 1px solid rgba(80, 255, 247, 0.3);
+        text-align: left;
+        padding: 1.5vh 3vw;
+        font-size: 0.75rem;
+        min-height: 44px;
+        align-items: center;
     }
-    .nav-item {
-        flex: 1 1 30%;
-        border-right: 1px solid var(--term-teal);
-        border-bottom: 1px solid var(--term-teal);
+    nav#main-nav.open .nav-item {
+        display: flex;
     }
+
+    /* --- Main stage: single column --- */
     .main-stage {
         display: flex;
         flex-direction: column;
@@ -772,21 +837,85 @@ nav {
         gap: 3vh;
     }
     .left-panel {
-        height: auto; 
+        height: auto;
         flex-shrink: 0;
         overflow: visible;
     }
+
+    /* --- Lain image box --- */
     .img-wrapper {
         height: 45vh;
-        min-height: 350px;
+        min-height: 300px;
     }
+
+    /* --- Terminal sub-nav: CONF / TERMINAL / FEED --- */
     .terminal-nav {
         display: flex;
         flex-wrap: wrap;
     }
     .terminal-nav .nav-item {
         flex: 1;
+        border-right: 2px solid var(--term-teal);
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+    .terminal-nav .nav-item:last-child {
+        border-right: none;
+    }
+
+    /* --- Mobile terminal input (shown via JS when terminal is active) --- */
+    #mobile-term-row {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        border-top: 1px solid rgba(80, 255, 247, 0.4);
+        padding: 8px;
+        flex-shrink: 0;
+        background: rgba(0,0,0,0.5);
+    }
+    #mobile-term-input {
+        flex: 1;
+        background: transparent;
+        border: 1px solid var(--term-teal);
+        color: var(--term-teal);
+        font-family: var(--font-body);
+        font-size: 0.8rem;
+        padding: 8px 10px;
+        outline: none;
+        min-height: 38px;
+        text-shadow: none;
+    }
+    #mobile-term-input::placeholder {
+        color: rgba(80, 255, 247, 0.4);
+        font-size: 0.7rem;
+    }
+    #mobile-term-submit {
+        background: transparent;
+        border: 1px solid var(--term-teal);
+        color: var(--term-teal);
+        font-family: var(--font-head);
+        font-size: 0.55rem;
+        padding: 8px 12px;
+        cursor: pointer;
+        min-height: 38px;
+        transition: all 0.2s;
+        text-shadow: none;
+        white-space: nowrap;
+    }
+    #mobile-term-submit:hover,
+    #mobile-term-submit:active {
+        background: var(--term-teal);
+        color: black;
+    }
+
+    /* --- Hide desktop terminal keyboard hint, show mobile row --- */
+    #hack-input-line {
+        display: none !important;
+    }
+
+    /* --- Right panel: single column --- */
     .right-panel {
         height: auto;
         overflow: visible;
@@ -812,10 +941,22 @@ nav {
     .article-card {
         height: auto;
         padding: 2.5vh;
+        min-height: 160px;
+    }
+    .article-thumb {
+        min-height: 100px;
     }
     .musiee-box {
         height: auto;
     }
+
+    /* --- Hide heavy ASCII art --- */
+    .branding-text,
+    .musiee-logo {
+        display: none;
+    }
+
+    /* --- BIOS footer --- */
     .bios-footer {
         display: flex;
         flex-direction: column;
@@ -824,7 +965,8 @@ nav {
         gap: 2vh;
         padding-top: 1vh;
     }
-    .footer-right, .footer-left {
+    .footer-right,
+    .footer-left {
         text-align: center;
     }
     .inputs-grid {
@@ -832,12 +974,19 @@ nav {
         justify-content: center;
         text-align: center;
     }
+
+    /* --- Modals: nearly full-screen --- */
     .modal-overlay {
-        padding-top: 15vh; 
+        padding-top: 8vh;
+        padding-left: 2vw;
+        padding-right: 2vw;
     }
-    .expanded-article, .expanded-socials, .articles-list-modal, .repos-modal {
-        width: 95vw;
-        height: 90vh;
+    .expanded-article,
+    .expanded-socials,
+    .articles-list-modal,
+    .repos-modal {
+        width: 96vw;
+        height: 88vh;
         padding: 4vw;
     }
     .expanded-article {
@@ -861,19 +1010,38 @@ nav {
         display: flex;
         flex-direction: column;
         overflow-y: auto;
+        gap: 2vh;
+    }
+    .social-preview-thumb {
+        height: 25vh;
+        position: relative;
     }
     .article-row {
         grid-template-columns: 1fr;
         text-align: center;
     }
     .article-row-thumb {
-        height: 180px;
+        height: 160px;
     }
     .repos-controls {
         flex-direction: column;
         align-items: stretch;
         gap: 2vh;
     }
+    .repo-select,
+    #repo-search {
+        font-size: 0.65rem;
+    }
+
+    /* --- Welcome modal --- */
+    .welcome-modal {
+        width: 92vw;
+        padding: 4vw;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    /* --- CONF file browser: stack vertically --- */
     .conf-body {
         display: flex;
         flex-direction: column;
@@ -881,17 +1049,30 @@ nav {
     }
     .conf-col {
         border-right: none;
-        border-bottom: 1px dashed rgba(80,255,247,0.3);
+        border-bottom: 1px dashed rgba(80, 255, 247, 0.3);
         padding-bottom: 10px;
         margin-bottom: 10px;
         height: auto;
-        max-height: 200px;
+        max-height: 180px;
     }
     .conf-col:last-child {
         border-bottom: none;
     }
-    .welcome-modal {
-        width: 90vw;
-        padding: 4vw;
+
+    /* --- Game iframe: scale to viewport --- */
+    #game-wrapper {
+        width: 95vw;
+        height: calc(95vw * 9 / 16);
+        max-height: 90vh;
+    }
+
+    /* --- Touch-friendly minimum tap targets --- */
+    .nav-item,
+    .btn-get,
+    .repo-get-btn,
+    .welcome-close-btn,
+    .social-arrow,
+    .social-info {
+        min-height: 44px;
     }
 }

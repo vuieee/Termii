@@ -259,6 +259,7 @@ function resetAll() {
     hackOutput.innerHTML = ""; 
     userInput = "";
     userInputDisplay.textContent = "";
+    hideMobileTermInput();
 }
 
 function openWelcome() {
@@ -535,11 +536,25 @@ bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startB
 confTrigger.addEventListener('click', () => { if (systemState === 'idle') startConf(); else resetAll(); });
 screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'assets/images/lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
 
-navHome.addEventListener('click', () => closeAllOverlays(null, null));
-navArticles.addEventListener('click', openArticlesList);
-navRepos.addEventListener('click', openRepos);
-navSocials.addEventListener('click', openSocials);
-navCerts.addEventListener('click', openCertsList);
+navHome.addEventListener('click', () => { closeAllOverlays(null, null); closeMobileNav(); });
+navArticles.addEventListener('click', () => { openArticlesList(); closeMobileNav(); });
+navRepos.addEventListener('click', () => { openRepos(); closeMobileNav(); });
+navSocials.addEventListener('click', () => { openSocials(); closeMobileNav(); });
+navCerts.addEventListener('click', () => { openCertsList(); closeMobileNav(); });
+
+/* ---- Hamburger Menu ---- */
+const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+const mainNav = document.getElementById('main-nav');
+
+function closeMobileNav() {
+    if (mainNav) mainNav.classList.remove('open');
+}
+
+if (mobileNavToggle) {
+    mobileNavToggle.addEventListener('click', () => {
+        mainNav.classList.toggle('open');
+    });
+}
 
 function startBoot() {
     systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
@@ -559,6 +574,70 @@ function showLoginPrompt() {
     hackOutput.innerHTML += "<br><br>SYSTEM BOOT INITIATED...<br>AWAITING COMMAND...<br>Type HELP for a list of commands.<br>"; 
     hackInputLine.style.display = 'block'; 
     hackOutput.scrollTop = hackOutput.scrollHeight;
+    showMobileTermInput();
+}
+
+/* ---- Mobile Terminal Input ---- */
+const mobileTermRow = document.getElementById('mobile-term-row');
+const mobileTermInput = document.getElementById('mobile-term-input');
+const mobileTermSubmit = document.getElementById('mobile-term-submit');
+
+function showMobileTermInput() {
+    if (mobileTermRow) mobileTermRow.style.display = 'flex';
+    if (mobileTermInput) { mobileTermInput.value = ''; mobileTermInput.focus(); }
+}
+
+function hideMobileTermInput() {
+    if (mobileTermRow) mobileTermRow.style.display = 'none';
+}
+
+function processMobileTermCommand(cmd) {
+    if (!cmd) return;
+    const upper = cmd.toUpperCase();
+    if (upper === 'START') {
+        hackOutput.innerHTML += `> START<br>ACCESS GRANTED.<br>----------------<br>`;
+        hideMobileTermInput();
+        startSystemBoot();
+    } else if (upper === 'FASTFETCH') {
+        hackOutput.innerHTML += `> FASTFETCH<br>`;
+        printFastfetch();
+    } else if (upper === 'CLEAR') {
+        hackOutput.innerHTML = '';
+    } else if (upper === 'ULTRAKILL') {
+        hackOutput.innerHTML += `> ULTRAKILL<br>ALLOCATING MEMORY...<br>LAUNCHING ENGINE...<br>`;
+        hackOutput.scrollTop = hackOutput.scrollHeight;
+        hideMobileTermInput();
+        setTimeout(startUltrakillGame, 800);
+    } else if (upper === 'HELP') {
+        hackOutput.innerHTML += `> HELP<br>
+AVAILABLE COMMANDS:<br>
+<span style="color:var(--term-teal)">START</span>     - Initiates the system boot sequence.<br>
+<span style="color:var(--term-teal)">FASTFETCH</span> - Displays system information and ASCII logo.<br>
+<span style="color:var(--term-teal)">ULTRAKILL</span> - Load Unofficial Web Port into memory.<br>
+<span style="color:var(--term-teal)">CLEAR</span>     - Clears the terminal output.<br>
+<span style="color:var(--term-teal)">HELP</span>      - Displays this help message.<br>`;
+    } else {
+        hackOutput.innerHTML += `> ${cmd}<br>INVALID COMMAND.<br>`;
+    }
+    hackOutput.scrollTop = hackOutput.scrollHeight;
+}
+
+if (mobileTermSubmit) {
+    mobileTermSubmit.addEventListener('click', () => {
+        const val = mobileTermInput ? mobileTermInput.value.trim() : '';
+        processMobileTermCommand(val);
+        if (mobileTermInput) mobileTermInput.value = '';
+    });
+}
+if (mobileTermInput) {
+    mobileTermInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const val = mobileTermInput.value.trim();
+            processMobileTermCommand(val);
+            mobileTermInput.value = '';
+        }
+    });
 }
 
 function startSystemBoot() {

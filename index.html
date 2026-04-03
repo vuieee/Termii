@@ -29,7 +29,10 @@
             <span>VER V1.05</span>
             <span>WEB......1</span>
         </header>
-        <nav>
+        <nav id="main-nav">
+            <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle Navigation">
+                <span>&#9776; MENU</span><span class="hamburger-arrow">&#9660;</span>
+            </button>
             <div class="nav-item" id="nav-home">HOME</div>
             <div class="nav-item" id="nav-articles">ARTICLES</div>
             <div class="nav-item" id="nav-repos">REPOS</div>
@@ -46,6 +49,10 @@
                         <div id="hack-overlay" class="term-overlay">
                             <div id="hack-output"></div>
                             <div id="hack-input-line" style="display:none;">> <span id="user-input"></span><span class="cursor-blink"></span></div>
+                            <div id="mobile-term-row" style="display:none;">
+                                <input type="text" id="mobile-term-input" placeholder="TYPE COMMAND..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                                <button id="mobile-term-submit">&#9654; RUN</button>
+                            </div>
                         </div>
                         <canvas id="matrix-canvas" class="term-overlay" style="z-index: 5; pointer-events: none; opacity: 0; background-color: rgba(0,0,0,0.85); display: none;"></canvas>
                         <div id="conf-overlay" class="term-overlay classic-conf">
