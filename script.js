@@ -122,8 +122,10 @@ const socialData = [
     { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a direct message." }
 ];
 const certData = [
-    { title: "Intermediate SQL", img: "assets/images/Intermediet SQL.jpg", desc: "DataCamp Statement of Accomplishment", date: "Nov 24, 2025" },
-    { title: "Introduction to SQL", img: "assets/images/Introduction to SQL.png", desc: "DataCamp Statement of Accomplishment", date: "Nov 14, 2025" }
+    { title: "Introduction to Git", img: "assets/images/Introduction to Git.png", desc: "DataCamp Statement of Accomplishment", date: "Mar 29, 2026" },
+    { title: "Intermediate Git", img: "assets/images/Intermediate Git.png", desc: "DataCamp Statement of Accomplishment", date: "Mar 29, 2026" },
+    { title: "Introduction to SQL", img: "assets/images/Introduction to SQL.png", desc: "DataCamp Statement of Accomplishment", date: "Nov 14, 2025" },
+    { title: "Intermediate SQL", img: "assets/images/Intermediate SQL.png", desc: "DataCamp Statement of Accomplishment", date: "Nov 24, 2025" }
 ];
 const musieeSongs = [
     { title: "it's 5a.m and i couldn't sleep", artist: "Local Audio", src: "assets/music/it's 5a.m and i couldn't sleep.mp3" },
@@ -150,7 +152,6 @@ const hackOverlay = document.getElementById('hack-overlay');
 const confOverlay = document.getElementById('conf-overlay');
 const matrixCanvas = document.getElementById('matrix-canvas');
 const iframeOverlay = document.getElementById('iframe-overlay');
-const gameIframe = document.getElementById('game-iframe');
 const welcomeOverlay = document.getElementById('welcome-overlay');
 const articleContainer = document.getElementById('article-overlay-container');
 const articlesListOverlay = document.getElementById('articles-list-overlay');
@@ -196,6 +197,20 @@ allImages.forEach(src => {
     img.onload = checkLoad; img.onerror = checkLoad; img.src = src;
 });
 let systemState = 'idle'; let userInput = ""; let intervals = []; let closeTimeout = null;
+function purgeIframe() {
+    const wrapper = document.getElementById('game-wrapper');
+    const oldIframe = document.getElementById('game-iframe');
+    if (oldIframe) {
+        oldIframe.src = 'about:blank';
+        oldIframe.remove();
+    }
+    if (wrapper) {
+        const newIframe = document.createElement('iframe');
+        newIframe.id = 'game-iframe';
+        newIframe.style.cssText = 'border: none; outline: none; width: 100%; height: 100%;';
+        wrapper.appendChild(newIframe);
+    }
+}
 function resetAll() {
     systemState = 'idle'; 
     intervals.forEach(clearInterval); 
@@ -205,7 +220,7 @@ function resetAll() {
     matrixCanvas.style.display = 'none'; 
     matrixCanvas.style.opacity = '0';
     if (iframeOverlay) iframeOverlay.style.display = 'none';
-    if (gameIframe) gameIframe.src = '';
+    purgeIframe();
     const ctx = matrixCanvas.getContext('2d');
     ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
     lainImg.style.opacity = '1'; 
@@ -221,7 +236,6 @@ function openWelcome() {
     welcomeOverlay.style.display = 'flex';
     requestAnimationFrame(() => { 
         welcomeOverlay.classList.add('active'); 
-        mainStage.classList.add('blur'); 
     });
 }
 function closeWelcome(e) {
@@ -229,7 +243,6 @@ function closeWelcome(e) {
     welcomeOverlay.classList.remove('active');
     setTimeout(() => { 
         welcomeOverlay.style.display = 'none'; 
-        mainStage.classList.remove('blur');
     }, 300);
 }
 function closeGame(e) {
@@ -237,7 +250,7 @@ function closeGame(e) {
     iframeOverlay.classList.remove('active');
     setTimeout(() => {
         iframeOverlay.style.display = 'none';
-        gameIframe.src = '';
+        purgeIframe();
         if (systemState === 'game_run') {
             hackOverlay.style.display = 'flex';
             systemState = 'boot_wait';
@@ -246,7 +259,6 @@ function closeGame(e) {
             hackOutput.innerHTML += "> ULTRAKILL ENGINE TERMINATED.<br>AWAITING COMMAND...<br>";
             hackOutput.scrollTop = hackOutput.scrollHeight;
         }
-        mainStage.classList.remove('blur');
     }, 300);
 }
 function closeAllOverlays(e, exceptContainer) {
@@ -258,7 +270,7 @@ function closeAllOverlays(e, exceptContainer) {
             setTimeout(() => { modal.style.display = 'none'; }, 300);
             if (modal === iframeOverlay) {
                 setTimeout(() => {
-                    gameIframe.src = '';
+                    purgeIframe();
                     if (systemState === 'game_run') {
                         hackOverlay.style.display = 'flex';
                         systemState = 'boot_wait';
@@ -269,7 +281,6 @@ function closeAllOverlays(e, exceptContainer) {
             }
         }
     });
-    if (!exceptContainer) mainStage.classList.remove('blur');
 }
 function openArticlesList() {
     closeAllOverlays(null, articlesListOverlay);
@@ -285,7 +296,7 @@ function openArticlesList() {
         container.appendChild(row);
     });
     articlesListOverlay.style.display = 'flex';
-    requestAnimationFrame(() => { articlesListOverlay.classList.add('active'); mainStage.classList.add('blur'); });
+    requestAnimationFrame(() => { articlesListOverlay.classList.add('active'); });
 }
 function openArticle(index) {
     closeAllOverlays(null, articleContainer);
@@ -302,7 +313,7 @@ function openArticle(index) {
             <div class="body-text text-xs opacity-50">${recData.desc}</div>
         </div>`;
     articleContainer.style.display = 'flex';
-    requestAnimationFrame(() => { articleContainer.classList.add('active'); mainStage.classList.add('blur'); });
+    requestAnimationFrame(() => { articleContainer.classList.add('active'); });
 }
 function switchArticle(index) {
     const content = document.getElementById('article-main-col');
@@ -312,8 +323,11 @@ function switchArticle(index) {
 let viewerScale = 1;
 let isDraggingViewer = false;
 let startX, startY, translateX = 0, translateY = 0;
+let viewerBackCallback = null;
+
 const viewerImg = document.getElementById('viewer-img');
-function openImageViewer(src) {
+function openImageViewer(src, backFn = null) {
+    viewerBackCallback = backFn;
     closeAllOverlays(null, imageViewerOverlay);
     viewerImg.src = src;
     viewerScale = 1;
@@ -321,11 +335,18 @@ function openImageViewer(src) {
     translateY = 0;
     updateViewerTransform();
     imageViewerOverlay.style.display = 'flex';
-    requestAnimationFrame(() => { imageViewerOverlay.classList.add('active'); mainStage.classList.add('blur'); });
+    requestAnimationFrame(() => { imageViewerOverlay.classList.add('active'); });
 }
 function closeImageViewer(e) {
     e.stopPropagation();
-    closeAllOverlays(null, null);
+    imageViewerOverlay.classList.remove('active');
+    setTimeout(() => {
+        imageViewerOverlay.style.display = 'none';
+        if (viewerBackCallback) {
+            viewerBackCallback();
+            viewerBackCallback = null;
+        }
+    }, 300);
 }
 viewerImg.addEventListener('wheel', (e) => {
     e.preventDefault();
@@ -360,7 +381,7 @@ function openCertsList() {
     certData.forEach((cert) => {
         const row = document.createElement('div');
         row.className = 'article-row'; 
-        row.onclick = () => openImageViewer(cert.img); 
+        row.onclick = () => openImageViewer(cert.img, openCertsList); 
         row.innerHTML = `
             <div class="article-row-thumb"><div class="scanlines"></div><img src="${cert.img}"></div>
             <div class="article-row-info">
@@ -371,13 +392,13 @@ function openCertsList() {
         container.appendChild(row);
     });
     certsListOverlay.style.display = 'flex';
-    requestAnimationFrame(() => { certsListOverlay.classList.add('active'); mainStage.classList.add('blur'); });
+    requestAnimationFrame(() => { certsListOverlay.classList.add('active'); });
 }
 function openRepos() {
     closeAllOverlays(null, reposContainer);
     renderReposModal();
     reposContainer.style.display = 'flex';
-    requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); });
+    requestAnimationFrame(() => { reposContainer.classList.add('active'); });
 }
 function renderReposModal() {
     const container = document.getElementById('repos-list-content');
@@ -442,7 +463,7 @@ function openSocials() {
     closeAllOverlays(null, socialsContainer);
     populateSocials();
     socialsContainer.style.display = 'flex';
-    requestAnimationFrame(() => { socialsContainer.classList.add('active'); mainStage.classList.add('blur'); });
+    requestAnimationFrame(() => { socialsContainer.classList.add('active'); });
 }
 bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
 confTrigger.addEventListener('click', () => { if (systemState === 'idle') startConf(); else resetAll(); });
@@ -563,11 +584,14 @@ window.addEventListener('resize', resizeIframe);
 function startUltrakillGame() {
     systemState = 'game_run';
     hackOverlay.style.display = 'none';
+    const iframeOverlay = document.getElementById('iframe-overlay');
     iframeOverlay.style.display = 'flex';
-    gameIframe.src = "assets/webport/Ultrakill.html";
+    const gameIframe = document.getElementById('game-iframe');
+    if(gameIframe) gameIframe.src = "assets/webport/Ultrakill.html";
     resizeIframe(); 
     setTimeout(() => {
-        gameIframe.focus();
+        const currentIframe = document.getElementById('game-iframe');
+        if(currentIframe) currentIframe.focus();
     }, 100);
 }
 function startMatrix() {
@@ -764,7 +788,29 @@ function formatTime(seconds) {
            (secs < 10 ? "0" : "") + secs;
 }
 loadSong(mCurrentIndex);
-document.addEventListener('keydown', (e) => {
+
+window.addEventListener('keydown', (e) => {
+    if (systemState === 'game_run') return;
+
+    const isInput = document.activeElement && (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA");
+    const isTerminal = systemState === 'boot_wait';
+
+    if (e.key === " " && !isInput) {
+        e.preventDefault();
+        togglePlay();
+        return;
+    }
+
+    if (!isInput && !isTerminal) {
+        if (e.key.toLowerCase() === "p") {
+            prevSong();
+            return;
+        } else if (e.key.toLowerCase() === "n") {
+            nextSong();
+            return;
+        }
+    }
+
     if (systemState === 'conf_run') {
         e.preventDefault();
         if (e.key === "ArrowDown") {
@@ -822,14 +868,5 @@ AVAILABLE COMMANDS:<br>
         }
         userInputDisplay.textContent = userInput;
         return; 
-    }
-    if(document.activeElement.tagName === "INPUT" || document.activeElement.classList.contains("playlist-item") || imageViewerOverlay.style.display === 'flex') return;
-    if (e.key.toLowerCase() === "p") {
-        prevSong();
-    } else if (e.key.toLowerCase() === "n") {
-        nextSong();
-    } else if (e.key === " ") {
-        e.preventDefault();
-        togglePlay();
     }
 });
