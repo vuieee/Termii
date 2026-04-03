@@ -160,17 +160,21 @@
             </section>
         </main>
     </div>
+    
     <div id="welcome-overlay" class="modal-overlay" onclick="closeWelcome(event)">
         <div class="welcome-modal" onclick="event.stopPropagation()">
-            <div class="welcome-header">PATCH NOTES : V1.05</div>
-            <div class="welcome-content">
-                <div class="header-text" style="font-size: 1.4rem; margin-bottom: 1.5vh; text-align: center; color: var(--term-teal); text-shadow: 0 0 10px var(--term-teal);">SYSTEM UPDATE</div>
-                <div class="body-text" style="text-align: center; margin-bottom: 3vh; color: var(--term-white); opacity: 0.8;">TERMII_ WEBGATE INITIALIZATION COMPLETE. CORE SYSTEMS OPTIMIZED.</div>
-                <div class="patch-list">
-                    <div class="patch-item">
-                        <div class="patch-title"><span style="color:var(--term-green)">[ SYSTEM ]</span> Dynamic Mobile Layout Scaling</div>
+            <div class="welcome-header">SYSTEM UPDATE LOG : V1.05</div>
+            <div class="welcome-content" style="max-height: 65vh; overflow-y: auto; padding-right: 1vw;">
+                <div style="text-align: center; margin-bottom: 4vh;">
+                    <h2 style="color: var(--term-teal); margin-bottom: 1.5vh; font-family: var(--font-head); font-size: 1.4rem; text-shadow: 0 0 10px var(--term-teal);">WELCOME VISITOR</h2>
+                    <p style="color: var(--term-white); opacity: 0.8; font-size: 0.9rem; line-height: 1.5;">TERMII_ WEBGATE INITIALIZATION COMPLETE. CORE SYSTEMS OPTIMIZED FOR RESPONSIVE PROTOCOLS.</p>
+                </div>
+
+                <div class="patch-stack">
+                    <div class="patch-box">
+                        <div class="patch-title"><span style="color:var(--term-green)">[ SYSTEM ]</span> Dynamic Layout Scaling</div>
                         <div class="patch-desc">Deployed advanced dynamic layout scaling for unified cross-platform interface rendering.</div>
-                        <details class="patch-code">
+                        <details class="patch-details">
                             <summary>> VIEW MODIFIED CODE</summary>
                             <div class="code-diff">
 <span class="diff-add">+ @media screen and (max-width: 900px) {</span>
@@ -180,22 +184,24 @@
                             </div>
                         </details>
                     </div>
-                    <div class="patch-item">
+
+                    <div class="patch-box">
                         <div class="patch-title"><span style="color:var(--term-green)">[ MEDIA ]</span> Native Audio Compression</div>
-                        <div class="patch-desc">Musiee player engine refined with native high-efficiency audio compression. Git LFS pointers removed.</div>
-                        <details class="patch-code">
+                        <div class="patch-desc">Musiee player engine refined with native high-efficiency audio compression algorithms.</div>
+                        <details class="patch-details">
                             <summary>> VIEW MODIFIED CODE</summary>
                             <div class="code-diff">
 <span class="diff-remove">- git lfs track "*.mp3"</span>
 <span class="diff-add">+ git rm --cached "assets/music/*.mp3"</span>
-<span class="diff-add">+ // Replaced 100MB+ files with 94MB 128kbps Constant Bitrate MP3s</span>
+<span class="diff-add">+ // Replaced LFS tracking with 94MB 128kbps Constant Bitrate MP3s</span>
                             </div>
                         </details>
                     </div>
-                    <div class="patch-item">
+
+                    <div class="patch-box">
                         <div class="patch-title"><span style="color:var(--term-green)">[ MODULE ]</span> ULTRAKILL Web Port Integration</div>
                         <div class="patch-desc">Unofficial ULTRAKILL Web Port securely re-integrated. Run 'ULTRAKILL' in terminal.</div>
-                        <details class="patch-code">
+                        <details class="patch-details">
                             <summary>> VIEW MODIFIED CODE</summary>
                             <div class="code-diff">
 <span class="diff-add">+ function startUltrakillGame() {</span>
@@ -205,14 +211,15 @@
                             </div>
                         </details>
                     </div>
-                    <div class="patch-item">
+
+                    <div class="patch-box">
                         <div class="patch-title"><span style="color:var(--term-green)">[ UI/UX ]</span> Z-Index Layering Correction</div>
-                        <div class="patch-desc">Matrix layering corrected. Navigation nodes remain fully interactive beneath modals.</div>
-                        <details class="patch-code">
+                        <div class="patch-desc">Matrix layering corrected. Navigation nodes and standard logic remain fully interactive globally.</div>
+                        <details class="patch-details">
                             <summary>> VIEW MODIFIED CODE</summary>
                             <div class="code-diff">
 <span class="diff-remove">- .modal-overlay { z-index: 1000; }</span>
-<span class="diff-add">+ .modal-overlay { z-index: 9990; }</span>
+<span class="diff-add">+ header, nav { z-index: 2000; position: relative; }</span>
 <span class="diff-add">+ #iframe-overlay { z-index: 9990; }</span>
                             </div>
                         </details>
@@ -222,6 +229,7 @@
             <button class="welcome-close-btn" onclick="closeWelcome(event)">[ ACKNOWLEDGE ]</button>
         </div>
     </div>
+    
     <div id="iframe-overlay" class="modal-overlay" onclick="closeGame(event)">
         <div id="game-wrapper" onclick="event.stopPropagation()">
             <iframe id="game-iframe" src="" style="border: none; outline: none; width: 100%; height: 100%;"></iframe>
