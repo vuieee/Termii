@@ -404,6 +404,7 @@ nav {
 }
 #welcome-overlay.active, #iframe-overlay.active {
     backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.7);
 }
 #image-viewer-overlay {
     z-index: 9995;
@@ -580,20 +581,17 @@ nav {
     margin: 2vh 0;
     font-family: var(--font-body);
     font-size: 0.8rem;
-    border: 1px solid var(--term-teal) !important;
 }
 .article-table th, .article-table td {
-    border: 1px solid var(--term-teal) !important;
-    padding: 1.5vh 1vw !important;
+    border: 1px solid var(--term-teal);
+    padding: 10px;
     text-align: left;
-    vertical-align: top;
 }
 .article-table th {
     background: rgba(80, 255, 247, 0.1);
     color: var(--term-teal);
     font-weight: bold;
     text-transform: uppercase;
-    border-bottom: 2px solid var(--term-teal) !important;
 }
 
 .code-wrapper {

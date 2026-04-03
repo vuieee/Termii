@@ -300,7 +300,7 @@ function closeAllOverlays(e, exceptContainer) {
     modals.forEach(modal => {
         if (modal !== exceptContainer && modal.style.display !== 'none') {
             modal.classList.remove('active');
-            setTimeout(() => { modal.style.display = 'none'; }, 400);
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
             
             if (modal === iframeOverlay) {
                 setTimeout(() => {
@@ -311,10 +311,14 @@ function closeAllOverlays(e, exceptContainer) {
                         hackOutput.innerHTML += "> ULTRAKILL ENGINE TERMINATED.<br>AWAITING COMMAND...<br>";
                         hackOutput.scrollTop = hackOutput.scrollHeight;
                     }
-                }, 400);
+                }, 300);
             }
         }
     });
+    
+    if (!exceptContainer) {
+        mainStage.classList.remove('blur');
+    }
 }
 
 function openArticlesList() {
@@ -333,6 +337,7 @@ function openArticlesList() {
     articlesListOverlay.style.display = 'flex';
     requestAnimationFrame(() => { 
         articlesListOverlay.classList.add('active'); 
+        mainStage.classList.add('blur'); 
     });
 }
 
@@ -353,6 +358,7 @@ function openArticle(index) {
     articleContainer.style.display = 'flex';
     requestAnimationFrame(() => { 
         articleContainer.classList.add('active'); 
+        mainStage.classList.add('blur'); 
     });
 }
 
@@ -420,7 +426,6 @@ function updateViewerTransform() {
     viewerImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${viewerScale})`;
 }
 
-
 function openCertsList() {
     closeAllOverlays(null, certsListOverlay);
     const container = document.getElementById('certs-list-content');
@@ -441,6 +446,7 @@ function openCertsList() {
     certsListOverlay.style.display = 'flex';
     requestAnimationFrame(() => { 
         certsListOverlay.classList.add('active'); 
+        mainStage.classList.add('blur'); 
     });
 }
 
@@ -450,6 +456,7 @@ function openRepos() {
     reposContainer.style.display = 'flex';
     requestAnimationFrame(() => { 
         reposContainer.classList.add('active'); 
+        mainStage.classList.add('blur'); 
     });
 }
 
@@ -520,6 +527,7 @@ function openSocials() {
     socialsContainer.style.display = 'flex';
     requestAnimationFrame(() => { 
         socialsContainer.classList.add('active'); 
+        mainStage.classList.add('blur'); 
     });
 }
 
