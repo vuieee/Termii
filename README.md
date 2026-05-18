@@ -1,10 +1,10 @@
 <div align="center">
 
-  <img src="assets/images/termiimainsection.png" width="100%" alt="Termii Header" />
-
   # ▀▄▀▄▀▄ 𝚃𝙴𝚁𝙼𝙸𝙸_ ▄▀▄▀▄▀
   
   **A STYLIZED TERMINAL WESBITE // WEBCORE // ANIME AESTHETIC**
+
+  <img src="assets/images/termiimainsection.png" width="100%" alt="Termii Header" />
 
   [![Status](https://img.shields.io/website?label=SYSTEM&style=for-the-badge&url=https%3A%2F%2Fvuieee.github.io%2FTermii%2F)](https://vuieee.github.io/Termii/)
   [![License](https://img.shields.io/badge/LICENSE-MIT-50fff7?style=for-the-badge&labelColor=000000)](LICENSE)
