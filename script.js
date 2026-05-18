@@ -5,6 +5,7 @@ const icons = {
     gmail: `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819v-5.818l-5.454-3.818v9.636h-2.182v-9.636l-5.455 3.818v5.818h-3.818c-.904 0-1.636-.732-1.636-1.636v-13.909c0-.219.046-.432.129-.627l10.91 7.636 10.909-7.636c.083.195.129.409.129.627z"/></svg>`
 };
 
+// Copies the adjacent code block text to clipboard and gives brief visual feedback.
 function copyCode(btn) {
     const codeText = btn.previousElementSibling.innerText;
     navigator.clipboard.writeText(codeText).then(() => {
@@ -27,8 +28,7 @@ The Arch Wiki is the holy grail here. After flashing the ISO to a USB, you boot 
         <div class="code-wrapper"><div class="code-content">fdisk /dev/nvme0n1</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
     </td></tr>
     <tr><td>2</td><td>Formatting the partitions</td><td>
-        <div class="code-wrapper"><div class="code-content">mkfs.ext4 /dev/nvme0n1p2
-mkfs.fat -F 32 /dev/nvme0n1p1</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+        <div class="code-wrapper"><div class="code-content">mkfs.ext4 /dev/nvme0n1p2\nmkfs.fat -F 32 /dev/nvme0n1p1</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
     </td></tr>
     <tr><td>3</td><td>Installing the base system</td><td>
         <div class="code-wrapper"><div class="code-content">pacstrap /mnt base linux linux-firmware neovim git</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
@@ -66,12 +66,7 @@ Here is the definitive guide to getting VRR working on Xorg.
         <td>
             <div class="code-wrapper"><div class="code-content">sudo nano /etc/X11/xorg.conf.d/20-amdgpu.conf</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
             Add this block:
-            <div class="code-wrapper"><div class="code-content">Section "Device"
-    Identifier "AMD"
-    Driver "amdgpu"
-    Option "TearFree" "true"
-    Option "VariableRefresh" "true"
-EndSection</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
+            <div class="code-wrapper"><div class="code-content">Section "Device"\n    Identifier "AMD"\n    Driver "amdgpu"\n    Option "TearFree" "true"\n    Option "VariableRefresh" "true"\nEndSection</div><button class="copy-btn" onclick="copyCode(this)">COPY</button></div>
         </td>
     </tr>
     <tr>
@@ -96,105 +91,104 @@ Keep in mind: On Xorg, VRR only works when a single window is fullscreen and unc
 
 const articlesData = [
     { title: "SWITCHING TO LINUX", img: "assets/images/rice1.png", desc: "Why I moved from Windows to Arch, and why Window Managers are superior.", longText: article1Text },
-    { title: "ENABLE VRR XORG", img: "assets/images/xorg.png", desc: "Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.", longText: article2Text }
+    { title: "ENABLE VRR XORG",    img: "assets/images/xorg.png",  desc: "Deep dive into Variable Refresh Rate (FreeSync/G-Sync) configuration.", longText: article2Text }
 ];
 
 const reposData = [
-    { name: "DUSKY", lang: "CSS", desc: "My saved .dotfiles for my current linux install made by dusky.", date: "2024", url: "https://github.com/vuieee/dusky" },
-    { name: "TERMII", lang: "HTML", desc: "A stylized terminal website.", date: "2026", url: "https://github.com/vuieee/Termii" },
-    { name: "SPOTIFYGITHUBRP", lang: "JS", desc: "Spotify Rich Presence for Github.", date: "2025", url: "https://github.com/vuieee/SpotifyGithubRP" }
+    { name: "DUSKY",           lang: "CSS",  desc: "My saved .dotfiles for my current linux install made by dusky.", date: "2024", url: "https://github.com/vuieee/dusky" },
+    { name: "TERMII",          lang: "HTML", desc: "A stylized terminal website.",                                    date: "2026", url: "https://github.com/vuieee/Termii" },
+    { name: "SPOTIFYGITHUBRP", lang: "JS",   desc: "Spotify Rich Presence for Github.",                              date: "2025", url: "https://github.com/vuieee/SpotifyGithubRP" }
 ];
 
+// Picks 2 random repos and renders them into the homepage card strip.
 function loadRecommendedRepos() {
-    const shuffled = [...reposData].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 2);
+    const selected  = [...reposData].sort(() => 0.5 - Math.random()).slice(0, 2);
     const container = document.getElementById('recommended-repos');
     container.innerHTML = '';
     selected.forEach(repo => {
         container.innerHTML += `
             <div class="repo-card">
                 <div class="header-text" style="margin-bottom:0.5vh;">${repo.name}</div>
-                <div class="body-text text-xs opacity-50">${repo.lang} • <br>${repo.desc}</div>
+                <div class="body-text text-xs opacity-50">${repo.lang} •<br>${repo.desc}</div>
                 <button class="btn-get" onclick="window.open('${repo.url}', '_blank')">GET</button>
-            </div>
-        `;
+            </div>`;
     });
 }
 loadRecommendedRepos();
 
 const socialData = [
-    { name: "Discord", icon: icons.discord, link: "https://discord.com", img: "assets/images/discordthumbail.png", desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
-    { name: "LinkedIn", icon: icons.linkedin, link: "https://linkedin.com", img: "assets/images/linkedinthumbnail.png", desc: "Manage your professional identity. Build and engage with your professional network." },
-    { name: "Github", icon: icons.github, link: "https://github.com/vuieee", img: "assets/images/githubthumbnail.png", desc: "My open source repositories." },
-    { name: "Gmail", icon: icons.gmail, link: "mailto:user@gmail.com", img: "assets/images/gmailthumbnail.png", desc: "Send me a direct message." }
+    { name: "Discord",  icon: icons.discord,  link: "https://discord.com",          img: "assets/images/discordthumbail.png",  desc: "A place to talk, chat, hang out, and stay close with your friends and communities." },
+    { name: "LinkedIn", icon: icons.linkedin,  link: "https://linkedin.com",          img: "assets/images/linkedinthumbnail.png",desc: "Manage your professional identity. Build and engage with your professional network." },
+    { name: "Github",   icon: icons.github,    link: "https://github.com/vuieee",     img: "assets/images/githubthumbnail.png",  desc: "My open source repositories." },
+    { name: "Gmail",    icon: icons.gmail,     link: "mailto:user@gmail.com",         img: "assets/images/gmailthumbnail.png",   desc: "Send me a direct message." }
 ];
 
 const certData = [
-    { title: "Introduction to Git", img: "assets/images/Introduction to Git.png", desc: "DataCamp Statement of Accomplishment", date: "Mar 29, 2026" },
-    { title: "Intermediate Git", img: "assets/images/Intermediate Git.png", desc: "DataCamp Statement of Accomplishment", date: "Mar 29, 2026" },
-    { title: "Introduction to SQL", img: "assets/images/Introduction to SQL.png", desc: "DataCamp Statement of Accomplishment", date: "Nov 14, 2025" },
-    { title: "Intermediate SQL", img: "assets/images/Intermediate SQL.png", desc: "DataCamp Statement of Accomplishment", date: "Nov 24, 2025" }
+    { title: "Introduction to Git",  img: "assets/images/Introduction to Git.png",  desc: "DataCamp Statement of Accomplishment", date: "Mar 29, 2026" },
+    { title: "Intermediate Git",     img: "assets/images/Intermediate Git.png",     desc: "DataCamp Statement of Accomplishment", date: "Mar 29, 2026" },
+    { title: "Introduction to SQL",  img: "assets/images/Introduction to SQL.png",  desc: "DataCamp Statement of Accomplishment", date: "Nov 14, 2025" },
+    { title: "Intermediate SQL",     img: "assets/images/Intermediate SQL.png",     desc: "DataCamp Statement of Accomplishment", date: "Nov 24, 2025" }
 ];
 
 const musieeSongs = [
     { title: "it's 5a.m and i couldn't sleep", artist: "Local Audio", src: "assets/music/it's 5a.m and i couldn't sleep.mp3" },
-    { title: "late night lofi", artist: "Local Audio", src: "assets/music/late night lofi.mp3" }
+    { title: "late night lofi",                artist: "Local Audio", src: "assets/music/late night lofi.mp3" }
 ];
 
 const confData = [
-    { name: "lainheader.png", type: "image", src: "assets/images/lainheader.png", size: "1.2 MB", desc: "Main header image for the landing page." },
-    { name: "rice1.png", type: "image", src: "assets/images/rice1.png", size: "3.4 MB", desc: "Screenshot of Arch Linux window manager setup." },
-    { name: "xorg.png", type: "image", src: "assets/images/xorg.png", size: "840 KB", desc: "Configuration snippet for VRR on X11." },
-    { name: "lain.gif", type: "image", src: "assets/images/lain.gif", size: "5.1 MB", desc: "Animated screen feed loop." },
-    { name: "sys_config.txt", type: "text", src: "SYSTEM_CFG=1\nVRR_ENABLED=true\nNET_PROXY=10.0.0.1\nPORT_FWD=8080\nDEBUG_MODE=false\n\n# NOTE: DO NOT MODIFY CORE VALUES\n# OVERRIDE AT OWN RISK.", size: "2 KB", desc: "System configuration parameters." }
+    { name: "lainheader.png", type: "image", src: "assets/images/lainheader.png",  size: "1.2 MB", desc: "Main header image for the landing page." },
+    { name: "rice1.png",      type: "image", src: "assets/images/rice1.png",       size: "3.4 MB", desc: "Screenshot of Arch Linux window manager setup." },
+    { name: "xorg.png",       type: "image", src: "assets/images/xorg.png",        size: "840 KB", desc: "Configuration snippet for VRR on X11." },
+    { name: "lain.gif",       type: "image", src: "assets/images/lain.gif",        size: "5.1 MB", desc: "Animated screen feed loop." },
+    { name: "sys_config.txt", type: "text",  src: "SYSTEM_CFG=1\nVRR_ENABLED=true\nNET_PROXY=10.0.0.1\nPORT_FWD=8080\nDEBUG_MODE=false\n\n# NOTE: DO NOT MODIFY CORE VALUES\n# OVERRIDE AT OWN RISK.", size: "2 KB", desc: "System configuration parameters." }
 ];
 
 let confCurrentItemIdx = 0;
 
-const bootTrigger = document.getElementById('boot-trigger');
-const confTrigger = document.getElementById('conf-trigger');
+// DOM references — grouped by feature area.
+const bootTrigger   = document.getElementById('boot-trigger');
+const confTrigger   = document.getElementById('conf-trigger');
 const screenTrigger = document.getElementById('screen-trigger');
-const navHome = document.getElementById('nav-home');
-const navArticles = document.getElementById('nav-articles');
-const navRepos = document.getElementById('nav-repos');
-const navSocials = document.getElementById('nav-socials');
-const navCerts = document.getElementById('nav-certs');
-const lainImg = document.getElementById('lain-img');
-const hackOverlay = document.getElementById('hack-overlay');
-const confOverlay = document.getElementById('conf-overlay');
-const matrixCanvas = document.getElementById('matrix-canvas');
-
+const navHome       = document.getElementById('nav-home');
+const navArticles   = document.getElementById('nav-articles');
+const navRepos      = document.getElementById('nav-repos');
+const navSocials    = document.getElementById('nav-socials');
+const navCerts      = document.getElementById('nav-certs');
+const lainImg       = document.getElementById('lain-img');
+const hackOverlay   = document.getElementById('hack-overlay');
+const confOverlay   = document.getElementById('conf-overlay');
+const matrixCanvas  = document.getElementById('matrix-canvas');
 const iframeOverlay = document.getElementById('iframe-overlay');
-const welcomeOverlay = document.getElementById('welcome-overlay');
 
-const articleContainer = document.getElementById('article-overlay-container');
+const articleContainer    = document.getElementById('article-overlay-container');
 const articlesListOverlay = document.getElementById('articles-list-overlay');
-const reposContainer = document.getElementById('repos-overlay-container');
-const socialsContainer = document.getElementById('socials-overlay-container');
-const certsListOverlay = document.getElementById('certs-list-overlay');
-const imageViewerOverlay = document.getElementById('image-viewer-overlay');
+const reposContainer      = document.getElementById('repos-overlay-container');
+const socialsContainer    = document.getElementById('socials-overlay-container');
+const certsListOverlay    = document.getElementById('certs-list-overlay');
+const imageViewerOverlay  = document.getElementById('image-viewer-overlay');
 
-const mainStage = document.getElementById('main-stage');
-const hackOutput = document.getElementById('hack-output');
-const hackInputLine = document.getElementById('hack-input-line');
+const mainStage        = document.getElementById('main-stage');
+const hackOutput       = document.getElementById('hack-output');
+const hackInputLine    = document.getElementById('hack-input-line');
 const userInputDisplay = document.getElementById('user-input');
 
+// All images are preloaded before the loading bar completes.
 const allImages = [
-    "assets/images/lainheader.png", "assets/images/lain.gif", "assets/images/rice1.png", 
-    "assets/images/xorg.png", "assets/images/discordthumbail.png", "assets/images/linkedinthumbnail.png",
+    "assets/images/lainheader.png", "assets/images/lain.gif",             "assets/images/rice1.png",
+    "assets/images/xorg.png",       "assets/images/discordthumbail.png",  "assets/images/linkedinthumbnail.png",
     "assets/images/githubthumbnail.png", "assets/images/gmailthumbnail.png"
 ];
 
-let loadedCount = 0;
-const totalImages = allImages.length;
+let loadedCount     = 0;
+const totalImages   = allImages.length;
 const loadingScreen = document.getElementById('loading-screen');
-const loadingBar = document.getElementById('loading-bar');
-const mainContent = document.getElementById('main-content');
+const loadingBar    = document.getElementById('loading-bar');
+const mainContent   = document.getElementById('main-content');
 
+// Increments the progress bar on each asset resolve; reveals the UI once all assets are done.
 function checkLoad() {
     loadedCount++;
-    const pct = Math.floor((loadedCount / totalImages) * 100);
-    loadingBar.style.width = pct + "%";
+    loadingBar.style.width = Math.floor((loadedCount / totalImages) * 100) + "%";
     if (loadedCount >= totalImages) {
         setTimeout(() => {
             loadingScreen.style.opacity = 0;
@@ -203,11 +197,8 @@ function checkLoad() {
                 loadingScreen.style.display = 'none';
                 document.getElementById('lain-img').src = "assets/images/lainheader.png";
                 document.querySelectorAll('.article-thumb img').forEach((img, idx) => {
-                    if(articlesData[idx]) img.src = articlesData[idx].img;
+                    if (articlesData[idx]) img.src = articlesData[idx].img;
                 });
-                
-                setTimeout(openWelcome, 500);
-                
             }, 500);
         }, 200);
     }
@@ -215,18 +206,21 @@ function checkLoad() {
 
 allImages.forEach(src => {
     const img = new Image();
-    img.onload = checkLoad; img.onerror = checkLoad; img.src = src;
+    img.onload = checkLoad;
+    img.onerror = checkLoad;
+    img.src = src;
 });
 
-let systemState = 'idle'; let userInput = ""; let intervals = []; let closeTimeout = null;
+let systemState  = 'idle';
+let userInput    = "";
+let intervals    = [];
+let closeTimeout = null;
 
+// Replaces the game iframe element entirely to unload the WebGL context and free GPU memory.
 function purgeIframe() {
-    const wrapper = document.getElementById('game-wrapper');
+    const wrapper   = document.getElementById('game-wrapper');
     const oldIframe = document.getElementById('game-iframe');
-    if (oldIframe) {
-        oldIframe.src = 'about:blank';
-        oldIframe.remove();
-    }
+    if (oldIframe) { oldIframe.src = 'about:blank'; oldIframe.remove(); }
     if (wrapper) {
         const newIframe = document.createElement('iframe');
         newIframe.id = 'game-iframe';
@@ -235,50 +229,38 @@ function purgeIframe() {
     }
 }
 
+// Returns the left panel to its idle state, clears all intervals and terminal content.
 function resetAll() {
-    systemState = 'idle'; 
-    intervals.forEach(clearInterval); 
+    systemState = 'idle';
+    intervals.forEach(clearInterval);
     intervals = [];
-    hackOverlay.style.display = 'none'; 
-    confOverlay.style.display = 'none';
-    matrixCanvas.style.display = 'none'; 
+
+    hackOverlay.style.display  = 'none';
+    confOverlay.style.display  = 'none';
+    matrixCanvas.style.display = 'none';
     matrixCanvas.style.opacity = '0';
-    
     if (iframeOverlay) iframeOverlay.style.display = 'none';
     purgeIframe();
-    
+
     const ctx = matrixCanvas.getContext('2d');
     ctx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-    
-    lainImg.style.opacity = '1'; 
+
+    lainImg.style.opacity = '1';
     lainImg.src = 'assets/images/lainheader.png';
-    bootTrigger.textContent = "TERMINAL"; bootTrigger.classList.remove('active');
-    confTrigger.textContent = "CONF"; confTrigger.classList.remove('active');
-    screenTrigger.textContent = "FEED"; screenTrigger.classList.remove('active');
-    
-    hackOutput.innerHTML = ""; 
-    userInput = "";
+
+    bootTrigger.textContent   = "TERMINAL"; bootTrigger.classList.remove('active');
+    confTrigger.textContent   = "CONF";     confTrigger.classList.remove('active');
+    screenTrigger.textContent = "FEED";     screenTrigger.classList.remove('active');
+
+    hackOutput.innerHTML       = "";
+    userInput                  = "";
     userInputDisplay.textContent = "";
     hideMobileTermInput();
 }
 
-function openWelcome() {
-    welcomeOverlay.style.display = 'flex';
-    requestAnimationFrame(() => { 
-        welcomeOverlay.classList.add('active'); 
-    });
-}
-
-function closeWelcome(e) {
-    if(e) e.stopPropagation();
-    welcomeOverlay.classList.remove('active');
-    setTimeout(() => { 
-        welcomeOverlay.style.display = 'none'; 
-    }, 500);
-}
-
+// Dismisses the game overlay and resumes the terminal prompt if it was active before launch.
 function closeGame(e) {
-    if(e) e.stopPropagation();
+    if (e) e.stopPropagation();
     iframeOverlay.classList.remove('active');
     setTimeout(() => {
         iframeOverlay.style.display = 'none';
@@ -294,15 +276,15 @@ function closeGame(e) {
     }, 400);
 }
 
+// Closes all content modals at once. Pass exceptContainer to keep one layer visible.
 function closeAllOverlays(e, exceptContainer) {
-    if(closeTimeout) clearTimeout(closeTimeout);
-    const modals = [articleContainer, articlesListOverlay, reposContainer, socialsContainer, certsListOverlay, imageViewerOverlay, welcomeOverlay, iframeOverlay];
-    
+    if (closeTimeout) clearTimeout(closeTimeout);
+    const modals = [articleContainer, articlesListOverlay, reposContainer, socialsContainer, certsListOverlay, imageViewerOverlay, iframeOverlay];
+
     modals.forEach(modal => {
         if (modal !== exceptContainer && modal.style.display !== 'none') {
             modal.classList.remove('active');
             setTimeout(() => { modal.style.display = 'none'; }, 300);
-            
             if (modal === iframeOverlay) {
                 setTimeout(() => {
                     purgeIframe();
@@ -316,10 +298,8 @@ function closeAllOverlays(e, exceptContainer) {
             }
         }
     });
-    
-    if (!exceptContainer) {
-        mainStage.classList.remove('blur');
-    }
+
+    if (!exceptContainer) mainStage.classList.remove('blur');
 }
 
 function openArticlesList() {
@@ -336,17 +316,15 @@ function openArticlesList() {
         container.appendChild(row);
     });
     articlesListOverlay.style.display = 'flex';
-    requestAnimationFrame(() => { 
-        articlesListOverlay.classList.add('active'); 
-        mainStage.classList.add('blur'); 
-    });
+    requestAnimationFrame(() => { articlesListOverlay.classList.add('active'); mainStage.classList.add('blur'); });
 }
 
 function openArticle(index) {
     closeAllOverlays(null, articleContainer);
-    const data = articlesData[index];
+    const data       = articlesData[index];
     const otherIndex = (index === 0) ? 1 : 0;
-    const recData = articlesData[otherIndex];
+    const recData    = articlesData[otherIndex];
+
     document.getElementById('exp-title').textContent = data.title;
     document.getElementById('exp-img').src = data.img;
     document.getElementById('exp-text').innerHTML = data.longText;
@@ -356,20 +334,19 @@ function openArticle(index) {
             <div class="rec-thumb"><div class="scanlines"></div><img src="${recData.img}"></div>
             <div class="body-text text-xs opacity-50">${recData.desc}</div>
         </div>`;
+
     articleContainer.style.display = 'flex';
-    requestAnimationFrame(() => { 
-        articleContainer.classList.add('active'); 
-        mainStage.classList.add('blur'); 
-    });
+    requestAnimationFrame(() => { articleContainer.classList.add('active'); mainStage.classList.add('blur'); });
 }
 
+// Fades out, swaps article content, and resets scroll without re-opening the modal.
 function switchArticle(index) {
     const content = document.getElementById('article-main-col');
     content.classList.add('switching');
     setTimeout(() => { openArticle(index); content.scrollTop = 0; content.classList.remove('switching'); }, 200);
 }
 
-let viewerScale = 1;
+let viewerScale      = 1;
 let isDraggingViewer = false;
 let startX, startY, translateX = 0, translateY = 0;
 
@@ -377,51 +354,38 @@ const viewerImg = document.getElementById('viewer-img');
 
 function openImageViewer(src) {
     viewerImg.src = src;
-    viewerScale = 1;
-    translateX = 0;
-    translateY = 0;
+    viewerScale = 1; translateX = 0; translateY = 0;
     updateViewerTransform();
     imageViewerOverlay.style.display = 'flex';
-    requestAnimationFrame(() => { 
-        imageViewerOverlay.classList.add('active'); 
-    });
+    requestAnimationFrame(() => { imageViewerOverlay.classList.add('active'); });
 }
 
 function closeImageViewer(e) {
     e.stopPropagation();
     imageViewerOverlay.classList.remove('active');
-    setTimeout(() => {
-        imageViewerOverlay.style.display = 'none';
-        viewerImg.src = '';
-    }, 300);
+    setTimeout(() => { imageViewerOverlay.style.display = 'none'; viewerImg.src = ''; }, 300);
 }
 
+// Scroll-to-zoom on the certificate viewer image.
 viewerImg.addEventListener('wheel', (e) => {
     e.preventDefault();
-    const zoomSensitivity = 0.15;
-    if (e.deltaY < 0) viewerScale += zoomSensitivity;
-    else viewerScale -= zoomSensitivity;
-    viewerScale = Math.max(0.5, Math.min(viewerScale, 5)); 
+    viewerScale += (e.deltaY < 0) ? 0.15 : -0.15;
+    viewerScale = Math.max(0.5, Math.min(viewerScale, 5));
     updateViewerTransform();
 });
-
 viewerImg.addEventListener('mousedown', (e) => {
     e.preventDefault();
     isDraggingViewer = true;
     startX = e.clientX - translateX;
     startY = e.clientY - translateY;
 });
-
 window.addEventListener('mousemove', (e) => {
     if (!isDraggingViewer) return;
     translateX = e.clientX - startX;
     translateY = e.clientY - startY;
     updateViewerTransform();
 });
-
-window.addEventListener('mouseup', () => {
-    isDraggingViewer = false;
-});
+window.addEventListener('mouseup', () => { isDraggingViewer = false; });
 
 function updateViewerTransform() {
     viewerImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${viewerScale})`;
@@ -431,52 +395,44 @@ function openCertsList() {
     closeAllOverlays(null, certsListOverlay);
     const container = document.getElementById('certs-list-content');
     container.innerHTML = '';
-    certData.forEach((cert) => {
+    certData.forEach(cert => {
         const row = document.createElement('div');
-        row.className = 'article-row'; 
-        row.onclick = () => openImageViewer(cert.img); 
+        row.className = 'article-row';
+        row.onclick = () => openImageViewer(cert.img);
         row.innerHTML = `
             <div class="article-row-thumb"><div class="scanlines"></div><img src="${cert.img}"></div>
             <div class="article-row-info">
                 <div class="article-row-title">${cert.title}</div>
                 <div class="article-row-desc">${cert.desc}</div>
-                <div class="article-row-desc" style="margin-top: 5px; color: var(--term-teal); opacity: 1;">${cert.date}</div>
+                <div class="article-row-desc" style="margin-top:5px; color:var(--term-teal); opacity:1;">${cert.date}</div>
             </div>`;
         container.appendChild(row);
     });
     certsListOverlay.style.display = 'flex';
-    requestAnimationFrame(() => { 
-        certsListOverlay.classList.add('active'); 
-        mainStage.classList.add('blur'); 
-    });
+    requestAnimationFrame(() => { certsListOverlay.classList.add('active'); mainStage.classList.add('blur'); });
 }
 
 function openRepos() {
     closeAllOverlays(null, reposContainer);
     renderReposModal();
     reposContainer.style.display = 'flex';
-    requestAnimationFrame(() => { 
-        reposContainer.classList.add('active'); 
-        mainStage.classList.add('blur'); 
-    });
+    requestAnimationFrame(() => { reposContainer.classList.add('active'); mainStage.classList.add('blur'); });
 }
 
+// Re-renders the repo list on every search / filter / sort input event.
 function renderReposModal() {
     const container = document.getElementById('repos-list-content');
     const searchVal = document.getElementById('repo-search').value.toLowerCase();
-    const langVal = document.getElementById('repo-lang').value;
-    const sortVal = document.getElementById('repo-sort').value;
+    const langVal   = document.getElementById('repo-lang').value;
+    const sortVal   = document.getElementById('repo-sort').value;
     container.innerHTML = '';
-    let filtered = reposData.filter(repo => {
-        const matchesSearch = repo.name.toLowerCase().includes(searchVal) || repo.desc.toLowerCase().includes(searchVal);
-        const matchesLang = langVal === 'ALL' || repo.lang.includes(langVal);
-        return matchesSearch && matchesLang;
-    });
-    filtered.sort((a, b) => {
-        if (sortVal === 'new') return a.name.localeCompare(b.name);
-        if (sortVal === 'old') return b.name.localeCompare(a.name);
-        if (sortVal === 'name') return a.name.localeCompare(b.name);
-    });
+
+    let filtered = reposData.filter(r =>
+        (r.name.toLowerCase().includes(searchVal) || r.desc.toLowerCase().includes(searchVal)) &&
+        (langVal === 'ALL' || r.lang.includes(langVal))
+    );
+    filtered.sort((a, b) => sortVal === 'old' ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name));
+
     filtered.forEach(repo => {
         const card = document.createElement('div');
         card.className = 'repo-row-card';
@@ -492,19 +448,21 @@ document.getElementById('repo-search').addEventListener('input', renderReposModa
 document.getElementById('repo-lang').addEventListener('change', renderReposModal);
 document.getElementById('repo-sort').addEventListener('change', renderReposModal);
 
+// Builds the socials panel: left column is a list, right column shows a live preview on hover/select.
 function populateSocials() {
     const listContainer = document.getElementById('socials-list-container');
     listContainer.innerHTML = '';
-    if(socialData.length > 0) {
+    if (socialData.length > 0) {
         document.getElementById('soc-prev-img').src = socialData[0].img;
         document.getElementById('soc-prev-desc').textContent = socialData[0].desc;
     }
     socialData.forEach((item, index) => {
         const capsule = document.createElement('div');
         capsule.className = 'social-capsule';
+
         const info = document.createElement('div');
         info.className = 'social-info';
-        if(index === 0) info.classList.add('active');
+        if (index === 0) info.classList.add('active');
         info.innerHTML = `${item.icon} <span class="header-text" style="font-size:0.7rem; margin:0;">${item.name}</span>`;
         info.onclick = () => {
             document.getElementById('soc-prev-img').src = item.img;
@@ -512,10 +470,12 @@ function populateSocials() {
             document.querySelectorAll('.social-info').forEach(el => el.classList.remove('active'));
             info.classList.add('active');
         };
+
         const arrow = document.createElement('div');
         arrow.className = 'social-arrow';
-        arrow.innerHTML = '&#8599;'; 
+        arrow.innerHTML = '&#8599;';
         arrow.onclick = () => window.open(item.link, '_blank');
+
         capsule.appendChild(info);
         capsule.appendChild(arrow);
         listContainer.appendChild(capsule);
@@ -526,74 +486,92 @@ function openSocials() {
     closeAllOverlays(null, socialsContainer);
     populateSocials();
     socialsContainer.style.display = 'flex';
-    requestAnimationFrame(() => { 
-        socialsContainer.classList.add('active'); 
-        mainStage.classList.add('blur'); 
-    });
+    requestAnimationFrame(() => { socialsContainer.classList.add('active'); mainStage.classList.add('blur'); });
 }
 
-bootTrigger.addEventListener('click', () => { if (systemState === 'idle') startBoot(); else resetAll(); });
-confTrigger.addEventListener('click', () => { if (systemState === 'idle') startConf(); else resetAll(); });
-screenTrigger.addEventListener('click', () => { if (systemState === 'idle') { systemState = 'screen_gif'; lainImg.src = 'assets/images/lain.gif'; screenTrigger.textContent = 'EXIT'; screenTrigger.classList.add('active'); } else { resetAll(); } });
+// Easter egg sub-nav: each trigger toggles its panel; any active panel resets on second click.
+bootTrigger.addEventListener('click',   () => { if (systemState === 'idle') startBoot(); else resetAll(); });
+confTrigger.addEventListener('click',   () => { if (systemState === 'idle') startConf(); else resetAll(); });
+screenTrigger.addEventListener('click', () => {
+    if (systemState === 'idle') {
+        systemState = 'screen_gif';
+        lainImg.src = 'assets/images/lain.gif';
+        screenTrigger.textContent = 'EXIT';
+        screenTrigger.classList.add('active');
+    } else { resetAll(); }
+});
 
-navHome.addEventListener('click', () => { closeAllOverlays(null, null); closeMobileNav(); });
+// Main nav: close the mobile menu after each selection.
+navHome.addEventListener('click',     () => { closeAllOverlays(null, null); closeMobileNav(); });
 navArticles.addEventListener('click', () => { openArticlesList(); closeMobileNav(); });
-navRepos.addEventListener('click', () => { openRepos(); closeMobileNav(); });
-navSocials.addEventListener('click', () => { openSocials(); closeMobileNav(); });
-navCerts.addEventListener('click', () => { openCertsList(); closeMobileNav(); });
+navRepos.addEventListener('click',    () => { openRepos();        closeMobileNav(); });
+navSocials.addEventListener('click',  () => { openSocials();      closeMobileNav(); });
+navCerts.addEventListener('click',    () => { openCertsList();    closeMobileNav(); });
 
-/* ---- Hamburger Menu ---- */
+// Hamburger nav — collapses when a nav item is selected or the user taps outside.
 const mobileNavToggle = document.getElementById('mobile-nav-toggle');
-const mainNav = document.getElementById('main-nav');
+const mainNav         = document.getElementById('main-nav');
 
-function closeMobileNav() {
-    if (mainNav) mainNav.classList.remove('open');
-}
+function closeMobileNav() { if (mainNav) mainNav.classList.remove('open'); }
 
 if (mobileNavToggle) {
-    mobileNavToggle.addEventListener('click', () => {
-        mainNav.classList.toggle('open');
-    });
+    mobileNavToggle.addEventListener('click', () => { mainNav.classList.toggle('open'); });
 }
 
+// Runs the kernel progress-bar animation, then enters command-prompt state.
 function startBoot() {
-    systemState = 'boot_loading'; hackOverlay.style.display = 'flex'; lainImg.style.opacity = '0';
-    bootTrigger.textContent = "EXIT"; bootTrigger.classList.add('active');
-    hackOutput.innerHTML = "INITIALIZING KERNEL..."; hackInputLine.style.display = 'none';
+    systemState = 'boot_loading';
+    hackOverlay.style.display = 'flex';
+    lainImg.style.opacity     = '0';
+    bootTrigger.textContent   = "EXIT";
+    bootTrigger.classList.add('active');
+    hackOutput.innerHTML      = "INITIALIZING KERNEL...";
+    hackInputLine.style.display = 'none';
+
     let progress = 0;
     const bootInt = setInterval(() => {
-        progress++; let bar = "["; for(let i=0; i<20; i++) bar += (i < progress) ? "|" : "."; bar += "]";
+        progress++;
+        let bar = "[";
+        for (let i = 0; i < 20; i++) bar += (i < progress) ? "|" : ".";
+        bar += "]";
         hackOutput.innerHTML = "INITIALIZING KERNEL...<br>" + bar;
-        if(progress >= 20) { clearInterval(bootInt); showLoginPrompt(); }
+        if (progress >= 20) { clearInterval(bootInt); showLoginPrompt(); }
     }, 50);
     intervals.push(bootInt);
 }
 
-function showLoginPrompt() { 
-    systemState = 'boot_wait'; 
-    hackOutput.innerHTML += "<br><br>SYSTEM BOOT INITIATED...<br>AWAITING COMMAND...<br>Type HELP for a list of commands.<br>"; 
-    hackInputLine.style.display = 'block'; 
+// Displays the terminal prompt and activates keyboard + mobile input.
+function showLoginPrompt() {
+    systemState = 'boot_wait';
+    hackOutput.innerHTML += "<br><br>SYSTEM BOOT INITIATED...<br>AWAITING COMMAND...<br>Type HELP for a list of commands.<br>";
+    hackInputLine.style.display = 'block';
     hackOutput.scrollTop = hackOutput.scrollHeight;
     showMobileTermInput();
 }
 
-/* ---- Mobile Terminal Input ---- */
-const mobileTermRow = document.getElementById('mobile-term-row');
-const mobileTermInput = document.getElementById('mobile-term-input');
+// Mobile terminal input elements.
+const mobileTermRow    = document.getElementById('mobile-term-row');
+const mobileTermInput  = document.getElementById('mobile-term-input');
 const mobileTermSubmit = document.getElementById('mobile-term-submit');
 
+// Adds the .active class to reveal the mobile input row.
+// CSS owns the display logic — no inline style conflicts with the responsive rules.
 function showMobileTermInput() {
-    if (mobileTermRow) mobileTermRow.style.display = 'flex';
-    if (mobileTermInput) { mobileTermInput.value = ''; mobileTermInput.focus(); }
+    if (mobileTermRow) {
+        mobileTermRow.classList.add('active');
+        if (mobileTermInput) { mobileTermInput.value = ''; mobileTermInput.focus(); }
+    }
 }
 
 function hideMobileTermInput() {
-    if (mobileTermRow) mobileTermRow.style.display = 'none';
+    if (mobileTermRow) mobileTermRow.classList.remove('active');
 }
 
+// Shared command dispatcher used by both the mobile submit button and Enter key.
 function processMobileTermCommand(cmd) {
     if (!cmd) return;
     const upper = cmd.toUpperCase();
+
     if (upper === 'START') {
         hackOutput.innerHTML += `> START<br>ACCESS GRANTED.<br>----------------<br>`;
         hideMobileTermInput();
@@ -633,26 +611,26 @@ if (mobileTermInput) {
     mobileTermInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            const val = mobileTermInput.value.trim();
-            processMobileTermCommand(val);
+            processMobileTermCommand(mobileTermInput.value.trim());
             mobileTermInput.value = '';
         }
     });
 }
 
+// Sequentially animates each boot task with random dot-fill timing, then triggers the matrix.
 function startSystemBoot() {
     systemState = 'ultrakill_boot';
     hackInputLine.style.display = 'none';
-    
+
     const tasks = [
-        { name: "Loading Bootloader", result: "OK", color: "var(--term-green)" },
-        { name: "Mounting Virtual FS", result: "OK", color: "var(--term-green)" },
-        { name: "Checking CPU Microcode", result: "OK", color: "var(--term-green)" },
-        { name: "Allocating Memory Pages", result: "16384M OK", color: "var(--term-green)" },
-        { name: "Initializing GPU Drivers", result: "OK", color: "var(--term-green)" },
-        { name: "Loading Kernel Modules", result: "OK", color: "var(--term-green)" },
-        { name: "Starting System Daemons", result: "OK", color: "var(--term-green)" },
-        { name: "Verifying Security Hashes", result: "OK", color: "var(--term-green)" }
+        { name: "Loading Bootloader",       result: "OK",        color: "var(--term-green)" },
+        { name: "Mounting Virtual FS",      result: "OK",        color: "var(--term-green)" },
+        { name: "Checking CPU Microcode",   result: "OK",        color: "var(--term-green)" },
+        { name: "Allocating Memory Pages",  result: "16384M OK", color: "var(--term-green)" },
+        { name: "Initializing GPU Drivers", result: "OK",        color: "var(--term-green)" },
+        { name: "Loading Kernel Modules",   result: "OK",        color: "var(--term-green)" },
+        { name: "Starting System Daemons",  result: "OK",        color: "var(--term-green)" },
+        { name: "Verifying Security Hashes",result: "OK",        color: "var(--term-green)" }
     ];
 
     let taskIdx = 0;
@@ -666,34 +644,32 @@ function startSystemBoot() {
             }, 500);
             return;
         }
-
-        const t = tasks[taskIdx];
+        const t      = tasks[taskIdx];
         const lineId = "task-" + taskIdx;
         hackOutput.innerHTML += `<div id="${lineId}">${t.name}</div>`;
         hackOutput.scrollTop = hackOutput.scrollHeight;
         const el = document.getElementById(lineId);
 
-        let dots = 0;
-        const maxDots = 25 - t.name.length > 3 ? 25 - t.name.length : 5; 
-        
+        let dots    = 0;
+        const maxDots = Math.max(5, 25 - t.name.length);
+
         const dotInt = setInterval(() => {
             el.innerHTML += ".";
-            dots++;
-            if (dots >= maxDots) {
+            if (++dots >= maxDots) {
                 clearInterval(dotInt);
                 setTimeout(() => {
                     el.innerHTML += ` <span style="color:${t.color};">[${t.result}]</span>`;
                     hackOutput.scrollTop = hackOutput.scrollHeight;
                     taskIdx++;
-                    setTimeout(doTask, Math.random() * 200 + 100); 
+                    setTimeout(doTask, Math.random() * 200 + 100);
                 }, Math.random() * 300 + 100);
             }
         }, 20);
     }
-
     doTask();
 }
 
+// Renders a neofetch-style system info panel into the terminal output.
 function printFastfetch() {
     const logo = `
 ████████╗███████╗██████╗ ███╗   ███╗██╗██╗
@@ -719,107 +695,88 @@ function printFastfetch() {
 <span style="color:var(--term-teal);font-weight:bold;">CPU:</span> WebAssembly JIT
 <span style="color:var(--term-teal);font-weight:bold;">Memory:</span> Allocated`.substring(1);
 
-    const ffHtml = `
+    hackOutput.innerHTML += `
 <div style="display:flex; gap:20px; align-items:center; margin:15px 0;">
 <div style="font-size:0.55rem; line-height:1.2; color:var(--term-teal); white-space:pre;">${logo}</div>
 <div style="font-size:0.65rem; line-height:1.4; white-space:pre;">${info}</div>
-</div>
-    `;
-    hackOutput.innerHTML += ffHtml;
+</div>`;
     hackOutput.scrollTop = hackOutput.scrollHeight;
 }
 
+// Scales the 1280×720 game wrapper uniformly to fill the iframe overlay on any viewport.
 function resizeIframe() {
     const overlay = document.getElementById('iframe-overlay');
     const wrapper = document.getElementById('game-wrapper');
-    if(!overlay || overlay.style.display === 'none' || !wrapper) return;
-    
-    const w = overlay.clientWidth * 0.95;
-    const h = overlay.clientHeight * 0.95;
-    
-    const gameW = 1280;
-    const gameH = 720;
-    
-    const scale = Math.min(w / gameW, h / gameH);
-    
+    if (!overlay || overlay.style.display === 'none' || !wrapper) return;
+    const scale = Math.min((overlay.clientWidth * 0.95) / 1280, (overlay.clientHeight * 0.95) / 720);
     wrapper.style.transform = `scale(${scale})`;
 }
-
 window.addEventListener('resize', resizeIframe);
 
 function startUltrakillGame() {
     systemState = 'game_run';
     hackOverlay.style.display = 'none';
-    
+
     const iframeOverlay = document.getElementById('iframe-overlay');
     iframeOverlay.style.display = 'flex';
-    
+
     const gameIframe = document.getElementById('game-iframe');
-    if(gameIframe) gameIframe.src = "assets/webport/Ultrakill.html";
-    
-    resizeIframe(); 
-    
-    setTimeout(() => {
-        const currentIframe = document.getElementById('game-iframe');
-        if(currentIframe) currentIframe.focus();
-    }, 100);
+    if (gameIframe) gameIframe.src = "assets/webport/Ultrakill.html";
+
+    resizeIframe();
+    setTimeout(() => { const f = document.getElementById('game-iframe'); if (f) f.focus(); }, 100);
 }
 
+// Katakana + ASCII matrix rain, rendered on a canvas layered over the Lain image.
 function startMatrix() {
     systemState = 'matrix_run';
     hackOutput.innerHTML = "";
     matrixCanvas.style.display = 'block';
     setTimeout(() => { matrixCanvas.style.opacity = '1'; }, 50);
-    
-    const ctx = matrixCanvas.getContext('2d');
-    matrixCanvas.width = matrixCanvas.parentElement.clientWidth;
+
+    const ctx   = matrixCanvas.getContext('2d');
+    matrixCanvas.width  = matrixCanvas.parentElement.clientWidth;
     matrixCanvas.height = matrixCanvas.parentElement.clientHeight;
-    
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ".split('');
-    const fontSize = 16; 
-    const columns = Math.ceil(matrixCanvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-    
+
+    const chars    = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%\"'#&_(),.;:?!\\|{}<>[]^~ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ".split('');
+    const fontSize = 16;
+    const drops    = Array(Math.ceil(matrixCanvas.width / fontSize)).fill(1);
+
     const matrixInt = setInterval(() => {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.08)"; 
+        ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
         ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-        
         ctx.font = fontSize + "px 'Fira Code', monospace";
-        
+
         for (let i = 0; i < drops.length; i++) {
-            const text = chars[Math.floor(Math.random() * chars.length)];
-            
+            const char = chars[Math.floor(Math.random() * chars.length)];
             ctx.fillStyle = "#FFF";
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-            
+            ctx.fillText(char, i * fontSize, drops[i] * fontSize);
             ctx.fillStyle = "#50fff7";
             ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fontSize, (drops[i] - 1) * fontSize);
-            
-            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
+            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
         }
     }, 33);
     intervals.push(matrixInt);
 }
 
+// Launches the CONF file browser and renders the initial file selection.
 function startConf() {
-    systemState = 'conf_run'; 
-    confOverlay.style.display = 'flex'; 
-    lainImg.style.opacity = '0';
-    confTrigger.textContent = "EXIT"; 
+    systemState = 'conf_run';
+    confOverlay.style.display = 'flex';
+    lainImg.style.opacity     = '0';
+    confTrigger.textContent   = "EXIT";
     confTrigger.classList.add('active');
-    
     confCurrentItemIdx = 0;
     renderConf();
 }
 
+// Syncs the file list column and preview pane to the currently highlighted index.
 function renderConf() {
     const menuContainer = document.getElementById('conf-menu');
-    const previewBox = document.getElementById('conf-preview-box');
-    const previewMeta = document.getElementById('conf-preview-meta');
-    
+    const previewBox    = document.getElementById('conf-preview-box');
+    const previewMeta   = document.getElementById('conf-preview-meta');
+
     menuContainer.innerHTML = '';
     confData.forEach((item, index) => {
         const row = document.createElement('div');
@@ -828,239 +785,148 @@ function renderConf() {
         menuContainer.appendChild(row);
     });
 
-    const currentItem = confData[confCurrentItemIdx];
-    if (currentItem.type === 'image') {
-        previewBox.innerHTML = `<img src="${currentItem.src}" alt="${currentItem.name}">`;
-    } else if (currentItem.type === 'text') {
-        previewBox.innerHTML = `<div class="text-preview">${currentItem.src}</div>`;
-    }
-    
+    const cur = confData[confCurrentItemIdx];
+    previewBox.innerHTML = cur.type === 'image'
+        ? `<img src="${cur.src}" alt="${cur.name}">`
+        : `<div class="text-preview">${cur.src}</div>`;
+
     previewMeta.innerHTML = `
-        <span style="color:var(--term-teal); font-weight:bold;">${currentItem.name}</span><br>
-        <span style="opacity:0.5;">Size:</span> ${currentItem.size}<br><br>
-        ${currentItem.desc}
-    `;
-    
+        <span style="color:var(--term-teal); font-weight:bold;">${cur.name}</span><br>
+        <span style="opacity:0.5;">Size:</span> ${cur.size}<br><br>
+        ${cur.desc}`;
+
     const selectedEl = menuContainer.querySelector('.selected');
-    if(selectedEl) {
-        selectedEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+    if (selectedEl) selectedEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// ─── Musiee Player ───────────────────────────────────────────────────────────
+
 let mCurrentIndex = 0;
-let mIsPlaying = false;
-const audioEl = document.getElementById("audio-element");
-const mTitle = document.getElementById("m-title");
-const mArtist = document.getElementById("m-artist");
-const mIndex = document.getElementById("m-index");
-const mTime = document.getElementById("m-time");
+let mIsPlaying    = false;
+
+const audioEl       = document.getElementById("audio-element");
+const mTitle        = document.getElementById("m-title");
+const mArtist       = document.getElementById("m-artist");
+const mIndex        = document.getElementById("m-index");
+const mTime         = document.getElementById("m-time");
 const mVolumeSlider = document.getElementById("m-volume");
-const visContainer = document.getElementById("m-vis");
-const visBase = document.getElementById("m-vis-base");
-const playlistBox = document.getElementById("m-playlist");
+const visContainer  = document.getElementById("m-vis");
+const visBase       = document.getElementById("m-vis-base");
+const playlistBox   = document.getElementById("m-playlist");
 
-mVolumeSlider.addEventListener('input', (e) => {
-    audioEl.volume = e.target.value;
-});
+mVolumeSlider.addEventListener('input', (e) => { audioEl.volume = e.target.value; });
 
+// Clicking an already-active playlist item toggles play/pause; any other item loads and plays.
 musieeSongs.forEach((song, idx) => {
     const div = document.createElement("div");
     div.className = "playlist-item";
-    div.tabIndex = 0; 
-    
-    div.innerHTML = `
-        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${song.title}</span>
-    `;
-    
-    div.onclick = () => { 
-        if (mCurrentIndex === idx) {
-            togglePlay(); 
-        } else {
-            mCurrentIndex = idx;
-            loadSong(mCurrentIndex); 
-            playSong(); 
-        }
+    div.tabIndex  = 0;
+    div.innerHTML = `<span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${song.title}</span>`;
+    const activate = () => {
+        if (mCurrentIndex === idx) { togglePlay(); }
+        else { mCurrentIndex = idx; loadSong(mCurrentIndex); playSong(); }
     };
-
-    div.onkeydown = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            if (mCurrentIndex === idx) {
-                togglePlay();
-            } else {
-                mCurrentIndex = idx;
-                loadSong(mCurrentIndex); 
-                playSong(); 
-            }
-        }
-    };
-
+    div.onclick  = activate;
+    div.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); activate(); } };
     playlistBox.appendChild(div);
 });
 
-for(let i=0; i<25; i++) {
-    const bar = document.createElement("div");
-    bar.className = "vis-bar";
-    bar.style.height = "5px";
-    visContainer.appendChild(bar);
-    
-    const baseSym = document.createElement("span");
-    baseSym.innerText = "=";
-    visBase.appendChild(baseSym);
+// Visualizer bars and base-row symbols, created once at startup.
+for (let i = 0; i < 25; i++) {
+    const bar = document.createElement("div"); bar.className = "vis-bar"; bar.style.height = "5px"; visContainer.appendChild(bar);
+    const sym = document.createElement("span"); sym.innerText = "="; visBase.appendChild(sym);
 }
 
 const cachedVisBars = document.querySelectorAll(".vis-bar");
 
+// Randomises bar heights while playing; resets to flat on pause.
 function updateVisualizer() {
-    if(mIsPlaying) {
-        cachedVisBars.forEach(bar => {
-            const height = Math.random() * 30 + 5;
-            bar.style.height = height + "px";
-        });
-    } else {
-        cachedVisBars.forEach(bar => {
-            bar.style.height = "5px";
-        });
-    }
+    cachedVisBars.forEach(bar => { bar.style.height = mIsPlaying ? (Math.random() * 30 + 5) + "px" : "5px"; });
 }
 setInterval(updateVisualizer, 150);
 
 function loadSong(index) {
-    audioEl.src = encodeURI(musieeSongs[index].src);
+    audioEl.src   = encodeURI(musieeSongs[index].src);
     audioEl.load();
-    mTitle.innerText = musieeSongs[index].title;
+    mTitle.innerText  = musieeSongs[index].title;
     mArtist.innerText = musieeSongs[index].artist;
-    mIndex.innerText = `${index + 1} / ${musieeSongs.length}`;
-    
-    const items = playlistBox.children;
-    for (let i = 0; i < items.length; i++) {
-        if (i === index) {
-            items[i].classList.add("active");
-            items[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        } else {
-            items[i].classList.remove("active");
-        }
-    }
-
+    mIndex.innerText  = `${index + 1} / ${musieeSongs.length}`;
+    Array.from(playlistBox.children).forEach((item, i) => {
+        item.classList.toggle("active", i === index);
+        if (i === index) item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
     updateTimeDisplay(0, 1);
 }
 
-function playSong() {
-    mIsPlaying = true;
-    audioEl.play().catch(e => console.log("Audio play prevented:", e));
-}
+function playSong()   { mIsPlaying = true;  audioEl.play().catch(e => console.log("Audio play prevented:", e)); }
+function pauseSong()  { mIsPlaying = false; audioEl.pause(); }
+function togglePlay() { if (mIsPlaying) pauseSong(); else playSong(); }
+function prevSong()   { mCurrentIndex = (mCurrentIndex - 1 + musieeSongs.length) % musieeSongs.length; loadSong(mCurrentIndex); if (mIsPlaying) playSong(); }
+function nextSong()   { mCurrentIndex = (mCurrentIndex + 1) % musieeSongs.length; loadSong(mCurrentIndex); if (mIsPlaying) playSong(); }
 
-function pauseSong() {
-    mIsPlaying = false;
-    audioEl.pause();
-}
-
-function togglePlay() {
-    if (mIsPlaying) pauseSong();
-    else playSong();
-}
-
-function prevSong() {
-    mCurrentIndex = (mCurrentIndex - 1 + musieeSongs.length) % musieeSongs.length;
-    loadSong(mCurrentIndex);
-    if (mIsPlaying) playSong();
-}
-
-function nextSong() {
-    mCurrentIndex = (mCurrentIndex + 1) % musieeSongs.length;
-    loadSong(mCurrentIndex);
-    if (mIsPlaying) playSong();
-}
-
-audioEl.addEventListener("timeupdate", () => {
-    const current = audioEl.currentTime;
-    const duration = audioEl.duration || 1;
-    updateTimeDisplay(current, duration);
-});
-
-audioEl.addEventListener("ended", () => {
-    nextSong();
-});
+audioEl.addEventListener("timeupdate", () => { updateTimeDisplay(audioEl.currentTime, audioEl.duration || 1); });
+audioEl.addEventListener("ended", nextSong);
 
 function updateTimeDisplay(current, total) {
     const pct = Math.floor((current / total) * 100);
     mTime.innerText = formatTime(current) + " / " + formatTime(total) + " (" + pct + "%)";
 }
 
-function formatTime(seconds) {
-    if (isNaN(seconds)) return "00:00:00";
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = Math.floor(seconds % 60);
-    return (hrs < 10 ? "0" : "") + hrs + ":" + 
-           (mins < 10 ? "0" : "") + mins + ":" + 
-           (secs < 10 ? "0" : "") + secs;
+function formatTime(s) {
+    if (isNaN(s)) return "00:00:00";
+    return [Math.floor(s / 3600), Math.floor((s % 3600) / 60), Math.floor(s % 60)]
+        .map(n => String(n).padStart(2, '0')).join(':');
 }
 
 loadSong(mCurrentIndex);
 
+// ─── Global keyboard handler ─────────────────────────────────────────────────
+// Space         = play/pause  (when not focused on an input)
+// P / N         = prev/next   (only outside terminal prompt)
+// Arrow ↑↓      = CONF navigation
+// Enter / Esc   = CONF open/close
+// All other keys build the terminal command string in boot_wait state.
 window.addEventListener('keydown', (e) => {
     if (systemState === 'game_run') return;
 
-    const isInput = document.activeElement && (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA");
+    const isInput    = document.activeElement?.tagName === "INPUT" || document.activeElement?.tagName === "TEXTAREA";
     const isTerminal = systemState === 'boot_wait';
 
-    if (e.key === " " && !isInput) {
-        e.preventDefault();
-        togglePlay();
-        return;
-    }
+    if (e.key === " " && !isInput) { e.preventDefault(); togglePlay(); return; }
 
     if (!isInput && !isTerminal) {
-        if (e.key.toLowerCase() === "p") {
-            prevSong();
-            return;
-        } else if (e.key.toLowerCase() === "n") {
-            nextSong();
-            return;
-        }
+        if (e.key.toLowerCase() === "p") { prevSong(); return; }
+        if (e.key.toLowerCase() === "n") { nextSong(); return; }
     }
 
     if (systemState === 'conf_run') {
         e.preventDefault();
-        
-        if (e.key === "ArrowDown") {
-            confCurrentItemIdx = (confCurrentItemIdx + 1) % confData.length;
-            renderConf();
-        } else if (e.key === "ArrowUp") {
-            confCurrentItemIdx = (confCurrentItemIdx - 1 + confData.length) % confData.length;
-            renderConf();
-        } else if (e.key === "Enter") {
-            const currentItem = confData[confCurrentItemIdx];
-            if (currentItem.type === 'image') {
-                openImageViewer(currentItem.src);
-            }
-        } else if (e.key === "Escape") {
-            resetAll();
-        }
-        return; 
+        if      (e.key === "ArrowDown")  { confCurrentItemIdx = (confCurrentItemIdx + 1) % confData.length; renderConf(); }
+        else if (e.key === "ArrowUp")    { confCurrentItemIdx = (confCurrentItemIdx - 1 + confData.length) % confData.length; renderConf(); }
+        else if (e.key === "Enter")      { const item = confData[confCurrentItemIdx]; if (item.type === 'image') openImageViewer(item.src); }
+        else if (e.key === "Escape")     { resetAll(); }
+        return;
     }
-    
-    if (systemState === 'boot_wait') {
+
+    if (isTerminal) {
         if (e.key === "Backspace") {
             userInput = userInput.slice(0, -1);
         } else if (e.key === "Enter") {
-            if (userInput.toUpperCase() === "START") { 
-                hackOutput.innerHTML += "> START<br>ACCESS GRANTED.<br>----------------<br>"; 
-                startSystemBoot(); 
-            } else if (userInput.toUpperCase() === "FASTFETCH") {
+            const cmd = userInput.toUpperCase();
+            userInput = "";
+            if (cmd === "START") {
+                hackOutput.innerHTML += "> START<br>ACCESS GRANTED.<br>----------------<br>";
+                startSystemBoot();
+            } else if (cmd === "FASTFETCH") {
                 hackOutput.innerHTML += `> FASTFETCH<br>`;
                 printFastfetch();
-                userInput = "";
-            } else if (userInput.toUpperCase() === "CLEAR") {
+            } else if (cmd === "CLEAR") {
                 hackOutput.innerHTML = "";
-                userInput = "";
-            } else if (userInput.toUpperCase() === "ULTRAKILL") {
+            } else if (cmd === "ULTRAKILL") {
                 hackOutput.innerHTML += `> ULTRAKILL<br>ALLOCATING MEMORY...<br>LAUNCHING ENGINE...<br>`;
                 hackOutput.scrollTop = hackOutput.scrollHeight;
                 setTimeout(startUltrakillGame, 800);
-                userInput = "";
-            } else if (userInput.toUpperCase() === "HELP") {
+            } else if (cmd === "HELP") {
                 hackOutput.innerHTML += `> HELP<br>
 AVAILABLE COMMANDS:<br>
 <span style="color:var(--term-teal)">START</span>     - Initiates the system boot sequence.<br>
@@ -1068,17 +934,13 @@ AVAILABLE COMMANDS:<br>
 <span style="color:var(--term-teal)">ULTRAKILL</span> - Load Unofficial Web Port into memory.<br>
 <span style="color:var(--term-teal)">CLEAR</span>     - Clears the terminal output.<br>
 <span style="color:var(--term-teal)">HELP</span>      - Displays this help message.<br>`;
-                hackOutput.scrollTop = hackOutput.scrollHeight;
-                userInput = "";
-            } else { 
-                hackOutput.innerHTML += `> ${userInput}<br>INVALID COMMAND.<br>`; 
-                hackOutput.scrollTop = hackOutput.scrollHeight;
-                userInput = ""; 
+            } else {
+                hackOutput.innerHTML += `> ${cmd || ''}<br>INVALID COMMAND.<br>`;
             }
+            hackOutput.scrollTop = hackOutput.scrollHeight;
         } else if (e.key.length === 1) {
             userInput += e.key;
         }
         userInputDisplay.textContent = userInput;
-        return; 
     }
 });
