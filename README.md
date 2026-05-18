@@ -1,6 +1,6 @@
 <div align="center">
 
-  # ▀▄▀▄▀▄ 𝚃𝙴𝚁𝙼𝙸𝙸_ ▄▀▄▀▄▀
+  # 𝚃𝙴𝚁𝙼𝙸𝙸_ 
   
   **A STYLIZED TERMINAL WESBITE // WEBCORE // ANIME AESTHETIC**
 
