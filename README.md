@@ -10,7 +10,7 @@
   [![License](https://img.shields.io/badge/LICENSE-MIT-50fff7?style=for-the-badge&labelColor=000000)](LICENSE)
   [![Vibe](https://img.shields.io/badge/VIBE-WIRED-00ff41?style=for-the-badge&labelColor=000000)](https://vuieee.github.io/Termii/)
 
-  [ **ENTER TERMII** ](https://vuieee.github.io/Termii/)
+  [ **ENTER TERMII** ](vuieee.github.io/termii/)
 
 </div>
 
