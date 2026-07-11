@@ -1,8 +1,8 @@
 <div align="center">
 
-  # 𝚃𝙴𝚁𝙼𝙸𝙸_ 
+  # TERMII 
   
-  **A STYLIZED TERMINAL WESBITE // WEBCORE // ANIME AESTHETIC**
+  **STYLIZED // TERMINAL // WEBCORE // ANIME AESTHETIC**
 
   <img src="assets/images/termiimainsection.png" width="100%" alt="Termii Header" />
 
