@@ -24,7 +24,7 @@
     </div>
     <div class="content-wrapper" id="main-content">
         <header class="body-text text-xs">
-            <span>ASCII TERMINAL WEBGATE</span>
+            <h1 style="display:inline; font-size:inherit; font-weight:normal; margin:0; padding:0; line-height:inherit;">ASCII TERMINAL WEBGATE</h1>
             <span>COPYRIGHT JOSHUA DESIGNS(C) 2026</span>
             <span>VER V1.05</span>
             <span>WEB......1</span>
@@ -50,7 +50,7 @@
                             <div id="hack-output"></div>
                             <div id="hack-input-line" style="display:none;">> <span id="user-input"></span><span class="cursor-blink"></span></div>
                             <div id="mobile-term-row" style="display:none;">
-                                <input type="text" id="mobile-term-input" placeholder="TYPE COMMAND..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                                <input type="text" id="mobile-term-input" aria-label="Terminal Input" placeholder="TYPE COMMAND..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                                 <button id="mobile-term-submit">&#9654; RUN</button>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                         <div class="musiee-player-footer text-xs">
                             <div class="musiee-time-vol-row">
                                 <div id="m-time">00:00:00 / 00:00:00 (0%)</div>
-                                <div class="vol-control">VOL <input type="range" id="m-volume" min="0" max="1" step="0.01" value="1"></div>
+                                <div class="vol-control">VOL <input type="range" id="m-volume" aria-label="Volume Control" min="0" max="1" step="0.01" value="1"></div>
                             </div>
                             <hr class="musiee-separator">
                             <div class="musiee-controls opacity-50">
@@ -171,7 +171,7 @@
     
     <div id="iframe-overlay" class="modal-overlay" onclick="closeGame(event)">
         <div id="game-wrapper" onclick="event.stopPropagation()">
-            <iframe id="game-iframe" src="" style="border: none; outline: none; width: 100%; height: 100%;"></iframe>
+            <iframe id="game-iframe" title="Game Engine Viewport" src="" style="border: none; outline: none; width: 100%; height: 100%;"></iframe>
             <div class="iframe-close-btn" onclick="closeGame(event)">[X] CLOSE</div>
         </div>
     </div>
@@ -216,15 +216,15 @@
             <div class="repos-controls">
                 <div class="search-box">
                     <span class="search-icon-symbol">&gt;</span>
-                    <input type="text" id="repo-search" placeholder="SEARCH REPOSITORIES...">
+                    <input type="text" id="repo-search" aria-label="Search Repositories" placeholder="SEARCH REPOSITORIES...">
                 </div>
-                <select id="repo-lang" class="repo-select">
+                <select id="repo-lang" aria-label="Filter by Language" class="repo-select">
                     <option value="ALL">LANGUAGE (ALL)</option>
                     <option value="CSS">CSS</option>
                     <option value="HTML">HTML</option>
                     <option value="JS">JS</option>
                 </select>
-                <select id="repo-sort" class="repo-select">
+                <select id="repo-sort" aria-label="Sort Repositories" class="repo-select">
                     <option value="new">SORT BY: NEW</option>
                     <option value="old">SORT BY: OLD</option>
                     <option value="name">SORT BY: NAME</option>
